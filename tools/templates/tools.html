@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<h1>Tools</h1>
+
+<p>The following tools are available:</p>
+
+<h3>Activity Log</h3>
+
+<p>
+  View your completed tasks week by week: <a href="{% url 'url_log' %}">Activity Log</a>
+</p>
+
+<h3>Bookmarklet</h3>
+
+<p>
+  Drag the following link to your toolbar:
+  <a href="javascript:function jta(){var t=open('http://jungletasks.com/b/task/add/','Jungle Tasks','toolbar=no,location=no,width=420,height=400');}jta();void(0);"
+     onclick="alert('Drag the link to your toolbar'); return false;">Add Task</a>
+</p>
+
+<h3>Change password</h3>
+
+<p>
+  You can change your password here: 
+  <a href="{% url 'url_password_change' %}">Change password</a>
+</p>
+
+{% endblock %}

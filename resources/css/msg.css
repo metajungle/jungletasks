@@ -1,0 +1,15 @@
+
+div.message {
+    margin: 0 auto;
+    display: inline-block;
+    border-left: 6px solid #404040;
+    border-right: 1px solid #C5BC39;
+    border-top: 1px solid #C5BC39;
+    border-bottom: 1px solid #C5BC39;
+    padding: 0px 10px 0px 10px;
+    background-color: #EEF475;
+}
+
+div.message div.message-inner {
+    float: left;
+}

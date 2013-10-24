@@ -1,0 +1,25 @@
+{% extends "add.html" %}
+
+{% block js-on-document-load %}
+{# inherited javascript #}
+{{ block.super }} 
+
+/* add task via ajax api call */
+$("input[type=button]").click(function() {
+    bookmarklet_task_add();
+});
+
+{% endblock %}
+
+{% block button %}
+      <input type="button" value="Add task" />
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

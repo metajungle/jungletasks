@@ -1,0 +1,160 @@
+/**
+ * FORMS
+ */
+
+form.form-add-task {
+
+}
+
+form.form-add-task p {
+    margin: 8px 0px 8px 0px;
+    padding: 0px;
+}
+
+form.form-add-task span.error {
+    background-color: red;
+    color: #fff;
+    padding: 4px;
+    margin: 8px 0px 8px 0px;
+}
+
+.form-wrapper {
+    padding: 8px 0px 2px 0px;
+}
+
+.form-label-wrapper {
+    display: block;
+    margin: 4px 0px 2px 0px;
+}
+
+.form-label {
+    display: inline-block;
+    margin: 2px 4px 2px 0px;
+    padding: 2px 10px 2px 10px; 
+    border: 1px solid #808080;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/**
+ *  FORMS
+ */
+
+div.formbox-outer {
+    margin: 0px;
+    margin-right: 20px;
+    padding: 0px;
+}
+
+div.formbox {
+  /* width: 300px; */
+  border: 1px solid #999999;
+  margin: 20px 0px 20px 0px;
+  padding: 10px 10px 10px 10px;
+}
+
+/*
+div.formbox input[type="submit"] {
+  background-color: #F88017;
+}
+*/
+
+div.formbox input.invalid {
+  background-color: #F76541;
+}
+
+div.formbox input.valid {
+  background-color: #C3FDB8;
+}
+
+input[type="text"], 
+input[type="password"],
+textarea { 
+  font-family: Arial, Sans-Serif;
+  font-size: 13px;
+  margin-bottom: 5px;
+  display: block;
+  padding: 4px;
+  border: solid 1px #a0a0a0;
+  width: 300px;
+}
+
+input[type="text"]:focus, 
+textarea:focus
+{
+    background-image: none;
+    background-color: #ffffff;
+    border: solid 1px #33677F;
+}
+
+/*
+div.formbox input[type="submit"],
+div.formbox input[type="reset"]
+{
+  width: 200px;
+  padding: 4px;
+  border: 2px outset #888888;
+  background-color: transparent;
+}
+*/
+
+input[type="submit"].confirm {
+  font-weight: bold;
+  background-color: #F88017;
+}
+
+span.inactive {
+  color: #808080;
+}
+
+table.form_table {
+ /* width: 100%; */
+}
+
+table.form_table td {
+  vertical-align: top;
+}
+
+table.form_table td.help_text {
+  color: #505050;
+  padding-left: 10px;
+  font-style: italic;
+}
+
+table.form_table td img {
+  vertical-align: middle;
+}
+
+div.formbox span.error {
+    display: block;
+    background-color: red;
+    color: #fff;
+    padding: 4px;
+    margin: 8px 0px 8px 0px;
+}
+
+/**
+ * PROCESS
+ */
+
+div.process {
+    display: inline-block;
+    border-top: 2px solid #808080;
+    padding-top: 5px;
+}
+
+div.process div.step {
+    float: left;
+    padding: 20px;
+    background-color: #808080;
+    margin-right: 20px;
+    width: 76px;
+}
+
+div.process div.terminal {
+    background-color: red;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;    
+    border-radius: 20px;
+}

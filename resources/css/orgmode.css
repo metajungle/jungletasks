@@ -1,0 +1,49 @@
+
+.task_export_list_orgmode {
+    display: inline-block;
+    margin: 0px 0px 0px 0px;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #000;
+    border-left: 6px solid #000;
+}
+
+.task_export_list_orgmode p {
+    color: blue;
+    margin: 4px 0px 0px 0px;
+}
+
+.task_export_list_orgmode p.header {
+    color: #D51722;
+}
+
+.task_export_list_orgmode span {
+    margin-right: 2px;
+}
+
+.task_export_list_orgmode span.done {
+    font-weight: bold;
+    color: green;
+}
+
+.task_export_list_orgmode span.todo {
+    font-weight: bold;
+    color: red;
+}
+
+.task_export_list_orgmode span.priority {
+    color: #D39F9F;
+}
+
+.task_export_list_orgmode span.closed {
+    color: #D39F9F;
+}
+
+.task_export_list_orgmode span.date {
+    color: #A10094;
+    text-decoration: underline;
+}
+
+form {
+    margin: 20px 0px 0px 0px;
+}

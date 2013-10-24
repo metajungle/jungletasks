@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+    {# <link href="/resources/css/labels.css" rel="stylesheet" type="text/css" /> #}
+    {# <link href="/resources/css/forms.css" rel="stylesheet" type="text/css" /> #}
+{% endblock %}
+
+{% block script %}
+{# <script type="text/javascript" src="/resources/js/tasks.js"></script> #}
+{% endblock %}
+
+{% block js-on-document-load %}
+
+/* focus on task text */
+$("#label").focus();
+
+{% endblock %}
+
+{% block contents %}
+
+{% block page_header %}
+<h1>Add Label</h1>
+{% endblock %}
+
+<form action="" method="post" class="pure-form">{% csrf_token %}
+
+    <fieldset>
+        <label for="label">Label</label>
+        <input id="label" name="label" type="text" placeholder="Label">
+
+        <button type="submit" class="pure-button pure-button-small pure-button-primary">Add</button>
+    </fieldset>
+
+</form>
+
+{% endblock %}

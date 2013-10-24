@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} ({{ num_not_done }}){% endblock %}
+
+{% block stylesheet %}
+    <link href="/resources/css/tasks.css" rel="stylesheet" type="text/css" />
+    <link href="/resources/css/labels.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="/resources/js/utils.js"></script>
+    <script type="text/javascript" src="/resources/js/tasks.js"></script>
+{% endblock %}
+
+{% block js-on-document-load %}
+
+/* register action for clicking on 'save' button */
+$("button#btn_label_save").click(task_labels_save);
+/* register action for clicking on 'close' button */
+$("button#btn_label_close").click(dom_label_task_clearup);
+
+$("input.due-date-holder").each(function() {
+    $(this).datepicker(
+    {
+      minDate: new Date(),
+      autoSize: true,
+      showAnim: 'blind'
+    });
+    /* get id */
+    var data = $(this).metadata();
+    /* request to save due date on change */
+    if (data && data.task_id) {
+        $(this).change(function() {
+            api_task_save_due_date(data.task_id);
+        });
+    }
+});
+
+{% endblock %}
+
+{% block action-controls %}
+{% if paged_items.object_list %}
+<a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a>
+{% endif %}
+{% url 'url_form_task_add' as form_add %}
+{% if user_label %}
+<a href="{{ form_add }}?orig_l_id={{ user_label.id }}" id="btn_add_task">add</a>
+{% else %}
+<li><a href="{% url 'url_form_task_add' %}">add</a></li>
+{% endif %}
+{% endblock %}
+
+{% block contents-outer %}
+
+<div class="row">
+    <div class="col-sm-9">
+        
+        {% if paged_items.object_list %}
+        <table class="table">
+          <tr class="table_header">
+            <th class="empty">&nbsp;</th>
+            <th>
+      	Items
+            </th>
+            <th>&nbsp;</th>
+            {# <th>Due</th> #}
+            <th>&nbsp;</th>
+          </tr>
+          {% for task in paged_items.object_list %}
+          <tr id="task{{ task.id }}"
+      	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
+      	data-labels="[{% for l in task.labels.all %}'{{ l.id }}'{% if not forloop.last %},{% endif %}{% endfor %}]">
+            {# Priority column #}
+            <td class="status narrow">
+      	&nbsp;
+            </td>
+            <td class="task">
+      	<a href="#" class="task_text" onClick="return dom_task_toggle('{{ task.id }}');">{{ task.task }}</a>
+	
+      	{# show task labels #}
+      	<ul class="label-crumbs">
+      	{% for label in task.labels.all %}
+      	{% if not label.is_hidden %}
+      	<li>
+      	  <span class="label-small">{{ label.name }}</span>
+      	</li>
+      	{% endif %}
+      	{% endfor %}
+      	</ul>
+      
+            </td>
+            <td class="icon-cell narrow">
+      	<a href="{% url 'url_form_task_edit' %}?t_id={{ task.id }}{% if get and get.l %}&orig_l={{ get.l }}{% endif %}"
+      	   style="display: {% if task.done %}none{% else %}inline{% endif %}"
+      	   class="task_edit"><span class="task-edit-icon"></span></a>
+            </td>
+            {# <td class="task_due_date"> #}
+      	{# <input type="text" class="due-date-holder hand" #}
+      	   {#    data-task_id="'{{ task.id }}'" #}
+      	     {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
+            {# </td> #}
+            <td class="icon-cell narrow">
+      	<a href="#" onClick="return dom_label_task('{{ task.id }}');"><img class="task_icon" src="/resources/icons/tag.png" alt="Edit labels" /></a>
+            </td>
+          </tr>
+          {% endfor %}
+    
+          {# PAGINATION #}
+          {% if paged_items.paginator.num_pages > 1 %}
+          <tr class="pagination">
+            <td class="empty">&nbsp;</td>
+            <td colspan="4">
+                {% if paged_items.has_previous %}
+                    <a href="?{{ get_values }}page={{ paged_items.previous_page_number }}">Previous</a> &#124;
+                {% endif %}
+                <span class="current">
+                    Page {{ paged_items.number }} of {{ paged_items.paginator.num_pages }}
+                </span>
+                {% if paged_items.has_next %}
+                    &#124; <a href="?{{ get_values }}page={{ paged_items.next_page_number }}">Next</a>
+                {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+  
+        </table>
+  
+        {% else %}
+        <p><strong>There are no tasks here.</strong></p>
+        <p><em>Add a task by clicking 'add' in the top-right corner.</em></p>
+        {% endif %}
+        
+    </div>
+    <div class="col-sm-3">
+        <ul id="folders">
+    
+          {% load tags %}
+    
+          {# standard labels #}
+          <li class="standard {% current active_label 'inbox' %}"><a href="?l=inbox">Inbox&nbsp({{ num_not_done }})</a></li>
+          <li class="standard {% current active_label 'all' %}"><a href="?l=all">All</a></li>
+          <li class="separator">&nbsp;</li>
+    
+          {# user-defined labels #}
+          <li class="title user-defined-labels">Your labels</li>
+          {% block labels %}
+          {% for label in labels %}
+          <li class="label userlabel {% current active_label label.name %} {% if label.is_hidden %}hidden{% endif %}" data-label_id="'{{ label.id }}'"
+      	style="background-color: #{{ label.color }}">
+            <a href="?l={{ label.name }}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+          </li>
+          {% empty %}
+          <li class="empty">&nbsp;</li>
+          {% endfor %}
+          {# save button for labeling #}
+          <li class="labeling-buttons">
+            <button id="btn_label_save">Save and close</button>
+            <button id="btn_label_close">Cancel</button>
+          </li>
+          {% endblock %}
+    
+          {% if user.get_profile and user.get_profile.system_labels.all %}
+          <li class="separator system-label-part">&nbsp;</li>
+          <li class="title system-label-part">System labels</li>
+          {% block systemlabels %}
+          {% for label in user.get_profile.system_labels.all %}
+          <li class="systemlabel system-label-part">
+            <a href="?l=s:{{ label.label }}">{{ label.get_label_display }}</a>
+          </li>
+          {% endfor %}
+          {% endblock %}
+          {% endif %}
+    
+          {# <li class="empty">&nbsp;</li> #}
+    
+          {# <li class="separator">&nbsp;</li> #}
+          {# <li class="title">Smart labels</li> #}
+          {# {% block smartlabels %} #}
+          {# <li class="empty">&nbsp;</li> #}
+          {# {% endblock %} #}
+  
+        </ul>        
+    </div>
+</div>
+
+<div id="contents-inner">
+<div id="sidebar">
+
+</div>
+
+<div id="main">
+  
+
+
+</div>
+
+<div style="clear: both;"></div>
+
+</div>
+{% endblock %}
+

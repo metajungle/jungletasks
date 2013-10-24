@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+    <link href="/resources/css/forms.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js-on-document-load %}
+$("input#id_email").focus();
+{% endblock %}
+
+{% block contents %}
+
+  <h1>Login</h1>
+
+  <p>Please provide the email you signed up with and your password.</p>
+
+  <form action="" method="post" class="pure-form pure-form-aligned">{% csrf_token %}
+    <fieldset>
+      {% for field in form %}
+      <div class="pure-control-group">
+        <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <ul>
+          {% for error in field.errors %}
+            <li>
+            {{ error }}
+            </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </fieldset>
+    
+    {% if invalid %}
+    <span class="error">
+      The email and password did not match
+    </span>
+    {% endif %}
+
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}
+
+    <div class="pure-controls">
+      <button type="submit" class="pure-button pure-button-primary">Login</button>
+    </div>
+
+    <p style="text-align: right; margin-right: 20px;">
+      Forgot your password? <a href="{% url 'url_password_reset' %}">Reset  your password</a>.
+    </p>
+
+  </form>
+
+{% endblock %}
+
+

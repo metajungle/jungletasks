@@ -1,0 +1,23 @@
+{% extends "add.html" %}
+
+{% block js-on-document-load %}
+{{ block.super }}
+
+/* select labels */
+{% if l_ids %}
+{% for l_id in l_ids %}
+dom_label_new_task_toggle({{ l_id }});
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+{% block page_header %}
+<h1>Edit Task</h1>
+{% endblock %}
+
+{% block button %}
+<input type="submit" name="save" value="Save task" />
+<input type="submit" name="delete" value="Delete task" />
+{% endblock %}
+

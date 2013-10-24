@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+    <link href="/resources/css/forms.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block js-on-document-load %}
+$("input#id_email").focus();
+{% endblock %}
+
+{% block contents %}
+
+  <h1>Signup</h1>
+
+  <p>Please provide an email and a password:</p>
+
+  <div id="login" class="formbox-outer">
+
+    <div class="formbox" style="width: 500px;">
+      <form action="" method="post">{% csrf_token %}
+        <table class="form_table">
+          {% for field in form %}
+            <tr>
+              <td>
+                <div class="fieldWrapper">
+                {{ field.label_tag }}:
+                </div>
+              </td>
+              <td>
+              {{ field }} 
+
+              {% if field.errors %}
+                  {% for error in field.errors %}
+                  {# <br /> #}
+                  <span class="error">{{ error }}</span>
+                  {% endfor %}
+              {% endif %}
+
+              </td>
+              <td class="help_text">
+                {# {% ifequal field.label "E-mail address" %} #}
+                {#   [?] #}
+                {# {% endifequal %} #}
+                {{ field.help_text }}
+              </td>
+            </tr>
+            {% endfor %}
+	</table>
+
+        <p><input type="submit" value="Signup" /></p>
+
+      </form>
+    </div>
+  </div>
+
+  <!--
+  <div class="process">
+    <p>Process overview:</p>
+    <div class="step">
+      1. You provide email and password
+    </div>
+    <div class="step">
+      2. We send email with confirmation code
+    </div>
+    <div class="step">
+      3. You activate account
+    </div>
+    <div class="step">
+      4. Done
+    </div>
+    <div style="clear: both;" />
+  </div>
+  -->
+
+{% endblock %}

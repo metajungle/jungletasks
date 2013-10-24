@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <link rel="shortcut icon" href="/resources/icons/favicon.ico" />
+    <title>{% block title %}Jungle Tasks - Home{% endblock %}</title>
+    {# <link href="/resources/css/smoothness/jquery-ui-1.8.8.custom.css" rel="stylesheet" type="text/css" /> #}
+    <!-- Latest compiled and minified CSS -->
+    
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css" />
+    
+    <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" type="text/css" />
+    
+    {% block stylesheet %}{% endblock %}
+    
+    {% block style %}{% endblock %}
+    
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
+    
+    
+    <script type="text/javascript" charset="utf-8">
+    <!--
+    
+    $(function() {
+        
+        /* for metadata plugin */
+        $.metadata.setType("html5");
+        
+        /* remove messages */
+        var offset = 0;
+        $("div.message-area").each(function() {
+            var wait = 4000 + (2000 * offset);
+            $(this).delay(wait).fadeOut(1000);
+            offset++;
+        });
+        
+        {% block js-on-document-load %}
+        {% endblock %}
+        
+        {% block keyboard-shortcuts %}
+        {% endblock %} {# 'keyboard-shortcuts' #}
+    
+    });
+    -->
+    </script>
+</head>
+
+<body>
+  
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand visible-xs" href="#">Jungletasks</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/?l=inbox">Hello, {{ user.email }}</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'url_label' %}">labels</a></li>
+          {# <li><a href="{% url 'url_tools' %}">tools</a></li> #}
+          {% endif %}
+          {% block action-controls %}
+          {% endblock action-controls %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'url_logout' %}">logout</a></li>
+            {% else %}
+                <li><a href="{% url 'url_login' %}">login</a></li>
+                <li><a href="{% url 'url_register' %}">signup</a></li>
+            {% endif %}
+          <li><a href="{% url 'url_tools' %}">tools</a></li>
+          <li><a href="{% url 'url_faq' %}">faq</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+      
+    <div id="page">
+    
+    {% block header %}
+    {# <div id="header"> #}
+    {#      #}
+    {#  #}
+    {#     <div id="top"> #}
+    {#        #}
+    {#       <div id="topcontrols"> #}
+    {#         <span id="ajax_status">&nbsp;</span> #}
+    {#          #}
+    {#         {% if user.is_authenticated %} #}
+    {#         <li class="item"><a href="/logout/">logout</a></li> #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         <li class="item"><a href="{% url 'url_label' %}">labels</a></li> #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         <li class="item"><a href="{% url 'url_tools' %}">tools</a></li> #}
+    {#         {% else %} #}
+    {#         <li class="item"><a href="/">home</a></li> #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         <li class="item"><a href="{% url 'url_register' %}">signup</a></li> #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         <li class="item"><a href="{% url 'url_login' %}">login</a></li> #}
+    {#         {% endif %} #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         <li class="item"><a href="{% url 'url_faq' %}">faq</a></li> #}
+    {#              #}
+    {#         {% block action-controls %} #}
+    {#         {% endblock %} #}
+    {#       </div> #}
+    {#        #}
+    {#       <ul id="topmenu"> #}
+    {#         {% if user.is_authenticated %} #}
+    {#         <li class="item">Hello, <a href="/?l=inbox">{{ user.email }}</a></li> #}
+    {#         <li class="navsep">&#124;</li> #}
+    {#         {% endif %} #}
+    {#  #}
+    {#       </ul> #}
+    {#       <div style="clear: both;"></div> #}
+    {#     </div> #}
+    {#    #}
+    {# </div>  #}
+    {# end 'header' #}
+      
+    {% for message in messages %}
+    <div class="message-area
+      {% if message.tags %}message-{{ message.tags }}{% endif %}">
+        {% autoescape off %}
+        {{ message }}
+        {% endautoescape %}
+    </div>
+    {% endfor %}
+      
+    {% block input-field %}
+    {% endblock %}
+
+    {% endblock %}
+    
+    {% block contents-outer %}
+    <div id="contents">
+      {% block contents %}
+        This should always be overridden.
+      {% endblock %}
+    </div> {# end 'contents' #}
+    {% endblock %}
+    
+    <div id="footer">
+    {% block footer %}
+      <p>Metajungle &copy; 2011-2014</p>
+    {% endblock %}
+    </div>
+  
+  </div> {# end 'page' #}
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.metadata.js">
+    </script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    
+    {% block script %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+/*
+ * LABELS
+ */ 
+
+ul#folders {
+    list-style: none; 
+    margin: 0px 10px 0px 0px;
+    padding: 0px;
+}
+
+ul#folders li {
+    display: block;
+    margin: 4px 0px 2px 0px;
+    /*padding: 5px 20px 5px 20px;  */
+    padding: 2px 26px 2px 4px;
+    border: 1px solid #c0c0c0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+ul#folders li.standard {
+    color: #000;
+    background-color: #99cc00;
+    /* background-color: #f912aa; */
+    /* background-color: #FFE737; */
+}
+
+ul#folders li.title {
+    border: 0px;
+    font-weight: bold;
+    padding: inherit;
+    padding-left: 2px;
+    padding-bottom: 8px;
+    font-style: italic;
+}
+
+ul#folders li.standard,
+ul#folders li.userlabel, 
+ul#folders li.label-edit {
+    background-image: url('/resources/images/label-hole.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+ul#folders li.systemlabel {
+    font-style: italic;
+    background-color: #97DEFB;
+    background-image: url('/resources/images/label-system.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+ul#folders li a, 
+ul#folders li a:link, 
+ul#folders li a:visited { 
+    color: #000;
+    background-color: #fdfdfd;
+    padding: 4px;
+    margin: 4px;
+    display: block;
+    line-height: 100%;
+    text-decoration: none;
+}
+
+ul#folders li.label-edit {
+    padding: 8px;
+    border: 1px solid #808080; 
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+ul#folders li.label-edit-active {
+    background-color: #000;
+    color: #fff;
+}
+
+/* 
+ * Used for labels when adding or editing tasks 
+ * (should be same as "ul#folders li.label-edit-active")
+ */
+span.label-edit-active {
+    background-color: #000;
+    color: #fff;
+}
+
+ul#folders li.priority {
+    font-style: italic;
+    margin-top: 10px;
+}
+
+ul#folders li.priority-normal:after {
+    content: "No priority";
+}
+
+ul#folders li.priority-high {
+    background-color: #FFC1C1;
+    /*
+    background-image: url('/resources/images/noise.png');
+    background-repeat: repeat;
+    */
+}
+
+ul#folders li.priority-high:after {
+    content: "Higher priority";
+}
+
+ul#folders li.smart {
+    
+}
+
+ul#folders li.separator {
+    border: 0px; 
+    border-top: 1px solid #000; 
+    margin-top: 10px;
+    margin-bottom: -20px;
+    border-radius: 0px;
+}
+
+ul#folders li.empty {
+    border: 0px; 
+    font-style: italic;
+    color: #808080;
+}
+
+ul#folders li.labeling-buttons {
+    display: none;
+    border: 0px;
+    padding: 5px 0px 0px 0px;
+}
+
+ul#folders li.active-label {
+    /* font-weight: bold; */
+    /* border: 1px solid #808080; */
+    background-image: url('/resources/images/label-hole-filled.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+ul#folders li.active-label a { 
+    color: #fff;
+    background-color: #000;
+}
+
+ul#folders li.empty::after {
+    content: "Empty";
+}
+
+ul#folders li.hidden {
+    display: none;
+}
+
+/**
+ * Labels listing and editing page 
+ */
+
+table#label_list {
+    /* width: 500px; */
+    width: 70%;
+    border: 0px;
+    border-collapse: collapse; 
+}
+
+

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block style %}
+    <link href="/resources/css/msg.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block contents %}
+
+<div class="message">
+{% if success %}
+<img src="/resources/icons/success.png" 
+     alt="Success" 
+     style="float: left;" />
+{% else %}
+<img src="/resources/icons/fail.png" 
+     alt="Failure" 
+     style="float: left;" />
+{% endif %}
+<div class="message-inner">
+{% autoescape off %}
+    {{ msg }}
+{% endautoescape %}
+</div>
+</div>
+
+{% endblock %}

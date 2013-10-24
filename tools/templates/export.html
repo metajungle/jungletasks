@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block stylesheet %}
+    <link href="/resources/css/orgmode.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block contents %}
+<h1>Export tasks</h1>
+
+{% if tasks %}
+
+<p>Below is a preview of your export in <a href="http://orgmode.org/">Org-Mode</a> format:</p>
+
+<div class="task_export_list_orgmode">
+
+  <p class="header">
+    #+PRIORITIES: A B B
+  </p>
+  <p>&nbsp;</p>
+
+  {% for task in tasks %}
+  <p id="task{{ task.id }}">
+    
+    <span>&#42;</span>
+
+    {% if task.done %}
+    <span class="done">DONE</span>
+    {% else %}
+    <span class="todo">TODO</span>
+    {% endif %}
+
+    <span class="priority">
+      {% ifequal task.priority 'HIG' %}
+      [#A]
+      {% else %}
+      [#B]
+      {% endifequal %}
+    </span>
+    
+    <span class="task">
+      {{ task.task }}
+    </span>
+  </p>
+  {% if task.done %}
+  <p>
+    <span class="closed">
+      &nbsp;&nbsp;&nbsp;CLOSED: 
+    </span>
+    <span class="date">
+      [{{ task.finished|date:"Y-m-d D G:i" }}]
+    </span>
+  </p>
+  {% endif %}
+  {% endfor %}
+  
+  {% if not all_shown %}
+  <p style="font-weight: bold;">. . .</p>
+  {% endif %}
+</div>
+
+{% if label and not error_no_such_label %}
+<form action="" method="post">{% csrf_token %}
+  <input type="hidden" name="label" value="{{ label }}" />
+  <input type="submit" value="Export" />
+</form>
+{% endif %}
+
+{% else %}
+  <p>Nothing here.</p>
+{% endif %}
+
+{% endblock %}
