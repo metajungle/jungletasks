@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block stylesheet %}
-    <link href="/resources/css/labels.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/labels.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="/resources/js/utils.js"></script>
-<script type="text/javascript" src="/resources/js/labels.js"></script>
-<script type="text/javascript" src="/resources/js/jquery.colorPicker.js"/></script>
+<script type="text/javascript" src="/static/js/utils.js"></script>
+<script type="text/javascript" src="/static/js/labels.js"></script>
+<script type="text/javascript" src="/static/js/jquery.colorPicker.js"/></script>
 {% endblock %}
 
 {% block js-on-document-load %}
@@ -98,10 +98,10 @@ $("td.status_hidden").each(function() {
     {#        value="#{{ label.color }}" /> #}
     {#   </td> #}
     {#   <td> #}
-    {#     <a href="#" onclick="return dom_label_rename('{{ label.id }}');"><img class="task_icon" src="/resources/icons/pencil.png" alt="Rename" /></a> #}
+    {#     <a href="#" onclick="return dom_label_rename('{{ label.id }}');"><img class="task_icon" src="/static/icons/pencil.png" alt="Rename" /></a> #}
     {#   </td> #}
     {#   <td class="label_trash"> #}
-    {#   <a href="#" onClick="return dom_label_delete('{{ label.id }}');"><img src="/resources/icons/trash.png" alt="Delete" /></a> #}
+    {#   <a href="#" onClick="return dom_label_delete('{{ label.id }}');"><img src="/static/icons/trash.png" alt="Delete" /></a> #}
     {#   </td> #}
     {#   <td><span style="font-weight: bold;">{{ label.num_not_done_tasks}}</span>  ({{ label.num_tasks }} total)</td> #}
     {#   <td class="status_hidden"> #}

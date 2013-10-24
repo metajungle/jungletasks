@@ -1,4 +1,4 @@
-/* @override http://localhost:8000/resources/css/main.css */
+/* @override http://localhost:8000/static/css/main.css */
 
 /*
  * PURECSS
@@ -50,13 +50,13 @@ body {
     padding: 0px; 
     background-color: #FBFBFB;
     font-size: 1.0em;
-    /* background-image: url('/resources/images/noise.png'); */
+    /* background-image: url('/static/images/noise.png'); */
     /* background-repeat: repeat; */
 
     /*
     background: #F5D6A7; 
     color:      #000000;
-    background-image: url('/resources/images/top-gradient.png'); 
+    background-image: url('/static/images/top-gradient.png'); 
     background-repeat: repeat-x;
     background-position :top;
     */
@@ -81,7 +81,7 @@ img {
     border-bottom: 1px solid #c0c0c0;
     margin: 0px;
     padding: 5px 0px 5px 10px;
-    background-image: url('/resources/images/background-top.png');
+    background-image: url('/static/images/background-top.png');
     background-repeat: repeat-x;
 }
 
@@ -270,7 +270,7 @@ div.message-success a:visited {
     border: 1px solid #b0b0b0;
     border-bottom: 2px solid #b0b0b0;
     background-color: #eda93d;  
-    background-image: url('/resources/images/background-highlight.png');
+    background-image: url('/static/images/background-highlight.png');
     background-repeat: repeat-x;
     margin: 0px;
     padding: 6px 12px 6px 12px;
@@ -329,7 +329,7 @@ div.color_picker {
   width: 16px;
   padding: 0 !important;
   border: 1px solid #ccc;
-  background: url('/resources/icons/colorpicker-corner.png') no-repeat top right;
+  background: url('/static/icons/colorpicker-corner.png') no-repeat top right;
   cursor: pointer;
   line-height: 16px;
 }

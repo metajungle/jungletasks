@@ -74,13 +74,6 @@ urlpatterns += patterns('',
   url(r'^logout/$', logout, name='url_logout', kwargs={ 'next_page': '/' }), 
 )
 
-
-# for serving static content 
-urlpatterns += patterns('', 
-  (r'^resources/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': '/Users/b0kaj/Development/git/jungletasks/resources'}),
-)
-
 # urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'jungletasks.views.home', name='home'),

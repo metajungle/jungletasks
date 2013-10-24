@@ -62,7 +62,7 @@ table.task_table tr.priority-high {
 }
 
 table.task_table tr.priority-high td.status {
-    background-image: url('/resources/icons/priority.png');
+    background-image: url('/static/icons/priority.png');
     background-repeat: no-repeat;
     background-position: left center;
 }
@@ -85,13 +85,13 @@ table.task_table img.task_icon {
 
 table.task_table span.task-edit-icon {
     display: block;
-    background-image: url('/resources/icons/pencil-grey.png');
+    background-image: url('/static/icons/pencil-grey.png');
     width: 16px;
     height: 16px;
 }
 
 table.task_table span.task-edit-icon:hover {
-    background-image: url('/resources/icons/pencil.png');
+    background-image: url('/static/icons/pencil.png');
 }
 
 table.task_table input.due-date-holder {
@@ -139,7 +139,7 @@ ul.label-crumbs li {
     margin: 0px 2px 0px 2px;
     border-top: 0px solid #dedede;
     background-color: #f0f0f0; 
-    background-image: url('/resources/images/crumbs.gif');
+    background-image: url('/static/images/crumbs.gif');
     background-repeat: no-repeat;
     background-position: right center; 
 

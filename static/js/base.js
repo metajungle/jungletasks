@@ -26,7 +26,7 @@ var css_task_not_done = "task_not_done";
  */
 function ajax_display_status(msg) {
     var m = 
-	'<img src="/resources/icons/yes_smaller.png" class="ajax-status-image" alt="Success" />' + msg;
+	'<img src="/static/icons/yes_smaller.png" class="ajax-status-image" alt="Success" />' + msg;
     $('#ajax_status').show().html(m).delay(2000).fadeOut(1000);
 }
 

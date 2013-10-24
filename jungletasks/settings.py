@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 PROJECT_DIR = os.path.dirname(__file__)
 
 ADMINS = (
-    ('Jakob Henriksson', 'tasks@metajungle.net'),
+    # ('First Last', 'email@host.com'),
 )
 
 MANAGERS = ADMINS
@@ -23,6 +23,13 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
+
+# can be overridden in local_settings.py
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smpt'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'email'
+# EMAIL_HOST_PASSWORD = 'password'
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -72,7 +79,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    "/Users/b0kaj/dev/git/a/jungletasks/resources",
+
 )
 
 # List of finder classes that know how to find static files in
@@ -168,9 +175,7 @@ LOGGING = {
 }
 
 # local settings 
-if os.path.exists(os.path.join(PROJECT_DIR, "local_settings.py")):
-    try:
-        from local_settings import *
-    except:
-        pass
-
+try:
+    from local_settings import *
+except ImportError:
+    pass

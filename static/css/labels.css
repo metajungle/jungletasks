@@ -38,7 +38,7 @@ ul#folders li.title {
 ul#folders li.standard,
 ul#folders li.userlabel, 
 ul#folders li.label-edit {
-    background-image: url('/resources/images/label-hole.png');
+    background-image: url('/static/images/label-hole.png');
     background-repeat: no-repeat;
     background-position: right center;
 }
@@ -46,7 +46,7 @@ ul#folders li.label-edit {
 ul#folders li.systemlabel {
     font-style: italic;
     background-color: #97DEFB;
-    background-image: url('/resources/images/label-system.png');
+    background-image: url('/static/images/label-system.png');
     background-repeat: no-repeat;
     background-position: right center;
 }
@@ -97,7 +97,7 @@ ul#folders li.priority-normal:after {
 ul#folders li.priority-high {
     background-color: #FFC1C1;
     /*
-    background-image: url('/resources/images/noise.png');
+    background-image: url('/static/images/noise.png');
     background-repeat: repeat;
     */
 }
@@ -133,7 +133,7 @@ ul#folders li.labeling-buttons {
 ul#folders li.active-label {
     /* font-weight: bold; */
     /* border: 1px solid #808080; */
-    background-image: url('/resources/images/label-hole-filled.png');
+    background-image: url('/static/images/label-hole-filled.png');
     background-repeat: no-repeat;
     background-position: right center;
 }

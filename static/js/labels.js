@@ -205,9 +205,9 @@ function dom_label_add(l_id, l_text) {
         'name="labelcolor' + l_id + '" ' +
         'value="#ffff99" /> ' +
         '</td>' +
-        '<td><a href="#" onclick="return dom_label_rename(\'' + l_id + '\');"><img class="task_icon" src="/resources/icons/pencil.png" alt="Rename" /></a></td>' +
+        '<td><a href="#" onclick="return dom_label_rename(\'' + l_id + '\');"><img class="task_icon" src="/static/icons/pencil.png" alt="Rename" /></a></td>' +
         '<td class="label_trash">' +
-        '<a href="#" onClick="return dom_label_delete(\'' + l_id + '\');"><img src="/resources/icons/trash.png" alt="Delete" /></a></td>' +
+        '<a href="#" onClick="return dom_label_delete(\'' + l_id + '\');"><img src="/static/icons/trash.png" alt="Delete" /></a></td>' +
         '<td><span style="font-weight: bold;">0</span> (0 total)</td>' +
         '<td class="status_hidden">' +
         '<input  type="checkbox" name="label' + l_id + '_hidden" ' +

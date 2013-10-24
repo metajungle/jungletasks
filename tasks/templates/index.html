@@ -5,8 +5,8 @@ Jungle Tasks - Simple Task Management
 {% endblock %}
 
 {% block style %}
-    <link href="/resources/css/index.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="/resources/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+    <link href="/static/css/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
     <style type="text/css">
       #top {
         border-bottom: 0px solid #c0c0c0;
@@ -25,7 +25,7 @@ Jungle Tasks - Simple Task Management
         color: #000;
         margin: 0px;
         padding: 0px 0px 10px 0px;
-        background-image: url('/resources/images/background-index-top.png');
+        background-image: url('/static/images/background-index-top.png');
         background-repeat: repeat-x;
         background-color: #048104;
       }
@@ -65,7 +65,7 @@ Jungle Tasks - Simple Task Management
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="/resources/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 {% endblock %}
 
 {% block js-on-document-load %}
@@ -78,7 +78,7 @@ Jungle Tasks - Simple Task Management
 
 <div class="index-top">
     <img style="width: 128px; vertical-align: middle; margin-top: -60px;"
-	 src="/resources/images/logo.png" alt="Jungle Tasks" /> 
+	 src="/static/images/logo.png" alt="Jungle Tasks" /> 
     <h1>Idea. Track. Move forward.</h1>
 </div>
 
@@ -105,14 +105,14 @@ Jungle Tasks - Simple Task Management
 	<form action="{% url 'url_login' %}" method="post">{% csrf_token %}
 	  <input type="hidden" name="email" value="demo@jungletasks.com" />
 	  <input type="hidden" name="password" value="demo" />
-	  <input type="image" src="/resources/images/button-demo.png" 
+	  <input type="image" src="/static/images/button-demo.png" 
 		 alt="Demo" />
 	</form>
       </p>
     </td>
     <td style="text-align: center;">
       <a class="screenshot"
-	 href="/resources/images/screenshot.png"><img src="/resources/images/screenshot-small.png" 
+	 href="/static/images/screenshot.png"><img src="/static/images/screenshot-small.png" 
 	     alt="Screenshot" 
 	     style="width: 240px;"/></a>
       <br />
@@ -120,25 +120,25 @@ Jungle Tasks - Simple Task Management
     </td>
     <td>
       <p class="new-infobox">
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Simple task management
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Organize tasks using labels
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Export tasks (no data lock-in)
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Accessible everywhere
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	No bloat
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Get things done
 	<br />
-	<img src="/resources/icons/yes_small.png" alt="Yes" />
+	<img src="/static/icons/yes_small.png" alt="Yes" />
 	Move forward
       </p>
     </td>
