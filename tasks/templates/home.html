@@ -50,7 +50,21 @@ $("input.due-date-holder").each(function() {
 {% endif %}
 {% endblock %}
 
-{% block contents-outer %}
+{% block contents %}
+
+<form role="form" action="{% url 'url_label_add' %}" method="POST">{% csrf_token %}
+<div class="row">
+  <div class="col-sm-9">
+      <label class="sr-only" for="inputTask">Label</label>
+      <input type="text" class="form-control" id="inputTask" name="task" placeholder="New task">
+  </div>
+  <div class="col-sm-3">
+    <button type="submit" class="btn btn-primary form-control">&plus; add task</button>
+  </div>
+</div>
+</form>
+
+<p></p>
 
 <div class="row">
     <div class="col-sm-9">

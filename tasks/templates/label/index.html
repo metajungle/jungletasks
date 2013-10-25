@@ -1,22 +1,60 @@
 {% extends "base.html" %}
 
 {% block stylesheet %}
-    <link href="/static/css/labels.css" rel="stylesheet" type="text/css" />
+    {# <link href="/static/css/labels.css" rel="stylesheet" type="text/css" /> #}
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript" src="/static/js/utils.js"></script>
 <script type="text/javascript" src="/static/js/labels.js"></script>
 <script type="text/javascript" src="/static/js/jquery.colorPicker.js"/></script>
+
+<script id="label-delete-confirm-template" type="text/x-handlebars-template">
+{% verbatim %}
+<form action="/label/delete/{{id}}/" method="POST">
+{% endverbatim %}
+{% csrf_token %}
+{% verbatim %}
+<input type="submit" class="btn btn-danger btn-sm btn-delete-confirm" value="Confirm..." />
+</form>
+{% endverbatim %}
+</script>
+
 {% endblock %}
 
 {% block js-on-document-load %}
 
-/* register action for clicking on 'save' button */
-/* $("button#btn_labels_save").click(api_labels_save); */
+$("#inputLabel").focus();
+// reset focus every second
+setInterval(function() {
+    $("#inputLabel").focus();
+}, 1000);
 
-/* register action for clicking on 'add' */
-$("a#btn_add_label").click(add_label);
+$(".btn-delete").click(function() {
+    // register events to handle clicking outside of the confirm area 
+    $('html').unbind('click');
+    $('html').click(function(e) {
+        // check if we click not on a delete button or a confirm button
+        if (!($(e.target).hasClass('btn-delete-confirm') || 
+              $(e.target).hasClass('btn-delete'))) {
+            $(".btn-delete-confirm").remove();
+            $(".btn-delete").removeClass('btn-default').addClass('btn-danger')
+                .show();
+        }
+    });
+    // update the status of other 'delete' buttons 
+    $(".btn-delete").removeClass('btn-danger').addClass('btn-default').show();
+    // remove all old 'confirm' buttons, if they exist 
+    $(".btn-delete-confirm").remove();
+    // hide the button just clicked 
+    $(this).hide();
+    // create the form to delete the label 
+    var id = $(this).data('id');
+    var source = $("#label-delete-confirm-template").html();
+    var template = Handlebars.compile(source);
+    var html = template({id: id});
+    $(this).after(html);
+});
 
 $("table#label_list td.label_color input").each(function() {
     $(this).colorPicker();
@@ -37,95 +75,57 @@ $("td.status_hidden").each(function() {
 {% block contents %}
 <h1>Your labels</h1>
 
-    <p>
-        <form class="form-inline" role="form">{% csrf_token %}
-          <div class="form-group">
+<form role="form" action="{% url 'url_label_add' %}" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-9">
             <label class="sr-only" for="inputLabel">Label</label>
-            <input type="text" class="form-control" id="inputLabel" placeholder="Label">
-          </div>
-          <button type="submit" class="btn btn-primary">&plus; add label</button>
-        </form>
-    </p>
-        
-    {# <p><a href="{% url 'url_label_add' %}" class="btn btn-primary">&plus; add label</a></p> #}
+            <input type="text" class="form-control" id="inputLabel" name="label" placeholder="Label">
+        </div>
+        <div class="col-sm-3">
+            <button type="submit" class="btn btn-primary form-control">&plus; add label</button>
+        </div>
+    </div>
+</form>
 
-    {% if labels %}
-    <table class="table">
-        <thead>
-            <tr>
-                <td>Label</td>
-                <td>Tasks</td>
-                <td>Visibility</td>
-                <td>Remove</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for label in labels %}
-            <tr style="background-color: #{{ label.color }}">
-                <td>{{ label.name }}</td>
-                <td><strong>{{ label.num_not_done_tasks}}</strong> ({{ label.num_tasks }} total)
-                </td>
-                <td>
-                    <button class="btn btn-sm button-default">Hidden</button>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p><strong>There are no labels here.</strong></p>
-        <p><em>Add a label by clicking 'add' in the top-right corner.</em></p>
-    {% endif %}
+<p></p>
+    
+{% if labels %}
+<table class="table">
+    <thead>
+        <tr>
+            <td>Label</td>
+            <td>Tasks</td>
+            <td>Visibility</td>
+            <td>Remove</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for label in labels %}
+        <tr style="background-color: #{{ label.color }}">
+            <td>{{ label.name }}</td>
+            <td><strong>{{ label.num_not_done_tasks}}</strong> ({{ label.num_tasks }} total)
+            </td>
+            <td>
+                <button class="btn btn-sm button-default">Hidden</button>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p><strong>There are no labels here.</strong></p>
+    <p><em>Add a label by clicking 'add' in the top-right corner.</em></p>
+{% endif %}
 
-    {#     <span class="labels_empty_holder"> #}
-    {# {% if not labels %} #}
-    {#   <p><strong>There are no labels here.</strong></p> #}
-    {#   <p><em>Add a label by clicking 'add' in the top-right corner.</em></p> #}
-    {# {% endif %} #}
-    {# </span> #}
-    {#  #}
-    {# <table id="label_list" class="label_table"> #}
-    {# {% for label in labels %} #}
-    {# <tr id="label{{ label.id }}" data-label_id="'{{ label.id }}'"> #}
-    {#   <td class="label_name">{{ label.name }}</td> #}
-    {#   <td class="label_color"> #}
-    {#     <input id="labelcolor{{ label.id }}"  #}
-    {#        type="text"  #}
-    {#        name="labelcolor{{ label.id }}"  #}
-    {#        value="#{{ label.color }}" /> #}
-    {#   </td> #}
-    {#   <td> #}
-    {#     <a href="#" onclick="return dom_label_rename('{{ label.id }}');"><img class="task_icon" src="/static/icons/pencil.png" alt="Rename" /></a> #}
-    {#   </td> #}
-    {#   <td class="label_trash"> #}
-    {#   <a href="#" onClick="return dom_label_delete('{{ label.id }}');"><img src="/static/icons/trash.png" alt="Delete" /></a> #}
-    {#   </td> #}
-    {#   <td><span style="font-weight: bold;">{{ label.num_not_done_tasks}}</span>  ({{ label.num_tasks }} total)</td> #}
-    {#   <td class="status_hidden"> #}
-    {#     <input  type="checkbox" name="label{{ label.id }}_hidden"  #}
-    {#         id="label{{ label.id }}_hidden"  #}
-    {#         {% if label.hidden %}checked="checked"{% endif %}></input> #}
-    {#     <label for="label{{ label.id }}_hidden">Hidden</label> #}
-    {#   </td> #}
-    {# </tr> #}
-    {# {% endfor %} #}
-    {# </table> #}
-
-{# {% if labels %} #} 
-{# <p> #} 
-{#   <button id="btn_labels_save">Save labels</button> #} 
-{# </p> #} 
-{# {% endif %} #} 
-
-    {% if system_labels %}
-    <h1>System labels</h1>
-    {% for label in system_labels %}
-    {{ label.get_label_display }} 
-    {% endfor %}
-    {% endif %}
+{# {% if system_labels %} #}
+{# <h1>System labels</h1> #}
+{# {% for label in system_labels %} #}
+{# {{ label.get_label_display }}  #}
+{# {% endfor %} #}
+{# {% endif %} #}
 
 {% endblock %}
 

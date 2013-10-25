@@ -152,28 +152,41 @@ def label(request):
                   context_instance=RequestContext(request)) 
                   
 @login_required
+@require_http_methods(['POST'])
 def label_add(request):
   """
   Add a label
   """
+  if 'label' in request.POST:
+    label = request.POST['label'].strip()
+    # check that the label name does not already exist
+    try:
+      Label.objects.get(user=request.user, name__iexact=label)
+      messages.add_message(request, messages.ERROR, 'The label already exists (labels are case-insensitive)')
+    except Label.DoesNotExist:
+      # ffff99 is the 'default' color
+      label = Label(user=request.user, name=label, color="ffff99")
+      label.save()
+      messages.add_message(request, messages.SUCCESS, 'The label was created')
+      
+  return HttpResponseRedirect(reverse('url_label'))
   
-  if request.method == 'POST':
-    if 'label' in request.POST:
-      label = request.POST['label'].strip()
-      # check that the label name does not already exist
-      try:
-        Label.objects.get(user=request.user, name=label)
-        messages.add_message(request, messages.ERROR, 'The label already exists')
-      except Label.DoesNotExist:
-        # ffff99 is the 'default' color
-        label = Label(user=request.user, name=label, color="ffff99")
-        label.save()
-        messages.add_message(request, messages.SUCCESS, 'The label was created')
-  
-  return render_to_response('label/add.html', 
-                            { }, 
-                  context_instance=RequestContext(request))                   
-  
+@login_required
+@require_http_methods(['POST'])
+def label_delete(request, id):
+  """
+  Delete a label (actually, just marks it as inactive)
+  """
+  try:
+    label = Label.objects.get(user=request.user, id=id)
+    label.active = False
+    label.save()
+    messages.add_message(request, messages.SUCCESS, 'The label was deleted')
+  except Label.DoesNotExist:
+    messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be deleted')
+      
+  return HttpResponseRedirect(reverse('url_label'))  
+
   
 @login_required
 def settings(request):
