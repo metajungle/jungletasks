@@ -159,17 +159,52 @@ def label_add(request):
   """
   if 'label' in request.POST:
     label = request.POST['label'].strip()
-    # check that the label name does not already exist
-    try:
-      Label.objects.get(user=request.user, name__iexact=label)
-      messages.add_message(request, messages.ERROR, 'The label already exists (labels are case-insensitive)')
-    except Label.DoesNotExist:
-      # ffff99 is the 'default' color
-      label = Label(user=request.user, name=label, color="ffff99")
-      label.save()
-      messages.add_message(request, messages.SUCCESS, 'The label was created')
+    
+    if label == '':
+      messages.add_message(request, messages.ERROR, 'The label cannot be empty')
+    else:
+      # check that the label name does not already exist
+      try:
+        Label.objects.get(user=request.user, name__iexact=label)
+        messages.add_message(request, messages.ERROR, 'The label already exists (labels are case-insensitive)')
+      except Label.DoesNotExist:
+        label = Label(user=request.user, name=label)
+        label.save()
+        messages.add_message(request, messages.SUCCESS, 'The label was created')
       
   return HttpResponseRedirect(reverse('url_label'))
+  
+@login_required
+@require_http_methods(['GET', 'POST'])
+def label_edit(request, id):
+  """
+  Edit a label
+  """
+  try: 
+    label = Label.objects.get(user=request.user, id=id)
+    
+    if request.method == 'POST':
+      l = request.POST['label'].strip()
+      # check for empty labels 
+      if l == '':
+        messages.add_message(request, messages.ERROR, 'The label cannot be empty')
+      else:
+        # check for existing labels
+        try:
+          Label.objects.get(user=request.user, name__iexact=l)
+          messages.add_message(request, messages.ERROR, 'That label already exists (labels are case-insensitive)')
+        except Label.DoesNotExist:
+          # TODO: should catch error if the label is too long, for example. 
+          label.name = l
+          label.save()
+          messages.add_message(request, messages.SUCCESS, 'The label was updated')
+    
+    return render_to_response('label/edit.html', 
+                              { 'label' : label }, 
+                    context_instance=RequestContext(request)) 
+  except:
+    raise Http404
+    
   
 @login_required
 @require_http_methods(['POST'])
@@ -185,7 +220,7 @@ def label_delete(request, id):
   except Label.DoesNotExist:
     messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be deleted')
       
-  return HttpResponseRedirect(reverse('url_label'))  
+  return HttpResponseRedirect(reverse('url_label'))
 
   
 @login_required
@@ -631,8 +666,7 @@ def api_label_add(request):
       Label.objects.get(user=request.user, name=label)
       messages.add_message(request, messages.ERROR, 'The label already exists')
     except Label.DoesNotExist:
-      # ffff99 is the 'default' color
-      label = Label(user=request.user, name=label, color="ffff99")
+      label = Label(user=request.user, name=label)
       label.save()
       messages.add_message(request, messages.SUCCESS, 'The label was created')
   return HttpResponseRedirect(reverse('url_label'))

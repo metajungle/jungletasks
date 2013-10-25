@@ -89,6 +89,12 @@ img {
     margin: 20px;
 }
 
+@media (max-width: 768px) {
+    #contents {
+        margin: 0px;
+    }
+}
+
 #contents-inner {
     float: left;
     width: 100%;
@@ -165,6 +171,24 @@ ul#topmenu li.navsep {
 
 #footer p {
     text-align: center;
+}
+
+/**
+ * LABELS
+ */
+
+.table-labels td:first-child {
+    width: 40%;
+}
+
+.table-labels td:last-child {
+/*    width: 20%;*/
+}
+
+@media (max-width: 768px) {
+    .table-labels td:last-child {
+/*        width: 40%;*/
+    }
 }
 
 /**
