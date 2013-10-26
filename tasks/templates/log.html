@@ -24,7 +24,7 @@ Next
   <p>Completed total: {{ total }}</p>
 </div>
 
-{% load tags %}
+{% load tasks_tags %}
 {% for date in dates %}
 <h3 class="date {% today date %}">{{ date|date:"D d M Y" }}</h3>
 {% for key,tasks in tasks.items %}

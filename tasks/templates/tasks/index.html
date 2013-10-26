@@ -14,6 +14,11 @@
 
 {% block js-on-document-load %}
 
+/* focus on creating tasks input */ 
+setInterval(function() {
+    $("#inputTask").focus();
+}, 200);
+
 /* register action for clicking on 'save' button */
 $("button#btn_label_save").click(task_labels_save);
 /* register action for clicking on 'close' button */
@@ -39,14 +44,8 @@ $("input.due-date-holder").each(function() {
 {% endblock %}
 
 {% block action-controls %}
-{% if paged_items.object_list %}
+{% if tasks.object_list %}
 <a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a>
-{% endif %}
-{% url 'url_form_task_add' as form_add %}
-{% if user_label %}
-<a href="{{ form_add }}?orig_l_id={{ user_label.id }}" id="btn_add_task">add</a>
-{% else %}
-<li><a href="{% url 'url_form_task_add' %}">add</a></li>
 {% endif %}
 {% endblock %}
 
@@ -69,7 +68,7 @@ $("input.due-date-holder").each(function() {
 <div class="row">
     <div class="col-sm-9">
         
-        {% if paged_items.object_list %}
+        {% if tasks.object_list %}
         <table class="table">
           <tr class="table_header">
             <th class="empty">&nbsp;</th>
@@ -80,7 +79,7 @@ $("input.due-date-holder").each(function() {
             {# <th>Due</th> #}
             <th>&nbsp;</th>
           </tr>
-          {% for task in paged_items.object_list %}
+          {% for task in tasks.object_list %}
           <tr id="task{{ task.id }}"
       	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
       	data-labels="[{% for l in task.labels.all %}'{{ l.id }}'{% if not forloop.last %},{% endif %}{% endfor %}]">
@@ -120,18 +119,18 @@ $("input.due-date-holder").each(function() {
           {% endfor %}
     
           {# PAGINATION #}
-          {% if paged_items.paginator.num_pages > 1 %}
+          {% if tasks.paginator.num_pages > 1 %}
           <tr class="pagination">
             <td class="empty">&nbsp;</td>
             <td colspan="4">
-                {% if paged_items.has_previous %}
-                    <a href="?{{ get_values }}page={{ paged_items.previous_page_number }}">Previous</a> &#124;
+                {% if tasks.has_previous %}
+                    <a href="?{{ get_values }}page={{ tasks.previous_page_number }}">Previous</a> &#124;
                 {% endif %}
                 <span class="current">
-                    Page {{ paged_items.number }} of {{ paged_items.paginator.num_pages }}
+                    Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
                 </span>
-                {% if paged_items.has_next %}
-                    &#124; <a href="?{{ get_values }}page={{ paged_items.next_page_number }}">Next</a>
+                {% if tasks.has_next %}
+                    &#124; <a href="?{{ get_values }}page={{ tasks.next_page_number }}">Next</a>
                 {% endif %}
             </td>
           </tr>
@@ -149,10 +148,16 @@ $("input.due-date-holder").each(function() {
         <ul id="folders">
     
           {% load tasks_tags %}
+          {% url 'url_tasks_inbox' as url_tasks_inbox %}
+          {% url 'url_tasks_all' as url_tasks_all %}
     
           {# standard labels #}
-          <li class="standard {% current active_label 'inbox' %}"><a href="?l=inbox">Inbox&nbsp({{ num_not_done }})</a></li>
-          <li class="standard {% current active_label 'all' %}"><a href="?l=all">All</a></li>
+          <li class="standard {% current active_label url_tasks_inbox %}">
+              <a href="{{ url_tasks_inbox }}">Inbox&nbsp({{ num_not_done }})</a>
+          </li>
+          <li class="standard {% current active_label url_tasks_all %}">
+              <a href="{{ url_tasks_all }}">All</a>
+          </li>
           <li class="separator">&nbsp;</li>
     
           {# user-defined labels #}

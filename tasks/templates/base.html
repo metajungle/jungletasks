@@ -65,11 +65,19 @@
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
+      {% load tasks_tags %}
+      {% url 'url_tasks' as url_tasks %}
+      {% url 'url_label' as url_label %}
+      {% url 'url_tools' as url_tools %}
+      {% url 'url_faq' as url_faq %}
+      {% url 'url_login' as url_login %}
+      {% url 'url_signup' as url_signup %}
+
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/?l=inbox">Hello, {{ user.email }}</a></li>
+          <li class="{% active request url_tasks %}"><a href="{{ url_tasks }}">Hello, {{ user.email }}</a></li>
           {% if user.is_authenticated %}
-          <li><a href="{% url 'url_label' %}">labels</a></li>
+          <li class="{% active request url_label %}"><a href="{{ url_label }}">labels</a></li>
           {# <li><a href="{% url 'url_tools' %}">tools</a></li> #}
           {% endif %}
           {% block action-controls %}
@@ -79,11 +87,11 @@
             {% if user.is_authenticated %}
                 <li><a href="{% url 'url_logout' %}">logout</a></li>
             {% else %}
-                <li><a href="{% url 'url_login' %}">login</a></li>
-                <li><a href="{% url 'url_register' %}">signup</a></li>
+                <li class="{% active request url_login %}"><a href="{{ url_login }}">login</a></li>
+                <li class="{% active request url_signup %}"><a href="{{ url_signup }}">signup</a></li>
             {% endif %}
-          <li><a href="{% url 'url_tools' %}">tools</a></li>
-          <li><a href="{% url 'url_faq' %}">faq</a></li>
+          <li class="{% active request url_tools %}"><a href="{{ url_tools }}">tools</a></li>
+          <li class="{% active request url_faq %}"><a href="{{ url_faq }}">faq</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>

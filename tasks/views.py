@@ -132,6 +132,60 @@ def home(request, label=None):
                               'get' : request.GET },
                   context_instance=RequestContext(request)) 
 
+
+@login_required
+@require_http_methods(['GET'])
+def tasks(request):
+  """
+  Display tasks in the 'inbox'
+  """
+  return tasks_inbox(request)
+
+@login_required
+@require_http_methods(['GET'])
+def tasks_inbox(request):
+  """
+  Display tasks in the 'inbox'
+  """
+  tasks = Task.objects.filter(user=request.user, done=False)
+  paginator = Paginator(tasks, 10) 
+
+  # make sure page request is an int. If not, deliver first page.
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+
+  # If page request (9999) is out of range, deliver last page of results.
+  try:
+    paged_items = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    paged_items = paginator.page(paginator.num_pages)
+      
+  return render_to_response('tasks/index.html', 
+                            { 'tasks' : paged_items }, 
+                  context_instance=RequestContext(request)) 
+  
+@login_required
+@require_http_methods(['GET'])
+def tasks_all(request):
+  """
+  Display all tasks 
+  """
+  return render_to_response('tasks/index.html', 
+                            { }, 
+                  context_instance=RequestContext(request)) 
+
+@login_required
+@require_http_methods(['GET'])
+def tasks_label(request, id):
+  """
+  Display tasks by a label
+  """
+  return render_to_response('tasks/index.html', 
+                            { }, 
+                  context_instance=RequestContext(request)) 
+
 @login_required
 def label(request):
   """
