@@ -137,9 +137,9 @@ def home(request, label=None):
 @require_http_methods(['GET'])
 def tasks(request):
   """
-  Display tasks in the 'inbox'
+  Re-directs to the tasks in the 'inbox'
   """
-  return tasks_inbox(request)
+  return HttpResponseRedirect(reverse('url_tasks_inbox'))
 
 @login_required
 @require_http_methods(['GET'])
@@ -185,6 +185,17 @@ def tasks_label(request, id):
   return render_to_response('tasks/index.html', 
                             { }, 
                   context_instance=RequestContext(request)) 
+
+# @login_required
+# @require_http_methods(['POST'])
+# def tasks_add(request):
+#   
+#   if 'task' in request.POST:
+#     task = request.POST['task']
+#     # create task
+#     task = Task(user=request.user, task=task)
+#     task.save()
+  
 
 @login_required
 def label(request):
@@ -275,6 +286,33 @@ def label_delete(request, id):
     messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be deleted')
       
   return HttpResponseRedirect(reverse('url_label'))
+
+@login_required
+@require_http_methods(['POST'])
+def label_set_hidden_json(request):
+  """
+  Sets the hidden flag of a label
+  """
+  l_id = request.POST['id']
+  l_hidden = request.POST['hidden']
+
+  # default 
+  json = simplejson.dumps({ 'status': 'KO' })
+  
+  if l_id != None and l_hidden != None:
+    try:
+      label = Label.objects.get(user=request.user, id=l_id)
+      status = True if l_hidden == 'true' else False
+      label.hidden = status
+      label.save()
+      print 'OK2: %s - %s' % (l_hidden, status)
+      json = simplejson.dumps({ 'status': 'OK' })
+    except Label.DoesNotExists:
+      messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be found')
+
+  return HttpResponse(json, mimetype = 'application/json', 
+                      content_type = 'application/json; charset=utf8')
+      
 
   
 @login_required

@@ -18,6 +18,8 @@ urlpatterns = patterns('tasks.views',
     url(r'^label/add/$', 'label_add', name='url_label_add'), 
     url(r'^label/edit/(?P<id>\d+)/$', 'label_edit', name='url_label_edit'), 
     url(r'^label/delete/(?P<id>\d+)/$', 'label_delete', name='url_label_delete'), 
+
+    url(r'^label/hidden/$', 'label_set_hidden_json', name='url_label_set_hidden_json'), 
     
     url(r'^settings/$', 'settings', name='url_settings'), 
     url(r'^tools/$', 'tools', name='url_tools'), 

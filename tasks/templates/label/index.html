@@ -1,27 +1,58 @@
 {% extends "base.html" %}
 
-{% block js-on-document-load %}
-
-/* focus on creating label input */ 
-setInterval(function() {
-    $("#inputLabel").focus();
-}, 200);
-
-$("table#label_list td.label_color input").each(function() {
-    $(this).colorPicker();
+{% block script %}
+<script type="text/javascript" charset="utf-8">
+<!--
+$(function() {
+    setInterval(function() {
+        $("#inputLabel").focus();
+    }, 200);
 });
 
-/* register action for checking and unchecking the hidden property */
-$("td.status_hidden").each(function() {
-    var data = $(this).parent().metadata();
-    if (data.label_id) {
-        $(this).find("input").button().click(function() {
-            dom_label_save(data.label_id);
-        }); 
+function Label() {
+    
+    if (!(this instanceof Label)) {
+        return new Label();
     }
+    
+    this.setLabelHiddenStatus = function(id, hidden, callback) {
+        $.post("{% url 'url_label_set_hidden_json' %}", {
+                'id': id,
+                'hidden': (hidden ? 'true' : 'false')
+            },
+            function(data, status) {
+                if (status == 'success' && data.status == 'OK') {
+                    callback();
+                }
+            }
+        );
+    };
+}
+
+var label = new Label();
+
+// listening to changing the 'hidden' status of a label 
+$(".btn-hidden-toggle").click(function() {
+    var id = $(this).data('id');
+    var hidden = $(this).data('hidden');
+    label.setLabelHiddenStatus(id, hidden, function(data, status) {
+        // updates the DOM if the change was successful 
+        var btns = $("#btn-hidden-group-" + id).children();
+        var btnShow = $(btns[0]);
+        var btnHide = $(btns[1]);
+        if (hidden) {
+            btnShow.removeClass('btn-success').addClass('btn-default');
+            btnHide.removeClass('btn-default').addClass('btn-danger');
+        } else {
+            btnShow.removeClass('btn-default').addClass('btn-success');
+            btnHide.removeClass('btn-danger').addClass('btn-default');
+        }
+    });
 });
 
-{% endblock %}
+-->
+</script>
+{% endblock script %}
 
 {% block contents %}
 <h1>Your labels</h1>
@@ -56,9 +87,9 @@ $("td.status_hidden").each(function() {
             <td class="hidden-xs"><strong>{{ label.num_not_done_tasks}}</strong> ({{ label.num_tasks }} total)
             </td>
             <td>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-{% if label.hidden %}default{% else %}success{% endif %}">Show</button>
-                  <button type="button" class="btn btn-sm btn-{% if label.hidden %}danger{% else %}default{% endif %}">Hide</button>
+                <div class="btn-group" id="btn-hidden-group-{{ label.id }}">
+                  <button type="button" data-id="{{ label.id }}" data-hidde="false" class="btn btn-sm btn-{% if label.hidden %}default{% else %}success{% endif %} btn-hidden-toggle">Show</button>
+                  <button type="button" data-id="{{ label.id }}" data-hidden="true" class="btn btn-sm btn-{% if label.hidden %}danger{% else %}default{% endif %} btn-hidden-toggle">Hide</button>
                 </div>
                 <a href="{% url 'url_label_edit' label.id %}" class="btn btn-sm btn-default">Edit...</a>
             </td>
