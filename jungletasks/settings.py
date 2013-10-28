@@ -4,6 +4,14 @@ import os.path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+MAINTENANCE_MODE = False
+MAINTENANCE_IGNORE_URLS = (
+    # static resources
+    r'^/static', 
+    # login form 
+    r'^/dev/login',
+)
+
 PROJECT_DIR = os.path.dirname(__file__)
 
 ADMINS = (
@@ -106,6 +114,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -128,6 +137,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, "tasks/templates"), 
     os.path.join(PROJECT_DIR, "tools/templates"), 
     os.path.join(PROJECT_DIR, "account/templates"), 
+    os.path.join(PROJECT_DIR, "dev/templates"), 
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -148,6 +158,7 @@ INSTALLED_APPS = (
     'tasks', 
     'tools', 
     'account', 
+    'dev', 
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

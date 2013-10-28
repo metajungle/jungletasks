@@ -51,7 +51,7 @@ $("input.due-date-holder").each(function() {
 
 {% block contents %}
 
-<form role="form" action="{% url 'url_label_add' %}" method="POST">{% csrf_token %}
+<form role="form" action="{% url 'url_tasks_add' %}" method="POST">{% csrf_token %}
 <div class="row">
   <div class="col-sm-9">
       <label class="sr-only" for="inputTask">Label</label>

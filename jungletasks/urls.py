@@ -14,6 +14,8 @@ urlpatterns = patterns('tasks.views',
     url(r'^tasks/all/$', 'tasks_all', name='url_tasks_all'), 
     url(r'^tasks/(?P<id>\d+)/$', 'tasks_label', name='url_tasks_label'), 
 
+    url(r'^tasks/add/$', 'tasks_add', name='url_tasks_add'), 
+
     url(r'^label/$', 'label', name='url_label'), 
     url(r'^label/add/$', 'label_add', name='url_label_add'), 
     url(r'^label/edit/(?P<id>\d+)/$', 'label_edit', name='url_label_edit'), 
@@ -79,6 +81,11 @@ urlpatterns += patterns('',
   # url(r'^accounts/signup/$', 'register', name='url_signup'), 
   #(r'^login/$',  login), 
   url(r'^logout/$', logout, name='url_logout', kwargs={ 'next_page': '/' }), 
+)
+
+# for dev
+urlpatterns += patterns('dev.views',
+  url(r'^dev/login/$', 'dev_login', name='url_dev_login' ), 
 )
 
 # urlpatterns = patterns('',

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+
+  <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css"    
+        rel="stylesheet" type="text/css" />
+  <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" 
+            type="text/css" />
+        
+  <script type="text/javascript" 
+          src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
+
+  <script type="text/javascript">
+
+  $(document).ready(function() {
+    $("input[type='text']#username").focus();
+  });
+
+  </script>
+</head>
+<body>
+
+<div id="contents">
+
+    <p class="lead">Please provide credentials</p>
+
+    {% if error %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        I'm sorry, your credentials were not accepted, please try again
+    </div>
+    {% endif %}
+
+    <form action="" method="POST" class="" role="form">{% csrf_token %}
+        <div class="form-group">
+            <label class="control-label" for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="Password" class="form-control" />
+            </div>
+        </div>
+        <p></p>
+        <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+  
+</div>
+
+</body>
+</html>

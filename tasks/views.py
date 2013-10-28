@@ -1,5 +1,5 @@
 from django.template import RequestContext 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect 
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -23,13 +23,15 @@ from tasks.forms import AddTaskForm
 
 import account.models as a_models
 
+@require_http_methods(['GET'])
 def index(request): 
   """
   Home page
   """
 
   if request.user.is_authenticated():
-    return home(request)
+    if not 'hp' in request.GET:
+      return redirect('url_tasks_inbox')
   
   return render_to_response('index.html', {}, 
                   context_instance=RequestContext(request)) 
@@ -142,11 +144,15 @@ def tasks(request):
   return HttpResponseRedirect(reverse('url_tasks_inbox'))
 
 @login_required
-@require_http_methods(['GET'])
+@require_http_methods(['GET', 'POST'])
 def tasks_inbox(request):
   """
   Display tasks in the 'inbox'
   """
+  
+  # if request.method == 'POST':
+  #   add_task(request)
+  
   tasks = Task.objects.filter(user=request.user, done=False)
   paginator = Paginator(tasks, 10) 
 
@@ -186,16 +192,28 @@ def tasks_label(request, id):
                             { }, 
                   context_instance=RequestContext(request)) 
 
-# @login_required
-# @require_http_methods(['POST'])
-# def tasks_add(request):
-#   
-#   if 'task' in request.POST:
-#     task = request.POST['task']
-#     # create task
-#     task = Task(user=request.user, task=task)
-#     task.save()
+@login_required
+@require_http_methods(['POST'])
+def tasks_add(request):
   
+  if 'task' in request.POST:
+    task = request.POST['task']
+    # create task
+    task = Task(user=request.user, task=task)
+    task.save()
+
+  # return tasks_inbox(request)
+  return redirect('url_tasks_inbox')
+  
+
+def add_task(request):
+  # create task
+  if request.method == 'POST':
+    task = request.POST['task']
+    if task != None:
+      task = Task(user=request.user, task=task)
+      task.save()
+      # TODO: add label
 
 @login_required
 def label(request):
