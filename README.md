@@ -5,9 +5,9 @@ A simple tasks web application.
 This application is implementing using, supports and uses, the following technologies:
 
 * The [Django][ref-django] Web Framework 
+* The [Bootstrap][ref-bootstrap] Web front-end framework 
+* The CSS extension framework [SASS][ref-sass] for improved CSS handling 
 * Responsive design to better support mobile devices 
-* [SASS][ref-sass]
-* [Bootstrap][ref-bootstrap]
 * The [jQuery][ref-jquery] JavaScript library
 * The [Handlebars][ref-handlebars] JavaScript template library 
 
