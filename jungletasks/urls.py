@@ -15,6 +15,7 @@ urlpatterns = patterns('tasks.views',
     url(r'^tasks/(?P<id>\d+)/$', 'tasks_label', name='url_tasks_label'), 
 
     url(r'^tasks/add/$', 'tasks_add', name='url_tasks_add'), 
+    url(r'^tasks/edit/(?P<id>\d+)/$', 'tasks_edit', name='url_tasks_edit'), 
 
     url(r'^label/$', 'label', name='url_label'), 
     url(r'^label/add/$', 'label_add', name='url_label_add'), 

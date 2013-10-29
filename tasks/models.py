@@ -45,19 +45,6 @@ class Label(models.Model):
     """
     return Task.objects.filter(labels=self, done=False).count()  
 
-  def is_hidden(self):
-    """
-    Returns True if the label is hidden, False otherwise
-    """
-    return self.hidden
-
-  def is_active(self):
-    """
-    Returns True if the label is active, False otherwise
-    """
-    return self.active 
-
-
 class SmartLabel(Label):
   """
   A smart label
@@ -123,3 +110,12 @@ class Task(models.Model):
 
   def pri_high(self):
     return self.priority == 'HIG'
+
+  def label_ids(self):
+    """ returns the IDs of the associated labels """
+    return [l.id for l in self.labels.all()]
+    
+  def label_ids_str(self):
+    """ returns a string with the label IDs space-separated """
+    return ' '.join([str(l) for l in self.label_ids()])
+

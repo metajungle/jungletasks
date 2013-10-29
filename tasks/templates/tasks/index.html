@@ -8,21 +8,25 @@
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="/static/js/utils.js"></script>
-    <script type="text/javascript" src="/static/js/tasks.js"></script>
+<script type="text/javascript" src="/static/js/utils.js"></script>
+<script type="text/javascript" src="/static/js/tasks-new.js"></script>
+
 {% endblock %}
 
 {% block js-on-document-load %}
 
 /* focus on creating tasks input */ 
-setInterval(function() {
-    $("#inputTask").focus();
-}, 200);
+$("#inputTask").focus();
 
 /* register action for clicking on 'save' button */
 $("button#btn_label_save").click(task_labels_save);
 /* register action for clicking on 'close' button */
 $("button#btn_label_close").click(dom_label_task_clearup);
+
+$(".task-label-edit").click(function() {
+    var task = $(this).data('id');
+    var labels = $(this).data('labels');
+});
 
 $("input.due-date-holder").each(function() {
     $(this).datepicker(
@@ -45,7 +49,7 @@ $("input.due-date-holder").each(function() {
 
 {% block action-controls %}
 {% if tasks.object_list %}
-<a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a>
+<li><a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a></li>
 {% endif %}
 {% endblock %}
 
@@ -70,73 +74,76 @@ $("input.due-date-holder").each(function() {
         
         {% if tasks.object_list %}
         <table class="table">
-          <tr class="table_header">
-            <th class="empty">&nbsp;</th>
-            <th>
-      	Items
-            </th>
-            <th>&nbsp;</th>
-            {# <th>Due</th> #}
-            <th>&nbsp;</th>
-          </tr>
-          {% for task in tasks.object_list %}
-          <tr id="task{{ task.id }}"
-      	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
-      	data-labels="[{% for l in task.labels.all %}'{{ l.id }}'{% if not forloop.last %},{% endif %}{% endfor %}]">
-            {# Priority column #}
-            <td class="status narrow">
-      	&nbsp;
-            </td>
-            <td class="task">
-      	<a href="#" class="task_text" onClick="return dom_task_toggle('{{ task.id }}');">{{ task.task }}</a>
-	
-      	{# show task labels #}
-      	<ul class="label-crumbs">
-      	{% for label in task.labels.all %}
-      	{% if not label.is_hidden %}
-      	<li>
-      	  <span class="label-small">{{ label.name }}</span>
-      	</li>
-      	{% endif %}
-      	{% endfor %}
-      	</ul>
+            <thead>
+            <tr class="table_header">
+                <th class="empty">&nbsp;</th>
+                <th>
+              	Items
+                </th>
+                <th>&nbsp;</th>
+                {# <th>Due</th> #}
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks.object_list %}
+            <tr id="task{{ task.id }}"
+                class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
+                data-labels="{{ task.label_ids }}">
+                {# Priority column #}
+                <td class="status narrow">
+                    &nbsp;
+                </td>
+                <td class="task">
+                    <a href="#" class="task_text" onClick="return dom_task_toggle('{{ task.id }}');">{{ task.task }}</a>
+
+                    {# show task labels #}
+                    <ul class="label-crumbs">
+                        {% for label in task.labels.all %}
+                        {% if not label.is_hidden %}
+                        <li>
+                            <span class="label-small">{{ label.name }}</span>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
       
-            </td>
-            <td class="icon-cell narrow">
-      	<a href="{% url 'url_form_task_edit' %}?t_id={{ task.id }}{% if get and get.l %}&orig_l={{ get.l }}{% endif %}"
-      	   style="display: {% if task.done %}none{% else %}inline{% endif %}"
-      	   class="task_edit"><span class="task-edit-icon"></span></a>
-            </td>
+                </td>
+                <td class="icon-cell narrow">
+                    <a href="{% url 'url_tasks_edit' task.id %}"
+                    class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
             {# <td class="task_due_date"> #}
       	{# <input type="text" class="due-date-holder hand" #}
       	   {#    data-task_id="'{{ task.id }}'" #}
       	     {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
             {# </td> #}
-            <td class="icon-cell narrow">
-      	<a href="#" onClick="return dom_label_task('{{ task.id }}');"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
-            </td>
-          </tr>
-          {% endfor %}
+                <td class="icon-cell narrow">
+                    <a href="#" class="task-label-edit" data-id="{{ task.id }}" data-labels="{{ task.label_ids }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
+                </td>
+            </tr>
+            {% endfor %}
     
-          {# PAGINATION #}
-          {% if tasks.paginator.num_pages > 1 %}
-          <tr class="pagination">
-            <td class="empty">&nbsp;</td>
-            <td colspan="4">
-                {% if tasks.has_previous %}
-                    <a href="?{{ get_values }}page={{ tasks.previous_page_number }}">Previous</a> &#124;
-                {% endif %}
-                <span class="current">
-                    Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
-                </span>
-                {% if tasks.has_next %}
-                    &#124; <a href="?{{ get_values }}page={{ tasks.next_page_number }}">Next</a>
-                {% endif %}
-            </td>
-          </tr>
-          {% endif %}
-  
+            </tbody>
         </table>
+        
+        {# PAGINATION #}
+        {% if tasks.paginator.num_pages > 1 %}
+        <tr class="pagination">
+          <td class="empty">&nbsp;</td>
+          <td colspan="4">
+              {% if tasks.has_previous %}
+                  <a href="?{{ get_values }}page={{ tasks.previous_page_number }}">Previous</a> &#124;
+              {% endif %}
+              <span class="current">
+                  Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
+              </span>
+              {% if tasks.has_next %}
+                  &#124; <a href="?{{ get_values }}page={{ tasks.next_page_number }}">Next</a>
+              {% endif %}
+          </td>
+        </tr>
+        {% endif %}        
   
         {% else %}
         <p><strong>There are no tasks here.</strong></p>
@@ -153,7 +160,7 @@ $("input.due-date-holder").each(function() {
     
           {# standard labels #}
           <li class="standard {% current active_label url_tasks_inbox %}">
-              <a href="{{ url_tasks_inbox }}">Inbox&nbsp({{ num_not_done }})</a>
+              <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
           </li>
           <li class="standard {% current active_label url_tasks_all %}">
               <a href="{{ url_tasks_all }}">All</a>
@@ -162,20 +169,24 @@ $("input.due-date-holder").each(function() {
     
           {# user-defined labels #}
           <li class="title user-defined-labels">Your labels</li>
+          
           {% block labels %}
+          
           {% for label in labels %}
-          <li class="label userlabel {% current active_label label.name %} {% if label.is_hidden %}hidden{% endif %}" data-label_id="'{{ label.id }}'"
-      	style="background-color: #{{ label.color }}">
-            <a href="?l={{ label.name }}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
-          </li>
+              <li class="standard {% current active_label label.name %} {% if label.is_hidden %}hidden{% endif %}" data-label="{{ label.id }}" data-color="{{ label.color }}"
+                  style="background-color: #{{ label.color }}">
+                  <a href="?l={{ label.name }}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+              </li>
           {% empty %}
           <li class="empty">&nbsp;</li>
           {% endfor %}
+          
           {# save button for labeling #}
           <li class="labeling-buttons">
             <button id="btn_label_save">Save and close</button>
             <button id="btn_label_close">Cancel</button>
           </li>
+          
           {% endblock %}
     
           {% if user.get_profile and user.get_profile.system_labels.all %}

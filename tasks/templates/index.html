@@ -6,7 +6,7 @@ Jungle Tasks - Simple Task Management
 
 {% block style %}
     <link href="/static/css/index.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
     <style type="text/css">
       #top {
         border-bottom: 0px solid #c0c0c0;
@@ -65,7 +65,7 @@ Jungle Tasks - Simple Task Management
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="/static/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 {% endblock %}
 
 {% block js-on-document-load %}
@@ -77,8 +77,8 @@ Jungle Tasks - Simple Task Management
 {% block contents %}
 
 <div class="index-top">
-    <img style="width: 128px; vertical-align: middle; margin-top: -60px;"
-	 src="/static/images/logo.png" alt="Jungle Tasks" /> 
+     {#     <img style="width: 128px; vertical-align: middle; margin-top: -60px;" #}
+     {# src="/static/images/logo.png" alt="Jungle Tasks" />  #}
     <h1>Idea. Track. Move forward.</h1>
 </div>
 

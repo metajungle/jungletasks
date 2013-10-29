@@ -153,6 +153,10 @@ def tasks_inbox(request):
   # if request.method == 'POST':
   #   add_task(request)
   
+  labels = Label.objects.filter(user=request.user, hidden=False, active=True)
+
+  num_tasks_not_done = Task.objects.filter(user=request.user, done=False).count()
+  
   tasks = Task.objects.filter(user=request.user, done=False)
   paginator = Paginator(tasks, 10) 
 
@@ -169,7 +173,9 @@ def tasks_inbox(request):
     paged_items = paginator.page(paginator.num_pages)
       
   return render_to_response('tasks/index.html', 
-                            { 'tasks' : paged_items }, 
+                            { 'tasks': paged_items, 
+                              'labels': labels, 
+                              'num_tasks_not_done': num_tasks_not_done }, 
                   context_instance=RequestContext(request)) 
   
 @login_required
@@ -214,6 +220,18 @@ def add_task(request):
       task = Task(user=request.user, task=task)
       task.save()
       # TODO: add label
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def tasks_edit(request, id):
+  """
+  Edit a task 
+  """
+  return render_to_response('tasks/index.html', 
+                            { }, 
+                  context_instance=RequestContext(request)) 
+
 
 @login_required
 def label(request):
@@ -567,7 +585,7 @@ def util_clear_labels(task):
   Removes all labels associated with the task that are active
   """
   for label in task.labels.all():
-    if label.is_active() and not label.is_hidden():
+    if label.active and not label.hidden:
       task.labels.remove(label)
 
 
