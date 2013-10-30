@@ -19,7 +19,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from tasks.models import Task, Label, SystemLabel
 
-from tasks.forms import AddTaskForm
+from tasks.forms import TaskForm
 
 import account.models as a_models
 
@@ -228,9 +228,47 @@ def tasks_edit(request, id):
   """
   Edit a task 
   """
-  return render_to_response('tasks/index.html', 
-                            { }, 
-                  context_instance=RequestContext(request)) 
+  try:
+    
+    task = Task.objects.get(user=request.user, id=id)
+    
+    if request.method == 'POST':
+      form = TaskForm(request.POST) 
+      if form.is_valid(): 
+        # update task 
+        data = form.cleaned_data
+        task.task = data['task']
+        task.priority = data['priority']
+        task.save()
+        # set message 
+        messages.add_message(request, messages.SUCCESS, 'Task updated')
+        return redirect('url_tasks')
+    else:
+      form = TaskForm(instance=task)
+      return render_to_response('tasks/edit.html', 
+                                { 'task': task, 
+                                  'form' : form }, 
+                      context_instance=RequestContext(request)) 
+    
+  except Task.DoesNotExist:
+    pass
+    
+  raise Http404
+
+@login_required
+@require_http_methods(['POST'])
+def tasks_delete(request, id):
+  """
+  Delete a task 
+  """
+  try:
+    task = Task.objects.get(user=request.user, id=id)
+    task.delete()
+    messages.add_message(request, messages.SUCCESS, 'The task was deleted')
+  except Label.DoesNotExist:
+    messages.add_message(request, messages.ERROR, 'An error occurred, the task could not be deleted')
+      
+  return redirect('url_tasks')
 
 
 @login_required
@@ -305,8 +343,8 @@ def label_edit(request, id):
                     context_instance=RequestContext(request)) 
   except:
     raise Http404
-    
-  
+
+
 @login_required
 @require_http_methods(['POST'])
 def label_delete(request, id):
@@ -321,7 +359,7 @@ def label_delete(request, id):
   except Label.DoesNotExist:
     messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be deleted')
       
-  return HttpResponseRedirect(reverse('url_label'))
+  return redirect('url_label')
 
 @login_required
 @require_http_methods(['POST'])
@@ -488,7 +526,7 @@ def log(request):
 def form_task_add(request, template='add.html'):
 
   if request.method == 'POST': 
-    form = AddTaskForm(request.POST) 
+    form = TaskForm(request.POST) 
     if form.is_valid(): 
       # save
       data = form.cleaned_data
@@ -514,7 +552,7 @@ def form_task_add(request, template='add.html'):
       # attempt to return to the label we were in before adding a task 
       return HttpResponseRedirect(util_return_url(request))
   else:
-    form = AddTaskForm() 
+    form = TaskForm() 
 
   labels = Label.objects.filter(user=request.user)
 
@@ -589,7 +627,7 @@ def form_task_edit(request, template='edit.html'):
       t_id = request.GET['t_id']
       try:
         task = Task.objects.get(id=t_id)
-        form = AddTaskForm({'task':task.task, 'priority': task.priority})
+        form = TaskForm({'task':task.task, 'priority': task.priority})
         # provide the ids of the labels that the task is associated with 
         l_ids = task.labels.values_list('id', flat=True)
       except Task.DoesNotExist:

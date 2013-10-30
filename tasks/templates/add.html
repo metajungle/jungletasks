@@ -71,9 +71,7 @@ $("#id_task").focus();
       {% endif %}
     </span>
 
-    {% block button %}
     <button type="submit" class="btn btn-primary">Add task</button>
-    {% endblock %}
 
     {# pass on the label ID of the active label before adding a task #}
     {% if get and get.orig_l_id %}

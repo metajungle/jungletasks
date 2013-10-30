@@ -40,6 +40,15 @@ body {
     
   }
   
+  input[type="text"]:not(.form-control), 
+  input[type="password"]:not(.form-control) { 
+    margin-bottom: 5px;
+    display: block;
+    padding: 4px;
+    border: solid 1px #a0a0a0;
+    width: 300px;
+  }  
+  
   #footer {
     margin: 0px;
     padding: 20px 0px;

@@ -5,7 +5,7 @@
 {% block stylesheet %}
     <link href="/static/css/tasks.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/labels.css" rel="stylesheet" type="text/css" />
-{% endblock %}
+{% endblock stylesheet %}
 
 {% block script %}
 <script type="text/javascript" src="/static/js/tasks-new.js"></script>
@@ -129,14 +129,14 @@ $(function() {
 });
 -->
 </script>
-{% endblock %}
+{% endblock script %}
 
 
 {% block action-controls %}
 {% if tasks.object_list %}
 <li><a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a></li>
 {% endif %}
-{% endblock %}
+{% endblock action-controls %}
 
 {% block contents %}
 
@@ -255,8 +255,6 @@ $(function() {
           {# user-defined labels #}
           <li class="title user-defined-labels">Your labels</li>
           
-          {% block labels %}
-          
           {% for label in labels %}
               {# for selecting labels #}
               <li class="task-label" style="background-color: #{{ label.color }}">
@@ -277,8 +275,6 @@ $(function() {
                     class="btn btn-success form-control">Done</button>
           </li>
           
-          {% endblock %}
-    
           {% if user.get_profile and user.get_profile.system_labels.all %}
           <li class="separator system-label-part">&nbsp;</li>
           <li class="title system-label-part">System labels</li>

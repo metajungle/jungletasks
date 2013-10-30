@@ -80,7 +80,7 @@ class Task(models.Model):
   user = models.ForeignKey(User) 
 
   # TODO: add optional 'notes' field (TextField) 
-  task = models.TextField(help_text="Content of a task")
+  task = models.CharField(max_length=1024, help_text="Content of a task")
   done = models.BooleanField(default=False)
   priority = models.CharField(max_length=3, choices=PRIORITIES, default='NOR')
   labels = models.ManyToManyField(Label)

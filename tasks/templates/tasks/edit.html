@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block script %}
+<script type="text/javascript" charset="utf-8">
+<!--
+$("#id_task").focus();
+-->
+</script>
+{% endblock script %}
+
+{% block contents %}
+<form action="" method="POST" role="form">{% csrf_token %}
+
+    <fieldset>
+    {% for field in form %}
+    
+        <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        </div>
+
+        {% for error in field.errors %}
+        <p>
+        <span class="error">{{ error }}</span>
+        </p>
+        {% endfor %}
+
+    {% endfor %}
+    </fieldset>
+
+    <span id="form-hidden-holder">
+      {# default for labels #}
+      <input type="hidden" name="labels" value="" />
+      {# task id: for when a task is being edited #}
+      {% if t_id %}
+      <input type="hidden" name="t_id" value="{{ t_id }}" />
+      {% endif %}
+    </span>
+
+    <button type="submit" name="save" class="btn btn-success">Save task</button>
+
+    {# pass on the label ID of the active label before adding a task #}
+    {% if get and get.orig_l_id %}
+    <input type="hidden" name="orig_l_id" value="{{ get.orig_l_id }}" />
+    {% else %}
+    {% if orig_l_id %}
+    <input type="hidden" name="orig_l_id" value="{{ orig_l_id }}" />
+    {% endif %}
+    {% endif %}
+
+</form>
+
+<p></p>
+
+<form action="{% url 'url_tasks_delete' task.id %}" method="POST" role="form">{% csrf_token %}
+  <button type="submit" name="delete" class="btn btn-danger">Delete task</button>
+</form>
+
+{% endblock contents %}

@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block stylesheet %}
-    <link href="/static/css/forms.css" rel="stylesheet" type="text/css" />
-{% endblock %}
-
 {% block js-on-document-load %}
 $("input#id_email").focus();
 {% endblock %}
@@ -14,7 +10,7 @@ $("input#id_email").focus();
 
   <p>Please provide the email you signed up with and your password.</p>
 
-  <form action="" method="post" class="form" role="form">{% csrf_token %}
+  <form action="" method="post" role="form">{% csrf_token %}
     <fieldset>
       {% for field in form %}
       <div class="form-group">
