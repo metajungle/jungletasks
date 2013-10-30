@@ -150,4 +150,34 @@ tr.task-row {
     }
   }
   
+  ul.label-crumbs {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    font-size: 0.7em;
+
+    padding: 1px 2px 1px 2px;
+    /* height: 2.3em; */
+    float: right;
+  }
+
+  ul.label-crumbs li {
+    float: left;
+    /* line-height: 2.3em; */
+    /* padding-left: .75em; */
+    color: #777;
+    padding: 0px 5px 0px 2px;
+    margin: 0px 2px 0px 2px;
+    border-top: 0px solid #dedede;
+    background-color: #f0f0f0; 
+//    background-image: url('/static/images/crumbs.gif');
+//    background-repeat: no-repeat;
+//    background-position: right center; 
+
+    /*
+    border-left: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+ */
+  }  
+  
 }

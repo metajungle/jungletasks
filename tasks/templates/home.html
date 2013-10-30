@@ -2,16 +2,6 @@
 
 {% block title %}{{ block.super }} ({{ num_not_done }}){% endblock %}
 
-{% block stylesheet %}
-    <link href="/static/css/tasks.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/labels.css" rel="stylesheet" type="text/css" />
-{% endblock %}
-
-{% block script %}
-    <script type="text/javascript" src="/static/js/utils.js"></script>
-    <script type="text/javascript" src="/static/js/tasks.js"></script>
-{% endblock %}
-
 {% block js-on-document-load %}
 
 /* register action for clicking on 'save' button */

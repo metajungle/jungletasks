@@ -2,11 +2,6 @@
 
 {% block title %}{{ block.super }} ({{ num_not_done }}){% endblock %}
 
-{% block stylesheet %}
-    <link href="/static/css/tasks.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/labels.css" rel="stylesheet" type="text/css" />
-{% endblock stylesheet %}
-
 {% block script %}
 <script type="text/javascript" src="/static/js/tasks-new.js"></script>
 
@@ -155,148 +150,148 @@ $(function() {
 <p></p>
 
 <div class="row">
-    <div class="col-sm-9">
+  <div class="col-sm-9">
         
-        {% if tasks.object_list %}
-        <table class="table">
-            <thead>
-            <tr class="table_header">
-                <th class="empty">&nbsp;</th>
-                <th>
-              	Items
-                </th>
-                <th>&nbsp;</th>
-                {# <th>Due</th> #}
-                <th>&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for task in tasks.object_list %}
-            <tr id="task-row-{{ task.id }}"
-                class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %} {% if task.pri_high %}task-row-priority-high{% endif %}"
-                data-labels="{{ task.label_ids }}">
-                {# Priority column #}
-                <td class="status narrow">
-                    &nbsp;
-                </td>
-                <td class="task">
-                    <a href="#" class="task_text" onClick="return dom_task_toggle('{{ task.id }}');">{{ task.task }}</a>
+    {% if tasks.object_list %}
+    <table class="table">
+      <thead>
+      <tr class="table_header">
+        <th class="empty">&nbsp;</th>
+        <th>
+      	Items
+        </th>
+        <th>&nbsp;</th>
+        {# <th>Due</th> #}
+        <th>&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for task in tasks.object_list %}
+      <tr id="task-row-{{ task.id }}"
+          class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %} {% if task.pri_high %}task-row-priority-high{% endif %}"
+          data-labels="{{ task.label_ids }}">
+        {# Priority column #}
+        <td class="status narrow">
+            &nbsp;
+        </td>
+        <td class="task">
+          <a href="#" class="task_text" onClick="return dom_task_toggle('{{ task.id }}');">{{ task.task }}</a>
 
-                    {# show task labels #}
-                    <ul class="label-crumbs">
-                        {% for label in task.labels.all %}
-                        {% if not label.is_hidden %}
-                        <li>
-                            <span class="label-small">{{ label.name }}</span>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-      
-                </td>
-                <td class="icon-cell narrow">
-                    <a href="{% url 'url_tasks_edit' task.id %}"
-                    class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
-                </td>
-            {# <td class="task_due_date"> #}
-      	{# <input type="text" class="due-date-holder hand" #}
-      	   {#    data-task_id="'{{ task.id }}'" #}
-      	     {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
-            {# </td> #}
-                <td class="icon-cell narrow">
-                    <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
-                </td>
-            </tr>
+          {# show task labels #}
+          <ul class="label-crumbs">
+            {% for label in task.labels.all %}
+            {% if not label.is_hidden %}
+            <li style="background-color: #{{ label.color }}">
+              <span class="label-small">{{ label.name|truncatechars:8 }}</span>
+            </li>
+            {% endif %}
             {% endfor %}
-    
-            </tbody>
-        </table>
+          </ul>
+        </td>
+        <td class="icon-cell narrow">
+            <a href="{% url 'url_tasks_edit' task.id %}"
+            class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
+        </td>
+    {# <td class="task_due_date"> #}
+{# <input type="text" class="due-date-holder hand" #}
+   {#    data-task_id="'{{ task.id }}'" #}
+     {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
+    {# </td> #}
+        <td class="icon-cell narrow">
+          <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
+        </td>
+      </tr>
+      {% endfor %}
+
+      </tbody>
+    </table>
         
-        {# PAGINATION #}
-        {% if tasks.paginator.num_pages > 1 %}
-        <tr class="pagination">
-          <td class="empty">&nbsp;</td>
-          <td colspan="4">
-              {% if tasks.has_previous %}
-                  <a href="?{{ get_values }}page={{ tasks.previous_page_number }}">Previous</a> &#124;
-              {% endif %}
-              <span class="current">
-                  Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
-              </span>
-              {% if tasks.has_next %}
-                  &#124; <a href="?{{ get_values }}page={{ tasks.next_page_number }}">Next</a>
-              {% endif %}
-          </td>
-        </tr>
-        {% endif %}        
+    {# PAGINATION #}
+    {% if tasks.paginator.num_pages > 1 %}
+    <tr class="pagination">
+      <td class="empty">&nbsp;</td>
+      <td colspan="4">
+          {% if tasks.has_previous %}
+              <a href="?{{ get_values }}page={{ tasks.previous_page_number }}">Previous</a> &#124;
+          {% endif %}
+          <span class="current">
+              Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}
+          </span>
+          {% if tasks.has_next %}
+              &#124; <a href="?{{ get_values }}page={{ tasks.next_page_number }}">Next</a>
+          {% endif %}
+      </td>
+    </tr>
+    {% endif %}        
   
-        {% else %}
-        <p><strong>There are no tasks here.</strong></p>
-        <p><em>Try adding a task first.</em></p>
-        {% endif %}
+    {% else %}
+    <p><strong>There are no tasks here.</strong></p>
+    <p><em>Try adding a task first.</em></p>
+    {% endif %}
         
     </div>
     <div class="col-sm-3">
-        <ul class="labels hidden-xs">
-    
-          {% load tasks_tags %}
-          {% url 'url_tasks_inbox' as url_tasks_inbox %}
-          {% url 'url_tasks_all' as url_tasks_all %}
-    
-          {# standard labels #}
-          <li class="label-standard {% current active_label url_tasks_inbox %}">
-              <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
-          </li>
-          <li class="label-standard {% current active_label url_tasks_all %}">
-              <a href="{{ url_tasks_all }}">All</a>
-          </li>
-          <li class="separator">&nbsp;</li>
-    
-          {# user-defined labels #}
-          <li class="title user-defined-labels">Your labels</li>
-          
-          {% for label in labels %}
-              {# for selecting labels #}
-              <li class="task-label" style="background-color: #{{ label.color }}">
-                  <a href="#">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
-              </li>
-              
-              {# for assigning labels to tasks #}
-              <li class="label-task-assignment hidden" data-id="{{ label.id }}" data-color="{{ label.color }}">
-                  <a href="#">{{ label.name }}</a>
-              </li>
-          {% empty %}
-          <li class="empty">&nbsp;</li>
-          {% endfor %}
-          
-          {# save button for labeling #}
-          <li class="controls hidden">
-            <button id="btn-label-assign-done" 
-                    class="btn btn-success form-control">Done</button>
-          </li>
-          
-          {% if user.get_profile and user.get_profile.system_labels.all %}
-          <li class="separator system-label-part">&nbsp;</li>
-          <li class="title system-label-part">System labels</li>
-          {% block systemlabels %}
-          {% for label in user.get_profile.system_labels.all %}
-          <li class="systemlabel system-label-part">
-            <a href="?l=s:{{ label.label }}">{{ label.get_label_display }}</a>
-          </li>
-          {% endfor %}
-          {% endblock %}
-          {% endif %}
-    
-          {# <li class="empty">&nbsp;</li> #}
-    
-          {# <li class="separator">&nbsp;</li> #}
-          {# <li class="title">Smart labels</li> #}
-          {# {% block smartlabels %} #}
-          {# <li class="empty">&nbsp;</li> #}
-          {# {% endblock %} #}
+      <ul class="labels hidden-xs">
   
-        </ul>        
+        {% load tasks_tags %}
+        {% url 'url_tasks_inbox' as url_tasks_inbox %}
+        {% url 'url_tasks_all' as url_tasks_all %}
+  
+        {# standard labels #}
+        <li class="label-standard {% current active_label url_tasks_inbox %}">
+            <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
+        </li>
+        <li class="label-standard {% current active_label url_tasks_all %}">
+            <a href="{{ url_tasks_all }}">All</a>
+        </li>
+        <li class="separator">&nbsp;</li>
+  
+        {# user-defined labels #}
+        <li class="title user-defined-labels">Your labels</li>
+        
+        {% for label in labels %}
+            {# for selecting labels #}
+            <li class="task-label" style="background-color: #{{ label.color }}">
+                <a href="#">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+            </li>
+            
+            {# for assigning labels to tasks #}
+            <li class="label-task-assignment hidden" data-id="{{ label.id }}" data-color="{{ label.color }}">
+                <a href="#">{{ label.name }}</a>
+            </li>
+        {% empty %}
+        <li class="empty">&nbsp;</li>
+        {% endfor %}
+        
+        {# save button for labeling #}
+        <li class="controls hidden">
+          <button id="btn-label-assign-done" 
+                  class="btn btn-success form-control">Done</button>
+        </li>
+        
+        {% if user.get_profile and user.get_profile.system_labels.all %}
+        <li class="separator system-label-part">&nbsp;</li>
+        <li class="title system-label-part">System labels</li>
+        {% block systemlabels %}
+        {% for label in user.get_profile.system_labels.all %}
+        <li class="systemlabel system-label-part">
+          <a href="?l=s:{{ label.label }}">{{ label.get_label_display }}</a>
+        </li>
+        {% endfor %}
+        {% endblock %}
+        {% endif %}
+  
+        {# <li class="empty">&nbsp;</li> #}
+  
+        {# <li class="separator">&nbsp;</li> #}
+        {# <li class="title">Smart labels</li> #}
+        {# {% block smartlabels %} #}
+        {# <li class="empty">&nbsp;</li> #}
+        {# {% endblock %} #}
+
+      </ul>        
     </div>
+  </div>
 </div>
 
 {% endblock %}
