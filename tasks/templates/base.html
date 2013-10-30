@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/static/icons/favicon.ico" />
     <title>{% block title %}Jungle Tasks - Home{% endblock %}</title>
+        
+    {# <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" /> #}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
     
-    {# <link href="/static/css/smoothness/jquery-ui-1.8.8.custom.css" rel="stylesheet" type="text/css" /> #}
-    <!-- Latest compiled and minified CSS -->
-    
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-    
-    {# <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css" /> #}
-    
-    <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" type="text/css" />
+    <link href="{{ STATIC_URL }}css/labels.css" rel="stylesheet" type="text/css" />
     
     {% block stylesheet %}{% endblock %}
     
@@ -66,6 +62,7 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       {% load tasks_tags %}
+      {% url 'url_index' as url_index %}
       {% url 'url_tasks' as url_tasks %}
       {% url 'url_label' as url_label %}
       {% url 'url_tools' as url_tools %}
@@ -75,7 +72,12 @@
 
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
           <li class="{% active request url_tasks %}"><a href="{{ url_tasks }}">Hello, {{ user.email }}</a></li>
+        {% else %}
+          <li class="{% active_exact request url_index %}"><a href="{{ url_index }}">Home</a></li>
+        
+        {% endif %}
           {% if user.is_authenticated %}
           <li class="{% active request url_label %}"><a href="{{ url_label }}">labels</a></li>
           {# <li><a href="{% url 'url_tools' %}">tools</a></li> #}
@@ -96,61 +98,19 @@
       </div><!-- /.navbar-collapse -->
     </nav>
       
-    <div id="page">
-    
     {% block header %}
-    {# <div id="header"> #}
-    {#      #}
-    {#  #}
-    {#     <div id="top"> #}
-    {#        #}
-    {#       <div id="topcontrols"> #}
-    {#         <span id="ajax_status">&nbsp;</span> #}
-    {#          #}
-    {#         {% if user.is_authenticated %} #}
-    {#         <li class="item"><a href="/logout/">logout</a></li> #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         <li class="item"><a href="{% url 'url_label' %}">labels</a></li> #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         <li class="item"><a href="{% url 'url_tools' %}">tools</a></li> #}
-    {#         {% else %} #}
-    {#         <li class="item"><a href="/">home</a></li> #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         <li class="item"><a href="{% url 'url_register' %}">signup</a></li> #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         <li class="item"><a href="{% url 'url_login' %}">login</a></li> #}
-    {#         {% endif %} #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         <li class="item"><a href="{% url 'url_faq' %}">faq</a></li> #}
-    {#              #}
-    {#         {% block action-controls %} #}
-    {#         {% endblock %} #}
-    {#       </div> #}
-    {#        #}
-    {#       <ul id="topmenu"> #}
-    {#         {% if user.is_authenticated %} #}
-    {#         <li class="item">Hello, <a href="/?l=inbox">{{ user.email }}</a></li> #}
-    {#         <li class="navsep">&#124;</li> #}
-    {#         {% endif %} #}
-    {#  #}
-    {#       </ul> #}
-    {#       <div style="clear: both;"></div> #}
-    {#     </div> #}
-    {#    #}
-    {# </div>  #}
-    {# end 'header' #}
+
+        {% for message in messages %}
+        <div class="message-area
+          {% if message.tags %}message-{{ message.tags }}{% endif %}">
+            {% autoescape off %}
+            {{ message }}
+            {% endautoescape %}
+        </div>
+        {% endfor %}
       
-    {% for message in messages %}
-    <div class="message-area
-      {% if message.tags %}message-{{ message.tags }}{% endif %}">
-        {% autoescape off %}
-        {{ message }}
-        {% endautoescape %}
-    </div>
-    {% endfor %}
-      
-    {% block input-field %}
-    {% endblock %}
+        {% block input-field %}
+        {% endblock %}
 
     {% endblock %}
     
@@ -168,13 +128,12 @@
     {% endblock %}
     </div>
   
-  </div> {# end 'page' #}
-
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/tasks.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.metadata.js">
     </script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    {# <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> #}
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
     
     <script type="text/javascript" src="{{ STATIC_URL }}js/handlebars-1.0.0.js"></script>
     

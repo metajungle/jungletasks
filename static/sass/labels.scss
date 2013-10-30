@@ -1,0 +1,144 @@
+
+/*
+ * Mixins
+ */
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+       -o-border-radius: $radius;
+          border-radius: $radius;
+}
+
+/*
+ * General
+ */
+
+body {
+  margin: 0px;
+  padding: 0px; 
+  background-color: #FBFBFB;
+  
+  img {
+    border: 0px;
+  }
+  
+  #contents {
+    margin: 20px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    
+//    .row {
+//      padding-right: 0px;
+//    }
+    
+//    #contents { 
+//      margin: 0px;
+//    }
+    
+  }
+  
+  #footer {
+    margin: 0px;
+    padding: 20px 0px;
+    clear: both; 
+    
+    p {
+      text-align: center;
+    }
+  }
+}
+
+
+/*
+ * Labels
+ */
+
+.rounded {
+  
+}
+
+ul.labels {
+  list-style: none; 
+  padding: 0px;
+  
+  li {
+    display: block;
+    margin: 4px 0px 2px 0px;
+    padding: 2px 26px 2px 4px;
+    border: 1px solid #808080;
+    @include border-radius(4px);
+
+    a,
+    a:link,
+    a:visited {
+      color: #000;
+      padding: 4px;
+      margin: 4px;
+      display: block;
+      line-height: 100%;
+      text-decoration: none;
+    }
+    
+    &.label-standard {
+      color: #000;
+      background-color: #99cc00;
+    }
+    
+    &.title {
+      border: 0px;
+      font-weight: bold;
+      padding: inherit;
+      padding-left: 2px;
+      padding-bottom: 8px;
+      font-style: italic;
+    }
+    
+    &.separator {
+      border: 0px; 
+      border-top: 1px solid #000; 
+      margin-top: 10px;
+      margin-bottom: -20px;
+      border-radius: 0px;
+    }
+    
+    &.hidden {
+      display: none;
+    }
+    
+    &.controls {
+      border: 0px;
+      padding: 5px 0px 0px 0px;
+    }
+    
+    &.label-selected {
+      background-color: #000;
+      a {
+        color: #fff;
+      }
+    }
+  }
+  
+}
+
+/* 
+ * Tasks
+ */
+
+tr.task-row {
+  
+  &.task-selected {
+    background-color: #f0f0f0;
+  }
+  
+  &.priority-high {
+    td.status {
+      background-image: url('/static/icons/priority.png');
+      background-repeat: no-repeat;
+      background-position: left center;
+    }
+  }
+  
+}

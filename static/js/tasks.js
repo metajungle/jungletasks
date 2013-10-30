@@ -4,7 +4,7 @@
  * NEW
  */
 
-
+// From: http://stackoverflow.com/questions/4726344/how-do-i-change-text-color-determined-by-the-background-color
 
 function idealTextColor(bgColor) {
 

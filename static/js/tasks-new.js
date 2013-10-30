@@ -5,7 +5,7 @@ function Tasks() {
         return new Tasks();
     }
     
-    this.editTaskLabels: function(task, labels) {
+    this.editTaskLabels = function(task, labels) {
         
     }
     

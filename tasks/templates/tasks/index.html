@@ -8,44 +8,129 @@
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="/static/js/utils.js"></script>
 <script type="text/javascript" src="/static/js/tasks-new.js"></script>
 
-{% endblock %}
+<script type="text/javascript" charset="utf-8">
+<!--
+$(function() {
+    
+    /* focus on creating tasks input */ 
+    $("#inputTask").focus();
 
-{% block js-on-document-load %}
-
-/* focus on creating tasks input */ 
-$("#inputTask").focus();
-
-/* register action for clicking on 'save' button */
-$("button#btn_label_save").click(task_labels_save);
-/* register action for clicking on 'close' button */
-$("button#btn_label_close").click(dom_label_task_clearup);
-
-$(".task-label-edit").click(function() {
-    var task = $(this).data('id');
-    var labels = $(this).data('labels');
-});
-
-$("input.due-date-holder").each(function() {
-    $(this).datepicker(
-    {
-      minDate: new Date(),
-      autoSize: true,
-      showAnim: 'blind'
+    $(".task-labels-assign").click(function(e) {
+        var task = $(this).data('id');
+        var labels = $("#task-row-" + task).data('labels');
+        // hide labels
+        $('.task-label').hide();
+        // set and show task assign labels 
+        $('.label-task-assignment').each(function(idx, value) {
+            var label = $(this).data('id');
+            // assign css class according to selection
+            if (labels.indexOf(label) != -1) {
+                $(this).addClass('label-selected');
+            } else {
+                $(this).removeClass('label-selected');
+            }
+            // assign task id (used when setting variable)
+            $(this).data('task', task);
+        }).removeClass('hidden');
+        // show controls
+        $('.controls').removeClass('hidden');
+        // de-highlight all tasks 
+        $(".task-row").removeClass('task-selected');        
+        // highlight the seleced task 
+        $("#task-row-" + task).addClass('task-selected');
+        
+        e.stopPropagation();
+        return false;
     });
-    /* get id */
-    var data = $(this).metadata();
-    /* request to save due date on change */
-    if (data && data.task_id) {
-        $(this).change(function() {
-            api_task_save_due_date(data.task_id);
-        });
-    }
-});
+    
+    // register action for assigning a task 
+    $(".label-task-assignment").click(function(e) {
+       var label = $(this).data('id');
+       var task = $(this).data('task');
+       
+       // true if we are assigning this label, false otherwise 
+       var assign = !$(this).hasClass('label-selected');
+       // update selection 
+       $(this).toggleClass('label-selected');
 
+       // update DOM
+       // 1. update label IDs for each task
+       var row = $("#task-row-" + task);
+       var labels = row.data('labels');
+       if (typeof labels == 'string' && labels == '') {
+           labels = [];
+       }
+       if (assign) {
+           // only add if it wasn't there
+           if (labels.indexOf(label) == -1) {
+               labels.push(label);    
+           }
+       } else {
+           var idx = labels.indexOf(label);
+           if (idx != -1) {
+               labels.splice(idx, 1);
+           }
+       }
+       row.data('labels', labels);
+       
+       // 2. update label badges 
+       // TODO: implement 
+       
+       // update DB 
+       $.post("{% url 'url_task_assign_json' %}", {
+               'label': label, 
+               'task': task, 
+               'action': assign ? 'add' : 'remove'
+           },
+           function(data, status) {
+               if (status == 'success' && data != 'OK') {
+                   // TODO: show error message 
+               }
+           }
+       );
+
+       e.stopPropagation();
+       return false;
+    });
+    
+    // register action for closing task label assignment 
+    $('#btn-label-assign-done').click(function() {
+        // show labels
+        $('.task-label').show();
+        // hide task assign labels
+        $('.label-task-assignment').
+            addClass('hidden').
+            removeClass('label-selected');
+        // hide controls
+        $('.controls').addClass('hidden');
+        // de-highlight all tasks 
+        $(".task-row").removeClass('task-selected');        
+    });
+    
+    $("input.due-date-holder").each(function() {
+        $(this).datepicker(
+        {
+          minDate: new Date(),
+          autoSize: true,
+          showAnim: 'blind'
+        });
+        /* get id */
+        var data = $(this).metadata();
+        /* request to save due date on change */
+        if (data && data.task_id) {
+            $(this).change(function() {
+                api_task_save_due_date(data.task_id);
+            });
+        }
+    });
+
+});
+-->
+</script>
 {% endblock %}
+
 
 {% block action-controls %}
 {% if tasks.object_list %}
@@ -87,8 +172,8 @@ $("input.due-date-holder").each(function() {
             </thead>
             <tbody>
             {% for task in tasks.object_list %}
-            <tr id="task{{ task.id }}"
-                class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
+            <tr id="task-row-{{ task.id }}"
+                class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %} {% if task.pri_high %}task-row-priority-high{% endif %}"
                 data-labels="{{ task.label_ids }}">
                 {# Priority column #}
                 <td class="status narrow">
@@ -119,7 +204,7 @@ $("input.due-date-holder").each(function() {
       	     {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
             {# </td> #}
                 <td class="icon-cell narrow">
-                    <a href="#" class="task-label-edit" data-id="{{ task.id }}" data-labels="{{ task.label_ids }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
+                    <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
                 </td>
             </tr>
             {% endfor %}
@@ -152,17 +237,17 @@ $("input.due-date-holder").each(function() {
         
     </div>
     <div class="col-sm-3">
-        <ul id="folders">
+        <ul class="labels hidden-xs">
     
           {% load tasks_tags %}
           {% url 'url_tasks_inbox' as url_tasks_inbox %}
           {% url 'url_tasks_all' as url_tasks_all %}
     
           {# standard labels #}
-          <li class="standard {% current active_label url_tasks_inbox %}">
+          <li class="label-standard {% current active_label url_tasks_inbox %}">
               <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
           </li>
-          <li class="standard {% current active_label url_tasks_all %}">
+          <li class="label-standard {% current active_label url_tasks_all %}">
               <a href="{{ url_tasks_all }}">All</a>
           </li>
           <li class="separator">&nbsp;</li>
@@ -173,18 +258,23 @@ $("input.due-date-holder").each(function() {
           {% block labels %}
           
           {% for label in labels %}
-              <li class="standard {% current active_label label.name %} {% if label.is_hidden %}hidden{% endif %}" data-label="{{ label.id }}" data-color="{{ label.color }}"
-                  style="background-color: #{{ label.color }}">
-                  <a href="?l={{ label.name }}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+              {# for selecting labels #}
+              <li class="task-label" style="background-color: #{{ label.color }}">
+                  <a href="#">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+              </li>
+              
+              {# for assigning labels to tasks #}
+              <li class="label-task-assignment hidden" data-id="{{ label.id }}" data-color="{{ label.color }}">
+                  <a href="#">{{ label.name }}</a>
               </li>
           {% empty %}
           <li class="empty">&nbsp;</li>
           {% endfor %}
           
           {# save button for labeling #}
-          <li class="labeling-buttons">
-            <button id="btn_label_save">Save and close</button>
-            <button id="btn_label_close">Cancel</button>
+          <li class="controls hidden">
+            <button id="btn-label-assign-done" 
+                    class="btn btn-success form-control">Done</button>
           </li>
           
           {% endblock %}
@@ -213,19 +303,5 @@ $("input.due-date-holder").each(function() {
     </div>
 </div>
 
-<div id="contents-inner">
-<div id="sidebar">
-
-</div>
-
-<div id="main">
-  
-
-
-</div>
-
-<div style="clear: both;"></div>
-
-</div>
 {% endblock %}
 

@@ -325,6 +325,41 @@ def label_delete(request, id):
 
 @login_required
 @require_http_methods(['POST'])
+def label_task_assign_json(request):
+  """
+  Assigns a label to a task
+  """
+  t_id = request.POST['task']
+  l_id = request.POST['label']
+  action = request.POST['action']
+  
+  # default 
+  json = simplejson.dumps({ 'status': 'KO' })
+  
+  if t_id != None and l_id != None and action != None:
+    try: 
+      # assign label to task 
+      task = Task.objects.get(user=request.user, id=t_id)
+      label = Label.objects.get(user=request.user, id=l_id)
+      if action == 'add':
+        task.labels.add(label)
+        task.save()
+      elif action == 'remove':
+        label.task_set.remove(task)
+        label.save()
+      json = simplejson.dumps({ 'status': 'OK' })
+    except Task.DoesNotExist, Label.DoesNotExist: 
+      json = simplejson.dumps({ 
+        'status': 'KO', 
+        'message': 'An error occurred, the task could not be updated' 
+      })
+      
+  return HttpResponse(json, mimetype = 'application/json', 
+                      content_type = 'application/json; charset=utf8')
+
+
+@login_required
+@require_http_methods(['POST'])
 def label_set_hidden_json(request):
   """
   Sets the hidden flag of a label
@@ -341,14 +376,17 @@ def label_set_hidden_json(request):
       status = True if l_hidden == 'true' else False
       label.hidden = status
       label.save()
-      print 'OK2: %s - %s' % (l_hidden, status)
       json = simplejson.dumps({ 'status': 'OK' })
     except Label.DoesNotExists:
-      messages.add_message(request, messages.ERROR, 'An error occurred, the label could not be found')
+      json = simplejson.dumps({ 
+        'status': 'KO', 
+        'message': 'An error occurred, the label could not be found' 
+      })
 
   return HttpResponse(json, mimetype = 'application/json', 
                       content_type = 'application/json; charset=utf8')
       
+
 
   
 @login_required

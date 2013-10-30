@@ -14,10 +14,10 @@ $("input#id_email").focus();
 
   <p>Please provide the email you signed up with and your password.</p>
 
-  <form action="" method="post" class="pure-form pure-form-aligned">{% csrf_token %}
+  <form action="" method="post" class="form" role="form">{% csrf_token %}
     <fieldset>
       {% for field in form %}
-      <div class="pure-control-group">
+      <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
         {{ field }}
         {% if field.errors %}
@@ -43,9 +43,7 @@ $("input#id_email").focus();
       <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
 
-    <div class="pure-controls">
-      <button type="submit" class="pure-button pure-button-primary">Login</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
 
     <p style="text-align: right; margin-right: 20px;">
       Forgot your password? <a href="{% url 'url_password_reset' %}">Reset  your password</a>.

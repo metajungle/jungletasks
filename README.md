@@ -1,8 +1,8 @@
 # Jungletasks 
 
-A simple tasks web application. 
+A simple Web application for keeping track of tasks. 
 
-This application is implementing using, supports and uses, the following technologies:
+This application is implemented using, supports and uses, the following technologies:
 
 * The [Django][ref-django] Web Framework 
 * The [Bootstrap][ref-bootstrap] Web front-end framework 
