@@ -22,13 +22,14 @@ $("#label").focus();
 <h1>Add Label</h1>
 {% endblock %}
 
-<form action="" method="post" class="pure-form">{% csrf_token %}
+<form action="" method="post" role="form">{% csrf_token %}
 
     <fieldset>
+      <div class="form-group">
         <label for="label">Label</label>
         <input id="label" name="label" type="text" placeholder="Label">
-
-        <button type="submit" class="pure-button pure-button-small pure-button-primary">Add</button>
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
     </fieldset>
 
 </form>

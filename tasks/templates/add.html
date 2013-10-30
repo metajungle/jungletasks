@@ -29,17 +29,17 @@ $("#id_task").focus();
 <h1>Add Task</h1>
 {% endblock %}
 
-<form action="" method="post" class="pure-form">{% csrf_token %}
+<form action="" method="post" role="form">{% csrf_token %}
 
     <fieldset>
     {% for field in form %}
     
-        <p>
+        <div class="form-group">
         {% if field.label != 'Task' %}
         {{ field.label_tag }}: 
         {% endif %}
         {{ field }}
-        </p>
+        </div>
 
         {% for error in field.errors %}
         <p>
@@ -58,7 +58,7 @@ $("#id_task").focus();
       {{ label.name }}
     </span>
     {% empty %}
-    <p style="font-style: italic;">You have not created any labels yet.</p>
+    <p><em>You have not created any labels yet.</em></p>
     {% endfor %}
     </span>
 
@@ -72,7 +72,7 @@ $("#id_task").focus();
     </span>
 
     {% block button %}
-    <button type="submit" class="pure-button pure-button-primary">Add task</button>
+    <button type="submit" class="btn btn-primary">Add task</button>
     {% endblock %}
 
     {# pass on the label ID of the active label before adding a task #}

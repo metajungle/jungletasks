@@ -50,17 +50,18 @@ $(".btn-delete").click(function() {
 <h1>Edit Label</h1>
 {% endblock %}
 
-<form action="" method="POST" class="pure-form pure-form-stacked">{% csrf_token %}
+<form action="" method="POST" role="form" class="">{% csrf_token %}
     <fieldset>
+      <div class="form-group">
         <label for="label">Label</label>
-        <input id="label" name="label" type="text" placeholder="Label" value="{{ label.name }}" class="pure-input-1"></input>
-
-        <button type="submit" class="pure-button pure-button-small pure-button-primary">Update</button>
+        <input id="label" name="label" type="text" placeholder="Label" value="{{ label.name }}" class="form-control"></input>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
     </fieldset>
 </form>
 
 <p></p>
 
-<button type="submit" class="pure-button pure-button-small pure-button-error btn-delete" data-id="{{ label.id }}">Delete label</button>
+<button type="submit" class="btn btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
 
 {% endblock %}
