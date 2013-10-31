@@ -142,7 +142,7 @@ $(function() {
       <input type="text" class="form-control" id="inputTask" name="task" placeholder="New task">
   </div>
   <div class="col-sm-3">
-    <button type="submit" class="btn btn-primary form-control">&plus; add task</button>
+    <button type="submit" class="btn btn-default form-control">&plus; add task</button>
   </div>
 </div>
 </form>
@@ -236,10 +236,12 @@ $(function() {
         {% url 'url_tasks_all' as url_tasks_all %}
   
         {# standard labels #}
-        <li class="label-standard {% current active_label url_tasks_inbox %}">
+        <li class="label-standard {% current active_label url_tasks_inbox %}"
+            style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
             <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
         </li>
-        <li class="label-standard {% current active_label url_tasks_all %}">
+        <li class="label-standard {% current active_label url_tasks_all %}"
+            style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
             <a href="{{ url_tasks_all }}">All</a>
         </li>
         <li class="separator">&nbsp;</li>
@@ -249,7 +251,8 @@ $(function() {
         
         {% for label in labels %}
             {# for selecting labels #}
-            <li class="task-label" style="background-color: #{{ label.color }}">
+            <li class="task-label" 
+                style="background-color: #{{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
                 <a href="#">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
             </li>
             

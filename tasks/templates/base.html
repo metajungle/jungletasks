@@ -75,7 +75,7 @@
         {% if user.is_authenticated %}
           <li class="{% active request url_tasks %}"><a href="{{ url_tasks }}">Hello, {{ user.email }}</a></li>
         {% else %}
-          <li class="{% active_exact request url_index %}"><a href="{{ url_index }}">Home</a></li>
+          <li class="{% active_exact request url_index %}"><a href="{{ url_index }}">Jungletasks</a></li>
         
         {% endif %}
           {% if user.is_authenticated %}
