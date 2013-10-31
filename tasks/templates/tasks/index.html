@@ -155,14 +155,12 @@ $(function() {
     {% if tasks.object_list %}
     <table class="table">
       <thead>
-      <tr class="table_header">
+      <tr>
         <th class="empty">&nbsp;</th>
-        <th>
-      	Items
-        </th>
+        <th>Tasks</th>
         <th>&nbsp;</th>
         {# <th>Due</th> #}
-        <th>&nbsp;</th>
+        <th class="hidden-xs">&nbsp;</th>
       </tr>
       </thead>
       <tbody>
@@ -188,7 +186,7 @@ $(function() {
             {% endfor %}
           </ul>
         </td>
-        <td class="icon-cell narrow">
+        <td>
             <a href="{% url 'url_tasks_edit' task.id %}"
             class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
         </td>
@@ -197,7 +195,7 @@ $(function() {
    {#    data-task_id="'{{ task.id }}'" #}
      {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
     {# </td> #}
-        <td class="icon-cell narrow">
+        <td class="hidden-xs">
           <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
         </td>
       </tr>
