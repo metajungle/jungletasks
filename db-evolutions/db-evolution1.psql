@@ -1,0 +1,4 @@
+-- this database evolution changes the SQL type of tasks from TEXT to VARCHAR(1024)
+BEGIN;
+ALTER TABLE tasks_task ALTER COLUMN task SET DATA TYPE character varying(1024);
+COMMIT;
