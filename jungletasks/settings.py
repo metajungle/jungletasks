@@ -1,5 +1,6 @@
 # Django settings for jungletasks project.
 import os.path
+from django.contrib.messages import constants as message_constants
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -30,6 +31,10 @@ DATABASES = {
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
+}
+
+MESSAGE_TAGS = {
+    message_constants.ERROR: 'danger',
 }
 
 # can be overridden in local_settings.py

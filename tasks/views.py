@@ -346,7 +346,8 @@ def label_edit(request, id):
           label.name = l
           label.save()
           messages.add_message(request, messages.SUCCESS, 'The label was updated')
-    
+          return redirect('url_label')
+          
     return render_to_response('label/edit.html', 
                               { 'label' : label }, 
                     context_instance=RequestContext(request)) 
@@ -422,6 +423,7 @@ def label_set_hidden_json(request):
       label = Label.objects.get(user=request.user, id=l_id)
       status = True if l_hidden == 'true' else False
       label.hidden = status
+      print "Status: %s" % label.hidden
       label.save()
       json = simplejson.dumps({ 'status': 'OK' })
     except Label.DoesNotExists:

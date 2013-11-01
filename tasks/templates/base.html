@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="/static/icons/favicon.ico" />
     <title>{% block title %}Jungletasks - Home{% endblock %}</title>
         
-    {# <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" /> #}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
     
     <link href="{{ STATIC_URL }}css/labels.css" rel="stylesheet" type="text/css" />
@@ -26,14 +25,6 @@
         
         /* for metadata plugin */
         $.metadata.setType("html5");
-        
-        /* remove messages */
-        var offset = 0;
-        $("div.message-area").each(function() {
-            var wait = 4000 + (2000 * offset);
-            $(this).delay(wait).fadeOut(1000);
-            offset++;
-        });
         
         {% block js-on-document-load %}
         {% endblock %}
@@ -99,28 +90,23 @@
     </nav>
       
     {% block header %}
-
-        {% for message in messages %}
-        <div class="message-area
-          {% if message.tags %}message-{{ message.tags }}{% endif %}">
-            {% autoescape off %}
-            {{ message }}
-            {% endautoescape %}
-        </div>
-        {% endfor %}
-      
-        {% block input-field %}
-        {% endblock %}
-
     {% endblock %}
     
-    {% block contents-outer %}
     <div id="contents">
+      
+      {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {% autoescape off %}
+        {{ message }}
+        {% endautoescape %}
+      </div>
+      {% endfor %}
+      
       {% block contents %}
-        This should always be overridden.
+        <strong>This should always be overridden.</strong>
       {% endblock contents %}
-    </div> {# end 'contents' #}
-    {% endblock %}
+    </div> 
     
     <div id="footer">
       <p>Metajungle &copy; 2011-2014</p>

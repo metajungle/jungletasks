@@ -18,7 +18,7 @@ function Label() {
     this.setLabelHiddenStatus = function(id, hidden, callback) {
         $.post("{% url 'url_label_set_hidden_json' %}", {
                 'id': id,
-                'hidden': (hidden ? 'true' : 'false')
+                'hidden': hidden ? 'true' : 'false'
             },
             function(data, status) {
                 if (status == 'success' && data.status == 'OK') {
@@ -33,19 +33,22 @@ var label = new Label();
 
 // listening to changing the 'hidden' status of a label 
 $(".btn-hidden-toggle").click(function() {
-    var id = $(this).data('id');
-    var hidden = $(this).data('hidden');
-    label.setLabelHiddenStatus(id, hidden, function(data, status) {
+    var id = $(this).data('id'), 
+        hidden = $(this).data('hidden') == 'True', 
+        btn = $(this);
+    label.setLabelHiddenStatus(id, !hidden, function() {
         // updates the DOM if the change was successful 
-        var btns = $("#btn-hidden-group-" + id).children();
-        var btnShow = $(btns[0]);
-        var btnHide = $(btns[1]);
+        var icon = btn.find('span.glyphicon'), 
+            gopen = 'glyphicon-eye-open', 
+            gclose = 'glyphicon-eye-close';
         if (hidden) {
-            btnShow.removeClass('btn-success').addClass('btn-default');
-            btnHide.removeClass('btn-default').addClass('btn-danger');
+          btn.addClass('btn-success').removeClass('btn-danger');
+          btn.data('hidden', 'False');
+          icon.addClass(gopen).removeClass(gclose); 
         } else {
-            btnShow.removeClass('btn-default').addClass('btn-success');
-            btnHide.removeClass('btn-danger').addClass('btn-default');
+          btn.addClass('btn-danger').removeClass('btn-success');
+          btn.data('hidden', 'True');
+          icon.addClass(gclose).removeClass(gopen);
         }
     });
 });
@@ -75,23 +78,26 @@ $(".btn-hidden-toggle").click(function() {
 <table class="table table-labels">
     <thead>
         <tr class="">
-            <td>Label</td>
-            <td class="hidden-xs">Tasks</td>
-            <td>Actions</td>
+            <th>Label</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for label in labels %}
         <tr style="background-color: #{{ label.color }}">
-            <td>{{ label.name }}</td>
-            <td class="hidden-xs"><strong>{{ label.num_not_done_tasks}}</strong> ({{ label.num_tasks }} total)
+            <td>
+              {{ label.name }}
+              (<strong>{{ label.num_not_done_tasks}}</strong>)
             </td>
             <td>
-                <div class="btn-group" id="btn-hidden-group-{{ label.id }}">
-                  <button type="button" data-id="{{ label.id }}" data-hidde="false" class="btn btn-sm btn-{% if label.hidden %}default{% else %}success{% endif %} btn-hidden-toggle">Show</button>
-                  <button type="button" data-id="{{ label.id }}" data-hidden="true" class="btn btn-sm btn-{% if label.hidden %}danger{% else %}default{% endif %} btn-hidden-toggle">Hide</button>
-                </div>
-                <a href="{% url 'url_label_edit' label.id %}" class="btn btn-sm btn-default">Edit...</a>
+                <button type="button" data-id="{{ label.id }}" data-hidden="{{ label.hidden }}" class="btn btn-sm btn-{% if label.hidden %}danger{% else %}success{% endif %} btn-hidden-toggle" title="Toggle visibility">
+                  {% if label.hidden %}
+                  <span class="glyphicon glyphicon-eye-close"></span></button>
+                  {% else %}
+                  <span class="glyphicon glyphicon-eye-open"></span></button>
+                  {% endif %}
+                  
+                <a href="{% url 'url_label_edit' label.id %}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></a>
             </td>
         </tr>
         {% endfor %}

@@ -119,13 +119,7 @@ body {
 //    }
     
   }
-  
-  .infobox {
-    img {
-      padding-right: 10px;
-    }
-  }
-  
+
   input[type="text"]:not(.form-control), 
   input[type="password"]:not(.form-control) { 
     margin-bottom: 5px;
@@ -146,7 +140,14 @@ body {
   }
 }
 
+.alert {
+  padding: 5px;
+  border: 2px solid transparent;
+}
 
+.alert-dismissable {
+  padding-right: 35px;
+}
 /*
  * Labels
  */

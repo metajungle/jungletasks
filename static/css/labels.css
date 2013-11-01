@@ -54,8 +54,6 @@ body {
     -ms-border-radius: 2px;
     -o-border-radius: 2px;
     border-radius: 2px; }
-  body .infobox img {
-    padding-right: 10px; }
   body input[type="text"]:not(.form-control),
   body input[type="password"]:not(.form-control) {
     margin-bottom: 5px;
@@ -69,6 +67,13 @@ body {
     clear: both; }
     body #footer p {
       text-align: center; }
+
+.alert {
+  padding: 5px;
+  border: 2px solid transparent; }
+
+.alert-dismissable {
+  padding-right: 35px; }
 
 /*
  * Labels

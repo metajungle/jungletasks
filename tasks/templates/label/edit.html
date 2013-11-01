@@ -7,48 +7,50 @@
 {% endverbatim %}
 {% csrf_token %}
 {% verbatim %}
-<input type="submit" class="btn btn-danger btn-sm btn-confirm btn-delete-confirm" value="Are you sure?" />
-<button type="button" class="btn btn-default btn-sm btn-confirm btn-delete-cancel">No</button>
+<input type="submit" class="btn btn-danger btn-confirm btn-delete-confirm" value="Are you sure?" />
+<button type="button" class="btn btn-default btn-confirm btn-delete-cancel">No</button>
 </form>
 {% endverbatim %}
 </script>
-{% endblock script %}
 
-{% block js-on-document-load %}
+<script type="text/javascript">
+<!--
+$(function() {
+  /* focus on label text */
+  setInterval(function() {
+      $("#label").focus();
+  }, 200);
 
-/* focus on label text */
-setInterval(function() {
-    $("#label").focus();
-}, 200);
+  $(".btn-delete").click(function() {
+      // hide the button just clicked 
+      $(this).hide();
 
-$(".btn-delete").click(function() {
-    // hide the button just clicked 
-    $(this).hide();
-
-    // create the form to delete the label 
-    var id = $(this).data('id');
-    var source = $("#label-delete-confirm-template").html();
-    var template = Handlebars.compile(source);
-    var html = template({id: id});
-    $(this).after(html);
+      // create the form to delete the label 
+      var id = $(this).data('id');
+      var source = $("#label-delete-confirm-template").html();
+      var template = Handlebars.compile(source);
+      var html = template({id: id});
+      $(this).after(html);
     
-    // register the cancel event 
-    $('.btn-delete-cancel').click(function(e) {
-        // remove the confirmation set of buttons 
-        $(".btn-confirm").remove();
-        // bring back the original button
-       $(".btn-delete").show(); 
-       e.stopPropagation();
-    });
+      // register the cancel event 
+      $('.btn-delete-cancel').click(function(e) {
+          // remove the confirmation set of buttons 
+          $(".btn-confirm").remove();
+          // bring back the original button
+         $(".btn-delete").show(); 
+         e.stopPropagation();
+      });
+  });  
 });
-
-{% endblock %}
+-->
+</script>
+{% endblock script %}
 
 {% block contents %}
 
-{% block page_header %}
+<p><a href="{% url 'url_label' %}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Back to labels</a></p>
+
 <h1>Edit Label</h1>
-{% endblock %}
 
 <form action="" method="POST" role="form" class="">{% csrf_token %}
     <fieldset>
@@ -64,4 +66,4 @@ $(".btn-delete").click(function() {
 
 <button type="submit" class="btn btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
 
-{% endblock %}
+{% endblock contents %}
