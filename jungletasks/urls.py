@@ -12,9 +12,9 @@ urlpatterns = patterns('tasks.views',
     url(r'^tasks/$', 'tasks', name='url_tasks'), 
     url(r'^tasks/inbox/$', 'tasks_inbox', name='url_tasks_inbox'), 
     url(r'^tasks/all/$', 'tasks_all', name='url_tasks_all'), 
-    url(r'^tasks/(?P<id>\d+)/$', 'tasks_label', name='url_tasks_label'), 
+    url(r'^tasks/(?P<id>\d+)/$', 'tasks_by_label', name='url_tasks_label'), 
 
-    url(r'^tasks/add/$', 'tasks_add', name='url_tasks_add'), 
+    url(r'^tasks/add/$', 'tasks_add_task', name='url_tasks_add'), 
     url(r'^tasks/edit/(?P<id>\d+)/$', 'tasks_edit', name='url_tasks_edit'), 
     url(r'^tasks/delete/(?P<id>\d+)/$', 'tasks_delete', name='url_tasks_delete'), 
 

@@ -143,65 +143,73 @@ def tasks(request):
   """
   return HttpResponseRedirect(reverse('url_tasks_inbox'))
 
+
 @login_required
 @require_http_methods(['GET', 'POST'])
 def tasks_inbox(request):
   """
   Display tasks in the 'inbox'
   """
-  
-  # if request.method == 'POST':
-  #   add_task(request)
-  
-  labels = Label.objects.filter(user=request.user, hidden=False, active=True)
-
-  num_tasks_not_done = Task.objects.filter(user=request.user, done=False).count()
-  
   tasks = Task.objects.filter(user=request.user, done=False)
-  paginator = Paginator(tasks, 10) 
+  return tasks_display(request, tasks)
 
-  # make sure page request is an int. If not, deliver first page.
-  try:
-    page = int(request.GET.get('page', '1'))
-  except ValueError:
-    page = 1
 
-  # If page request (9999) is out of range, deliver last page of results.
-  try:
-    paged_items = paginator.page(page)
-  except (EmptyPage, InvalidPage):
-    paged_items = paginator.page(paginator.num_pages)
-      
-  return render_to_response('tasks/index.html', 
-                            { 'tasks': paged_items, 
-                              'labels': labels, 
-                              'num_tasks_not_done': num_tasks_not_done }, 
-                  context_instance=RequestContext(request)) 
-  
 @login_required
 @require_http_methods(['GET'])
 def tasks_all(request):
   """
   Display all tasks 
   """
-  return render_to_response('tasks/index.html', 
-                            { }, 
-                  context_instance=RequestContext(request)) 
+  tasks = Task.objects.filter(user=request.user)
+  return tasks_display(request, tasks)
+
 
 @login_required
 @require_http_methods(['GET'])
-def tasks_label(request, id):
+def tasks_by_label(request, id):
   """
   Display tasks by a label
   """
+  try:
+    label = Label.objects.get(id=id)
+    tasks = Task.objects.filter(user=request.user, labels=label, done=False)
+    return tasks_display(request, tasks)
+  except Label.DoesNotExist:
+    raise Http404
+
+
+def tasks_display(request, tasks):
+  """
+  Utility method for displaying the given tasks 
+  """
+  # all the users labels
+  labels = Label.objects.filter(user=request.user, hidden=False, active=True)
+  # the number of tasks not done (used to display 'inbox' count)
+  num_tasks_not_done = Task.objects.filter(user=request.user, done=False).count()
+  # paginate the tasks 
+  paginator = Paginator(tasks, 10) 
+  # make sure page request is an int. If not, deliver first page.
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+  # if page request (9999) is out of range, deliver last page of results.
+  try:
+    paged_items = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    paged_items = paginator.page(paginator.num_pages)
+  
   return render_to_response('tasks/index.html', 
-                            { }, 
+                            { 'tasks': paged_items, 
+                              'labels': labels, 
+                              'num_tasks_not_done': num_tasks_not_done }, 
                   context_instance=RequestContext(request)) 
+
 
 @login_required
 @require_http_methods(['POST'])
-def tasks_add(request):
-  
+def tasks_add_task(request):
+  """ Adds a new task """
   if 'task' in request.POST:
     task = request.POST['task']
     # create task
@@ -212,14 +220,15 @@ def tasks_add(request):
   return redirect('url_tasks_inbox')
   
 
-def add_task(request):
-  # create task
-  if request.method == 'POST':
-    task = request.POST['task']
-    if task != None:
-      task = Task(user=request.user, task=task)
-      task.save()
-      # TODO: add label
+# def tasks_add_task(request):
+#   """ Adds a new task """
+#   # create task
+#   if request.method == 'POST':
+#     task = request.POST['task']
+#     if task != None:
+#       task = Task(user=request.user, task=task)
+#       task.save()
+#       # TODO: add label
 
 
 @login_required

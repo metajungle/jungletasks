@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ block.super }} ({{ num_not_done }}){% endblock %}
+{% block title %}{{ block.super }}{% endblock %}
 
 {% block script %}
 <script type="text/javascript" charset="utf-8">
@@ -48,8 +48,7 @@ $(function() {
        // update selection 
        $(this).toggleClass('label-selected');
 
-       // update DOM
-       // 1. update label IDs for each task
+       // update DOM: update label IDs for each task
        var row = $("#task-row-" + task);
        var labels = row.data('labels');
        if (typeof labels == 'string' && labels == '') {
@@ -68,8 +67,9 @@ $(function() {
        }
        row.data('labels', labels);
        
-       // 2. update label badges 
-       // TODO: implement 
+       // TODO: update label badges 
+       
+       // TODO: update task counts for each label 
        
        // update DB 
        $.post("{% url 'url_task_assign_json' %}", {
@@ -228,28 +228,25 @@ $(function() {
       <ul class="labels hidden-xs">
   
         {% load tasks_tags %}
-        {% url 'url_tasks_inbox' as url_tasks_inbox %}
-        {% url 'url_tasks_all' as url_tasks_all %}
   
         {# standard labels #}
         <li class="label-standard {% current active_label url_tasks_inbox %}"
             style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            <a href="{{ url_tasks_inbox }}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
+            <a href="{% url 'url_tasks_inbox' %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
         </li>
         <li class="label-standard {% current active_label url_tasks_all %}"
             style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            <a href="{{ url_tasks_all }}">All</a>
+            <a href="{% url 'url_tasks_all' %}">All</a>
         </li>
         {# <li class="separator">&nbsp;</li> #}
   
         {# user-defined labels #}
         <li class="title">Your labels</li>
-        
         {% for label in labels %}
             {# for selecting labels #}
             <li class="task-label" 
                 style="background-color: #{{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
-                <a href="#">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+                <a href="{% url 'url_tasks_label' label.id %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
             </li>
             
             {# for assigning labels to tasks #}
@@ -278,14 +275,6 @@ $(function() {
         {% endblock %}
         {% endif %}
   
-        {# <li class="empty">&nbsp;</li> #}
-  
-        {# <li class="separator">&nbsp;</li> #}
-        {# <li class="title">Smart labels</li> #}
-        {# {% block smartlabels %} #}
-        {# <li class="empty">&nbsp;</li> #}
-        {# {% endblock %} #}
-
       </ul>        
     </div>
   </div>
