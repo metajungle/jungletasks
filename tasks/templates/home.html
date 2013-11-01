@@ -72,7 +72,7 @@ $("input.due-date-holder").each(function() {
           </tr>
           {% for task in paged_items.object_list %}
           <tr id="task{{ task.id }}"
-      	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.pri_high %}priority-high{% endif %}"
+      	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.important %}priority-high{% endif %}"
       	data-labels="[{% for l in task.labels.all %}'{{ l.id }}'{% if not forloop.last %},{% endif %}{% endfor %}]">
             {# Priority column #}
             <td class="status narrow">

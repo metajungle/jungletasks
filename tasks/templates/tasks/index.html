@@ -3,8 +3,6 @@
 {% block title %}{{ block.super }} ({{ num_not_done }}){% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="/static/js/tasks-new.js"></script>
-
 <script type="text/javascript" charset="utf-8">
 <!--
 $(function() {
@@ -166,13 +164,13 @@ $(function() {
       <tbody>
       {% for task in tasks.object_list %}
       <tr id="task-row-{{ task.id }}"
-          class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %} {% if task.pri_high %}task-row-priority-high{% endif %}"
+          class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %}"
           data-labels="{{ task.label_ids }}">
         {# Priority column #}
-        <td class="status narrow">
-            &nbsp;
+        <td>
+            {% if task.important %}<span class="glyphicon glyphicon-arrow-up"></span>{% endif %}
         </td>
-        <td class="task">
+        <td>
           <a href="#" class="task_text">{{ task.task }}</a>
 
           {# show task labels #}
@@ -196,7 +194,7 @@ $(function() {
      {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
     {# </td> #}
         <td class="hidden-xs">
-          <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><img class="task_icon" src="/static/icons/tag.png" alt="Edit labels" /></a>
+          <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><span class="glyphicon glyphicon-tags"></span></a>
         </td>
       </tr>
       {% endfor %}
@@ -242,10 +240,10 @@ $(function() {
             style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
             <a href="{{ url_tasks_all }}">All</a>
         </li>
-        <li class="separator">&nbsp;</li>
+        {# <li class="separator">&nbsp;</li> #}
   
         {# user-defined labels #}
-        <li class="title user-defined-labels">Your labels</li>
+        <li class="title">Your labels</li>
         
         {% for label in labels %}
             {# for selecting labels #}

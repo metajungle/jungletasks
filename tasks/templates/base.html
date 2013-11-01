@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/static/icons/favicon.ico" />
-    <title>{% block title %}Jungle Tasks - Home{% endblock %}</title>
+    <title>{% block title %}Jungletasks - Home{% endblock %}</title>
         
     {# <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" /> #}
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
@@ -57,7 +57,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand visible-xs" href="{% url 'url_index' %}">Jungletasks</a>
+        <a class="navbar-brand visible-xs" href="{% url 'url_index' %}">jungletasks</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -75,7 +75,7 @@
         {% if user.is_authenticated %}
           <li class="{% active request url_tasks %}"><a href="{{ url_tasks }}">Hello, {{ user.email }}</a></li>
         {% else %}
-          <li class="{% active_exact request url_index %}"><a href="{{ url_index }}">Jungletasks</a></li>
+          <li class="{% active_exact request url_index %}"><a href="{{ url_index }}">jungletasks</a></li>
         
         {% endif %}
           {% if user.is_authenticated %}

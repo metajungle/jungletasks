@@ -2,3 +2,4 @@
 *.db
 local_settings.py
 *~
+.sass-cache

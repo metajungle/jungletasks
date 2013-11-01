@@ -108,7 +108,7 @@ class Task(models.Model):
       return 'L'
     return self.priority
 
-  def pri_high(self):
+  def important(self):
     return self.priority == 'HIG'
 
   def label_ids(self):
