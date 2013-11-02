@@ -345,8 +345,7 @@ def label_edit(request, id):
           # TODO: should catch error if the label is too long, for example. 
           label.name = l
           # color
-          if 'color' in request.POST:
-            label.color = request.POST['color'][1:]
+          label.color = request.POST['color'] or '#ffff99'
           label.save()
           messages.add_message(request, messages.SUCCESS, 'The label was updated')
           return redirect('url_label')

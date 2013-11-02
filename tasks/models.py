@@ -20,8 +20,8 @@ class Label(models.Model):
   created = models.DateTimeField(auto_now_add=True)
   # auto_now is set when the object is saved
   edited = models.DateTimeField(auto_now=True)
-  color = models.CharField(max_length=6, 
-                           help_text="Hex code for color.", default='ffff99')
+  color = models.CharField(max_length=9, 
+                           help_text="Hex code for color.", default='#ffff99')
   # true if the label should not be shown in the home view 
   hidden = models.BooleanField(default=False)
   # active if False if the label is deleted 

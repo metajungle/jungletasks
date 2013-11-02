@@ -84,7 +84,7 @@ $(".btn-hidden-toggle").click(function() {
     </thead>
     <tbody>
         {% for label in labels %}
-        <tr style="background-color: #{{ label.color }}">
+        <tr style="background-color: {{ label.color }}">
             <td>
               {{ label.name }}
               (<strong>{{ label.num_not_done_tasks}}</strong>)

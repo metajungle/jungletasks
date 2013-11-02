@@ -177,7 +177,7 @@ $(function() {
           <ul class="label-crumbs hidden-xs">
             {% for label in task.labels.all %}
             {% if not label.is_hidden %}
-            <li style="background-color: #{{ label.color }}">
+            <li style="background-color: {{ label.color }}">
               <span class="label-small">{{ label.name|truncatechars:8 }}</span>
             </li>
             {% endif %}
@@ -245,7 +245,7 @@ $(function() {
         {% for label in labels %}
             {# for selecting labels #}
             <li class="task-label" 
-                style="background-color: #{{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
+                style="background-color: {{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
                 <a href="{% url 'url_tasks_label' label.id %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
             </li>
             

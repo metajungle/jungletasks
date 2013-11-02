@@ -150,7 +150,7 @@ $("input.due-date-holder").each(function() {
           {% block labels %}
           {% for label in labels %}
           <li class="label userlabel {% current active_label label.name %} {% if label.is_hidden %}hidden{% endif %}" data-label_id="'{{ label.id }}'"
-      	style="background-color: #{{ label.color }}">
+      	style="background-color: {{ label.color }}">
             <a href="?l={{ label.name }}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
           </li>
           {% empty %}
