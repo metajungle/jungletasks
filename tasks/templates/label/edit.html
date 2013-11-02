@@ -50,13 +50,12 @@ $(function() {
   
   $("#colorpicker").spectrum({
     color: '{{ label.color }}', 
-    showInput: false, 
-    className: 'label-colorpicker',
+    flat: true, 
     showButtons: false, 
-    clickoutFiresChange: true, 
-    chooseText: 'Set color',
-    change: function(color) {
-      $("#label-color").attr('value', color.toHexString());
+    move: function(color) {
+      var color = color.toHexString();
+      $("#label-color").attr('value', color);
+      $("ul.labels li").css('background-color', color);
     }
   })
 });
@@ -78,18 +77,25 @@ $(function() {
       </div>
       <div class="form-group">
         <label for="colorpicker">Color</label>
-        <div style="clear: both;">
-        <input type="text" id="colorpicker" />
-        </div>
+        <div class="clearfix"></div>
+        <input type="text" id="colorpicker" class="clearfix" />
+        <div class="clearfix"></div>
+        <label for="colorpicker">Preview</label>
+        <ul class="labels">
+          <li style="background-color: {{ label.color }}; width: 172px;">&nbsp;</li>
+        </ul>
+        
       </div>
       <input id="label-color" type="hidden" name="color" value="#ffff99" />
       <button type="submit" class="btn btn-primary">Update</button>
+      <div class="pull-right">
+        <button type="button" class="btn btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
+      </div>
     </fieldset>
 </form>
 
 <p></p>
 
-<button type="submit" class="btn btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
 
 
 {% endblock contents %}

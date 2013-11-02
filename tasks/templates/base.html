@@ -95,8 +95,11 @@
     <div id="contents">
       
       {% for message in messages %}
-      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissable">
+      <div class="alert alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>
+          <span class="text-{{ message.tags }}">{{ message.tags|capfirst }}!</span>&nbsp;
+        </strong>
         {% autoescape off %}
         {{ message }}
         {% endautoescape %}
