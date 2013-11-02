@@ -148,6 +148,7 @@ body {
 .alert-dismissable {
   padding-right: 35px;
 }
+
 /*
  * Labels
  */
@@ -222,6 +223,16 @@ ul.labels {
     }
   }
   
+}
+
+#colorpicker {
+  display: inline;
+  clear: both;
+}
+
+.label-colorpicker {
+  background-color: transparent;
+  border: 1px solid #f0f0f0;
 }
 
 /* 

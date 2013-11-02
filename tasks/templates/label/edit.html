@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/spectrum.css" />
+{% endblock stylesheet %}
+
 {% block script %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/spectrum.js"></script>
+
 <script id="label-delete-confirm-template" type="text/x-handlebars-template">
 {% verbatim %}
 <form action="/label/delete/{{id}}/" method="POST">
@@ -40,7 +46,19 @@ $(function() {
          $(".btn-delete").show(); 
          e.stopPropagation();
       });
-  });  
+  }); 
+  
+  $("#colorpicker").spectrum({
+    color: '#{{ label.color }}', 
+    showInput: false, 
+    className: 'label-colorpicker',
+    showButtons: false, 
+    clickoutFiresChange: true, 
+    chooseText: 'Set color',
+    change: function(color) {
+      $("#label-color").attr('value', color.toHexString());
+    }
+  })
 });
 -->
 </script>
@@ -58,6 +76,13 @@ $(function() {
         <label for="label">Label</label>
         <input id="label" name="label" type="text" placeholder="Label" value="{{ label.name }}" class="form-control"></input>
       </div>
+      <div class="form-group">
+        <label for="colorpicker">Color</label>
+        <div style="clear: both;">
+        <input type="text" id="colorpicker" />
+        </div>
+      </div>
+      <input id="label-color" type="hidden" name="color" value="#ffff99" />
       <button type="submit" class="btn btn-primary">Update</button>
     </fieldset>
 </form>
@@ -65,5 +90,6 @@ $(function() {
 <p></p>
 
 <button type="submit" class="btn btn-danger btn-delete" data-id="{{ label.id }}">Delete label</button>
+
 
 {% endblock contents %}

@@ -338,12 +338,15 @@ def label_edit(request, id):
         messages.add_message(request, messages.ERROR, 'The label cannot be empty')
       else:
         # check for existing labels
-        try:
-          Label.objects.get(user=request.user, name__iexact=l)
+        ls = Label.objects.filter(user=request.user, name__iexact=l).exclude(id=id)
+        if len(ls) > 0:
           messages.add_message(request, messages.ERROR, 'That label already exists (labels are case-insensitive)')
-        except Label.DoesNotExist:
+        else:
           # TODO: should catch error if the label is too long, for example. 
           label.name = l
+          # color
+          if 'color' in request.POST:
+            label.color = request.POST['color'][1:]
           label.save()
           messages.add_message(request, messages.SUCCESS, 'The label was updated')
           return redirect('url_label')

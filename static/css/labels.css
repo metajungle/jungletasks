@@ -127,6 +127,14 @@ ul.labels {
       ul.labels li.label-selected a {
         color: #fff; }
 
+#colorpicker {
+  display: inline;
+  clear: both; }
+
+.label-colorpicker {
+  background-color: transparent;
+  border: 1px solid #f0f0f0; }
+
 /* 
  * Tasks
  */

@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/static/icons/favicon.ico" />
     <title>{% block title %}Jungletasks - Home{% endblock %}</title>
+
+    {% block stylesheet %}{% endblock %}
         
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
     
     <link href="{{ STATIC_URL }}css/labels.css" rel="stylesheet" type="text/css" />
-    
-    {% block stylesheet %}{% endblock %}
     
     {% block style %}{% endblock %}
     
