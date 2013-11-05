@@ -36,8 +36,8 @@ def tasks_export(request):
     except Label.DoesNotExist:
       if label.lower() == "inbox":
         # limit number of tasks for the preview 
-        count = Task.objects.filter(user=request.user, done=False).count()
-        tasks = Task.objects.filter(user=request.user, done=False)[:no]
+        count = Task.objects.filter(user=request.user, completed=False).count()
+        tasks = Task.objects.filter(user=request.user, completed=False)[:no]
       elif label.lower() == "all":
         # limit number of tasks for the preview 
         count = Task.objects.filter(user=request.user).count()
@@ -64,7 +64,7 @@ def tasks_export(request):
       tasks = Task.objects.filter(user=request.user, labels=l)
     except Label.DoesNotExist:
       if label.lower() == "inbox":
-        tasks = Task.objects.filter(user=request.user, done=False)
+        tasks = Task.objects.filter(user=request.user, completed=False)
       elif label.lower() == "all":
         tasks = Task.objects.filter(user=request.user)
     # export tasks 

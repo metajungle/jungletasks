@@ -72,7 +72,7 @@ $("input.due-date-holder").each(function() {
           </tr>
           {% for task in paged_items.object_list %}
           <tr id="task{{ task.id }}"
-      	class="task_item {% if task.done %}task_done{% else %}task_not_done{% endif %} {% if task.important %}priority-high{% endif %}"
+      	class="task_item {% if task.is_completed %}task_done{% else %}task_not_done{% endif %} {% if task.important %}priority-high{% endif %}"
       	data-labels="[{% for l in task.labels.all %}'{{ l.id }}'{% if not forloop.last %},{% endif %}{% endfor %}]">
             {# Priority column #}
             <td class="status narrow">
@@ -95,7 +95,7 @@ $("input.due-date-holder").each(function() {
             </td>
             <td class="icon-cell narrow">
       	<a href="{% url 'url_form_task_edit' %}?t_id={{ task.id }}{% if get and get.l %}&orig_l={{ get.l }}{% endif %}"
-      	   style="display: {% if task.done %}none{% else %}inline{% endif %}"
+      	   style="display: {% if task.is_completed %}none{% else %}inline{% endif %}"
       	   class="task_edit"><span class="task-edit-icon"></span></a>
             </td>
             {# <td class="task_due_date"> #}

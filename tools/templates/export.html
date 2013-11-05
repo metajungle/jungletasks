@@ -23,7 +23,7 @@
     
     <span>&#42;</span>
 
-    {% if task.done %}
+    {% if task.is_completed %}
     <span class="done">DONE</span>
     {% else %}
     <span class="todo">TODO</span>
@@ -41,13 +41,13 @@
       {{ task.task }}
     </span>
   </p>
-  {% if task.done %}
+  {% if task.is_completed %}
   <p>
     <span class="closed">
       &nbsp;&nbsp;&nbsp;CLOSED: 
     </span>
     <span class="date">
-      [{{ task.finished|date:"Y-m-d D G:i" }}]
+      [{{ task.date_completed|date:"Y-m-d D G:i" }}]
     </span>
   </p>
   {% endif %}

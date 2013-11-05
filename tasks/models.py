@@ -43,7 +43,7 @@ class Label(models.Model):
     Returns the number of tasks that have this (unique) label
     and are not done
     """
-    return Task.objects.filter(labels=self, done=False).count()  
+    return Task.objects.filter(labels=self, completed=False).count()  
 
 class SmartLabel(Label):
   """
@@ -80,24 +80,28 @@ class Task(models.Model):
   user = models.ForeignKey(User) 
 
   # TODO: add optional 'notes' field (TextField) 
-  task = models.CharField(max_length=1024, help_text="Content of a task")
-  done = models.BooleanField(default=False)
+  task = models.CharField(max_length=1024, help_text="Content of the task")
+  completed = models.BooleanField(default=False)
   priority = models.CharField(max_length=3, choices=PRIORITIES, default='NOR')
   labels = models.ManyToManyField(Label)
 
   # auto_now_add is set when the object is created
-  created = models.DateTimeField(auto_now_add=True)
+  date_created = models.DateTimeField(auto_now_add=True)
   # auto_now is set when the object is saved
-  edited = models.DateTimeField(auto_now=True)
-  # auto_now is set when the object is saved
-  finished = models.DateTimeField(auto_now=True)
-  due = models.DateTimeField(blank=True, null=True)
+  date_edited = models.DateTimeField(auto_now=True)
+  date_completed = models.DateTimeField(blank=True, null=True)
+  # due date 
+  date_due = models.DateTimeField(blank=True, null=True)
 
   class Meta:
-    ordering = ('priority', 'due', '-edited')
+    ordering = ('priority', 'date_due', '-date_edited')
 
   def __unicode__(self):
     return self.task
+
+  def is_completed(self):
+    """ returns True if the task is marked as completed, False otherwise """
+    return self.completed
 
   def pri_letter(self):
     if self.priority == 'HIG':

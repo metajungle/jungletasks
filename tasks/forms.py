@@ -8,7 +8,7 @@ class TaskForm(forms.ModelForm):
   """
   class Meta:
     model = models.Task
-    exclude = ['user', 'done', 'due', 'labels']
+    exclude = ['user', 'completed', 'date_due', 'labels']
     widgets = {
       'task': forms.TextInput(attrs={'class': 'form-control'}),
       'priority': forms.Select(attrs={'class': 'form-control'}),

@@ -12,7 +12,7 @@ def orgmode_write(tasks):
         # start
         s.append('* ')
         # completion
-        if task.done:
+        if task.is_completed:
             s.append('DONE ')
         else:
             s.append('TODO ')
@@ -27,9 +27,9 @@ def orgmode_write(tasks):
         s.append('\n')
 
         # finished date
-        if task.done:
+        if task.is_completed:
             s.append('  CLOSED: [%s]' % 
-                     task.finished.strftime("%Y-%m-%d %a %H:%M"))
+                     task.date_completed.strftime("%Y-%m-%d %a %H:%M"))
             s.append('\n')
 
     return "".join(s)

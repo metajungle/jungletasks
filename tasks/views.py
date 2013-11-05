@@ -7,7 +7,7 @@ from django.contrib import messages
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
 
 from django.core.urlresolvers import reverse
 from django.core import serializers
@@ -23,7 +23,7 @@ from tasks.forms import TaskForm
 
 import account.models as a_models
 
-@require_http_methods(['GET'])
+@require_GET
 def index(request): 
   """
   Home page
@@ -59,7 +59,7 @@ def home(request, label=None):
   # 'standard' labels
   if label.lower() == "inbox" or label.lower() == "all":
     if label.lower() == "inbox":
-      tasks = Task.objects.filter(user=request.user, done=False)
+      tasks = Task.objects.filter(user=request.user, completed=False)
     else:
       tasks = Task.objects.filter(user=request.user)      
     pass
@@ -67,12 +67,12 @@ def home(request, label=None):
   elif label.lower().startswith('s:'):
     system = label.upper()[2:]
     if system == 'UNLABELED':
-      tasks = Task.objects.filter(user=request.user, labels=None, done=False)
+      tasks = Task.objects.filter(user=request.user, labels=None, completed=False)
     elif system == 'PRIORITY':
-      tasks = Task.objects.filter(user=request.user, priority='HIG', done=False)
+      tasks = Task.objects.filter(user=request.user, priority='HIG', completed=False)
     else:
       # fall back to 'inbox'
-      tasks = Task.objects.filter(user=request.user, done=False)
+      tasks = Task.objects.filter(user=request.user, completed=False)
       # ... but leave a message 
       msg = """
             Did not understand the given system label "%s", showing
@@ -84,10 +84,10 @@ def home(request, label=None):
     try:
       l = Label.objects.get(user=request.user, name=label)
       user_label = l 
-      tasks = Task.objects.filter(user=request.user, labels=l, done=False) 
+      tasks = Task.objects.filter(user=request.user, labels=l, completed=False) 
     except Label.DoesNotExist:
       # use 'inbox' tasks, but give an error 
-      tasks = Task.objects.filter(user=request.user, done=False)
+      tasks = Task.objects.filter(user=request.user, completed=False)
       # write message 
       msg = 'The label "%s" is not recognized, showing the Inbox instead.' % label
       messages.error(request, msg)
@@ -98,7 +98,7 @@ def home(request, label=None):
     #tasks = sorted(tasks, key=lambda task: task.priority)
 
 
-  num_not_done = Task.objects.filter(user=request.user, done=False).count()
+  num_not_done = Task.objects.filter(user=request.user, completed=False).count()
     
   #
   # LABELS
@@ -136,7 +136,7 @@ def home(request, label=None):
 
 
 @login_required
-@require_http_methods(['GET'])
+@require_GET
 def tasks(request):
   """
   Re-directs to the tasks in the 'inbox'
@@ -150,29 +150,29 @@ def tasks_inbox(request):
   """
   Display tasks in the 'inbox'
   """
-  tasks = Task.objects.filter(user=request.user, done=False)
+  tasks = Task.objects.filter(user=request.user, completed=False)
   return tasks_display(request, tasks)
 
 
 @login_required
-@require_http_methods(['GET'])
-def tasks_all(request):
+@require_GET
+def tasks_completed(request):
   """
-  Display all tasks 
+  Display completed tasks 
   """
-  tasks = Task.objects.filter(user=request.user)
+  tasks = Task.objects.filter(user=request.user, completed=True).order_by('-date_completed')
   return tasks_display(request, tasks)
 
 
 @login_required
-@require_http_methods(['GET'])
+@require_GET
 def tasks_by_label(request, id):
   """
   Display tasks by a label
   """
   try:
     label = Label.objects.get(id=id)
-    tasks = Task.objects.filter(user=request.user, labels=label, done=False)
+    tasks = Task.objects.filter(user=request.user, labels=label, completed=False)
     return tasks_display(request, tasks)
   except Label.DoesNotExist:
     raise Http404
@@ -185,7 +185,7 @@ def tasks_display(request, tasks):
   # all the users labels
   labels = Label.objects.filter(user=request.user, hidden=False, active=True)
   # the number of tasks not done (used to display 'inbox' count)
-  num_tasks_not_done = Task.objects.filter(user=request.user, done=False).count()
+  num_tasks_not_done = Task.objects.filter(user=request.user, completed=False).count()
   # paginate the tasks 
   paginator = Paginator(tasks, 10) 
   # make sure page request is an int. If not, deliver first page.
@@ -207,7 +207,7 @@ def tasks_display(request, tasks):
 
 
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def tasks_add_task(request):
   """ Adds a new task """
   if 'task' in request.POST:
@@ -265,7 +265,7 @@ def tasks_edit(request, id):
   raise Http404
 
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def tasks_delete(request, id):
   """
   Delete a task 
@@ -279,8 +279,40 @@ def tasks_delete(request, id):
       
   return redirect('url_tasks')
 
+@login_required
+@require_POST
+def tasks_mark_done(request):
+  """
+  Marks a task done (or not done)
+  """
+  t_id = request.POST['task']
+  action = request.POST['action']
+  
+  # default 
+  json = simplejson.dumps({ 'status': 'KO' })
+  
+  if t_id != None and action != None:
+    try: 
+      task = Task.objects.get(user=request.user, id=t_id)
+      if action == 'done':
+        task.completed = True
+        task.date_completed = datetime.now()
+      elif action == 'undone':
+        task.completed = False
+        task.date_completed = None
+      task.save()
+      json = simplejson.dumps({ 'status': 'OK' })
+    except Task.DoesNotExist, Label.DoesNotExist: 
+      json = simplejson.dumps({ 
+        'status': 'KO', 
+        'message': 'An error occurred, the task could not be updated' 
+      })
+      
+  return HttpResponse(json, mimetype = 'application/json', 
+                      content_type = 'application/json; charset=utf8')
 
 @login_required
+@require_GET
 def label(request):
   """
   A view to create, delete and modify labels (categories)
@@ -300,7 +332,7 @@ def label(request):
                   context_instance=RequestContext(request)) 
                   
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def label_add(request):
   """
   Add a label
@@ -358,7 +390,7 @@ def label_edit(request, id):
 
 
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def label_delete(request, id):
   """
   Delete a label (actually, just marks it as inactive)
@@ -374,7 +406,7 @@ def label_delete(request, id):
   return redirect('url_label')
 
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def label_task_assign_json(request):
   """
   Assigns a label to a task
@@ -393,10 +425,8 @@ def label_task_assign_json(request):
       label = Label.objects.get(user=request.user, id=l_id)
       if action == 'add':
         task.labels.add(label)
-        task.save()
       elif action == 'remove':
         label.task_set.remove(task)
-        label.save()
       json = simplejson.dumps({ 'status': 'OK' })
     except Task.DoesNotExist, Label.DoesNotExist: 
       json = simplejson.dumps({ 
@@ -409,7 +439,7 @@ def label_task_assign_json(request):
 
 
 @login_required
-@require_http_methods(['POST'])
+@require_POST
 def label_set_hidden_json(request):
   """
   Sets the hidden flag of a label
@@ -436,10 +466,11 @@ def label_set_hidden_json(request):
 
   return HttpResponse(json, mimetype = 'application/json', 
                       content_type = 'application/json; charset=utf8')
-      
 
 
-  
+
+
+
 @login_required
 def settings(request):
   return render_to_response('settings.html', 
@@ -502,7 +533,7 @@ def log(request):
     messages.error(request, msg)
 
 
-  total = Task.objects.filter(user=request.user, done=True).count()
+  total = Task.objects.filter(user=request.user, completed=True).count()
 
   total_week = 0
   tasks = {}
@@ -512,7 +543,7 @@ def log(request):
     # add to the list of dates
     dates.append(day)
     # create a map from dates to tasks 
-    tasks_ = Task.objects.filter(user=request.user, done=True, finished__year=day.year, finished__month=day.month, finished__day=day.day)
+    tasks_ = Task.objects.filter(user=request.user, completed=True, finished__year=day.year, finished__month=day.month, finished__day=day.day)
     tasks[day] = tasks_
     # count
     total_week += len(tasks_)
@@ -793,7 +824,7 @@ def api_task_toggle(request):
     t_id = request.POST['task_id']
     try:
       task = Task.objects.get(id=t_id)
-      task.done = not task.done
+      task.completed = not task.completed
       task.save()
       return HttpResponse('True')
     except Task.DoesNotExist:

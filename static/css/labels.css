@@ -100,6 +100,10 @@ ul.labels {
       display: block;
       line-height: 100%;
       text-decoration: none; }
+      ul.labels li a.active,
+      ul.labels li a:link.active,
+      ul.labels li a:visited.active {
+        font-weight: bold; }
     ul.labels li.label-standard {
       color: #000;
       background-color: #99cc00; }
@@ -126,6 +130,8 @@ ul.labels {
       background-color: #000; }
       ul.labels li.label-selected a {
         color: #fff; }
+    ul.labels li.label-task-assignment {
+      border: 1px dotted #808080; }
 
 #colorpicker {
   display: inline;
@@ -138,31 +144,43 @@ ul.labels {
 /* 
  * Tasks
  */
-tr.task-row a,
-tr.task-row a:link,
-tr.task-row a:visited {
+table.table-tasks thead th.narrow {
+  width: 32px; }
+table.table-tasks thead th:not(.narrow) {
+  width: 100%; }
+table.table-tasks tr.task-row td {
+  vertical-align: middle; }
+table.table-tasks tr.task-row.task-done {
+  text-decoration: line-through; }
+table.table-tasks tr.task-row a,
+table.table-tasks tr.task-row a:link,
+table.table-tasks tr.task-row a:visited {
   color: #000;
   text-decoration: none; }
-tr.task-row.task-selected {
-  background-color: #c0c0c0; }
-  tr.task-row.task-selected a {
+table.table-tasks tr.task-row.task-selected {
+  background-color: #f0f0f0; }
+  table.table-tasks tr.task-row.task-selected a {
     color: #000; }
-tr.task-row.priority-high td.status {
+table.table-tasks tr.task-row.priority-high td.status {
   background-image: url("/static/icons/priority.png");
   background-repeat: no-repeat;
   background-position: left center; }
-tr.task-row ul.label-crumbs {
+table.table-tasks tr.task-row ul.label-crumbs {
   list-style-type: none;
   padding: 0px;
   margin: 0px;
   font-size: 0.7em;
-  padding: 1px 2px 1px 2px;
-  /* height: 2.3em; */
-  float: right; }
-tr.task-row ul.label-crumbs li {
+  padding: 1px 2px 1px 0px;
+  /* height: 2.3em; */ }
+table.table-tasks tr.task-row ul.label-crumbs li {
   float: left;
   color: #777;
-  padding: 0px 5px 0px 2px;
-  margin: 0px 2px 0px 2px;
+  padding: 2px 5px;
+  margin: 0px 4px 0px 0px;
   border-top: 0px solid #dedede;
-  background-color: #f0f0f0; }
+  background-color: #f0f0f0;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px; }

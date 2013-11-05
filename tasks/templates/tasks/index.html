@@ -10,6 +10,7 @@ $(function() {
     /* focus on creating tasks input */ 
     $("#inputTask").focus();
 
+    // register action for entering task labeling mode 
     $(".task-labels-assign").click(function(e) {
         var task = $(this).data('id');
         var labels = $("#task-row-" + task).data('labels');
@@ -34,11 +35,10 @@ $(function() {
         // highlight the seleced task 
         $("#task-row-" + task).addClass('task-selected');
         
-        e.stopPropagation();
         return false;
     });
     
-    // register action for assigning a task 
+    // register action for assigning or removing a label to a task 
     $(".label-task-assignment").click(function(e) {
        var label = $(this).data('id');
        var task = $(this).data('task');
@@ -84,7 +84,6 @@ $(function() {
            }
        );
 
-       e.stopPropagation();
        return false;
     });
     
@@ -102,22 +101,42 @@ $(function() {
         $(".task-row").removeClass('task-selected');        
     });
     
-    $("input.due-date-holder").each(function() {
-        $(this).datepicker(
-        {
-          minDate: new Date(),
-          autoSize: true,
-          showAnim: 'blind'
-        });
-        /* get id */
-        var data = $(this).metadata();
-        /* request to save due date on change */
-        if (data && data.task_id) {
-            $(this).change(function() {
-                api_task_save_due_date(data.task_id);
-            });
-        }
+    // register action for clicking on a task to mark it complete 
+    $(".task-text").click(function(e) {
+      var id = $(this).data('id');
+      var row = $("#task-row-" + id);
+      var done = !row.hasClass('task-done');
+      row.toggleClass('task-done');
+      // update DB 
+      $.post("{% url 'url_tasks_mark_done' %}", {
+              'task': id, 
+              'action': done ? 'done' : 'undone'
+          },
+          function(data, status) {
+              if (status == 'success' && data != 'OK') {
+                  // TODO: show error message 
+              }
+          }
+      );
+      return false;
     });
+    
+    // $("input.due-date-holder").each(function() {
+    //     $(this).datepicker(
+    //     {
+    //       minDate: new Date(),
+    //       autoSize: true,
+    //       showAnim: 'blind'
+    //     });
+    //     /* get id */
+    //     var data = $(this).metadata();
+    //     /* request to save due date on change */
+    //     if (data && data.task_id) {
+    //         $(this).change(function() {
+    //             api_task_save_due_date(data.task_id);
+    //         });
+    //     }
+    // });
 
 });
 -->
@@ -151,42 +170,41 @@ $(function() {
   <div class="col-sm-9">
         
     {% if tasks.object_list %}
-    <table class="table">
+    <table class="table table-tasks">
       <thead>
       <tr>
-        <th class="empty">&nbsp;</th>
+        <th class="narrow">&nbsp;</th>
         <th>Tasks</th>
-        <th>&nbsp;</th>
-        {# <th>Due</th> #}
-        <th class="hidden-xs">&nbsp;</th>
+        <th class="narrow">&nbsp;</th>
+        <th class="narrow hidden-xs">&nbsp;</th>
       </tr>
       </thead>
       <tbody>
       {% for task in tasks.object_list %}
       <tr id="task-row-{{ task.id }}"
-          class="task-row {% if task.done %}task-row-done{% else %}task-row-not-done{% endif %}"
+          class="task-row {% if task.is_completed %}task-done{% else %}task-not-done{% endif %}"
           data-labels="{{ task.label_ids }}">
         {# Priority column #}
         <td>
             {% if task.important %}<span class="glyphicon glyphicon-arrow-up"></span>{% endif %}
         </td>
         <td>
-          <a href="#" class="task_text">{{ task.task }}</a>
+          <a href="#" class="task-text" data-id="{{ task.id }}">{{ task.task }}</a>
 
           {# show task labels #}
           <ul class="label-crumbs hidden-xs">
             {% for label in task.labels.all %}
             {% if not label.is_hidden %}
             <li style="background-color: {{ label.color }}">
-              <span class="label-small">{{ label.name|truncatechars:8 }}</span>
+              <span class="label-small">{{ label.name|truncatechars:12 }}</span>
             </li>
             {% endif %}
             {% endfor %}
           </ul>
         </td>
         <td>
-            <a href="{% url 'url_tasks_edit' task.id %}"
-            class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
+            <a href="{% url 'url_tasks_edit' task.id %}" title="Edit task" 
+               class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
         </td>
     {# <td class="task_due_date"> #}
 {# <input type="text" class="due-date-holder hand" #}
@@ -194,7 +212,7 @@ $(function() {
      {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
     {# </td> #}
         <td class="hidden-xs">
-          <a href="#" class="task-labels-assign" data-id="{{ task.id }}"><span class="glyphicon glyphicon-tags"></span></a>
+          <a href="#" title="Assign labels to task" class="task-labels-assign" data-id="{{ task.id }}"><span class="glyphicon glyphicon-tags"></span></a>
         </td>
       </tr>
       {% endfor %}
@@ -220,7 +238,7 @@ $(function() {
     {% endif %}
     {% else %}
       <p><strong>There are no tasks here.</strong></p>
-      <p><em>Try adding a task first.</em></p>
+      <p><em>Try creating or completing a task first.</em></p>
     {% endif %}
         
     </div>
@@ -230,13 +248,15 @@ $(function() {
         {% load tasks_tags %}
   
         {# standard labels #}
-        <li class="label-standard {% current active_label url_tasks_inbox %}"
+        <li class="label-standard"
             style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            <a href="{% url 'url_tasks_inbox' %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
+            {% url 'url_tasks_inbox' as url_tasks_inbox %}
+            <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
         </li>
-        <li class="label-standard {% current active_label url_tasks_all %}"
+        <li class="label-standard"
             style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            <a href="{% url 'url_tasks_all' %}">All</a>
+            {% url 'url_tasks_completed' as url_tasks_completed %}
+            <a href="{{ url_tasks_completed }}" class="{% active_exact request url_tasks_completed %}">Completed</a>
         </li>
         {# <li class="separator">&nbsp;</li> #}
   
@@ -246,7 +266,8 @@ $(function() {
             {# for selecting labels #}
             <li class="task-label" 
                 style="background-color: {{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
-                <a href="{% url 'url_tasks_label' label.id %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+                {% url 'url_tasks_label' label.id as url_label %}
+                <a href="{{ url_label }}" class="{% active_exact request url_label %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
             </li>
             
             {# for assigning labels to tasks #}

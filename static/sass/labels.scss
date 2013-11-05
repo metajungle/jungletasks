@@ -177,6 +177,10 @@ ul.labels {
       display: block;
       line-height: 100%;
       text-decoration: none;
+      
+      &.active {
+        font-weight: bold;
+      }
     }
     
     &.label-standard {
@@ -219,7 +223,7 @@ ul.labels {
     }
     
     &.label-task-assignment {
-//      border: 1px solid #808080;
+      border: 1px dotted #808080;
     }
   }
   
@@ -239,50 +243,71 @@ ul.labels {
  * Tasks
  */
 
-tr.task-row {
+table.table-tasks {
 
-  a, 
-  a:link, 
-  a:visited {
-    color: #000;
-    text-decoration: none;
+  thead {
+    th.narrow {
+      width: 32px;
+    }
+    th:not(.narrow) {
+      width: 100%;
+    }
   }
   
-  &.task-selected {
-    a {
+  tr.task-row {
+    
+    td {
+      vertical-align: middle
+    }
+    
+    &.task-done {
+      text-decoration: line-through;
+    }
+    
+    a, 
+    a:link, 
+    a:visited {
       color: #000;
+      text-decoration: none;
     }
-    background-color: #c0c0c0;
-  }
   
-  &.priority-high {
-    td.status {
-      background-image: url('/static/icons/priority.png');
-      background-repeat: no-repeat;
-      background-position: left center;
+    &.task-selected {
+      a {
+        color: #000;
+      }
+      background-color: #f0f0f0;
     }
-  }
   
-  ul.label-crumbs {
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
-    font-size: 0.7em;
-
-    padding: 1px 2px 1px 2px;
-    /* height: 2.3em; */
-    float: right;
-  }
-
-  ul.label-crumbs {
-    li {
-      float: left;
-      color: #777;
-      padding: 0px 5px 0px 2px;
-      margin: 0px 2px 0px 2px;
-      border-top: 0px solid #dedede;
-      background-color: #f0f0f0; 
+    &.priority-high {
+      td.status {
+        background-image: url('/static/icons/priority.png');
+        background-repeat: no-repeat;
+        background-position: left center;
+      }
     }
+  
+    ul.label-crumbs {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+      font-size: 0.7em;
+      padding: 1px 2px 1px 0px;
+      /* height: 2.3em; */
+  //    float: right;
+    }
+
+    ul.label-crumbs {
+      li {
+        float: left;
+        color: #777;
+        padding: 2px 5px;
+        margin: 0px 4px 0px 0px;
+        border-top: 0px solid #dedede;
+        background-color: #f0f0f0; 
+        @include border-radius(8px);
+      }
+    }  
+  
   }  
-  
 }
+
