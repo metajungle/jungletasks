@@ -364,10 +364,11 @@ def label_edit(request, id):
     label = Label.objects.get(user=request.user, id=id)
     
     if request.method == 'POST':
-      l = request.POST['label'].strip()
+      l = request.POST.get('label') or ''
+      l = l.strip()
       # check for empty labels 
       if l == '':
-        messages.add_message(request, messages.ERROR, 'The label cannot be empty')
+          messages.add_message(request, messages.ERROR, 'The label cannot be empty')
       else:
         # check for existing labels
         ls = Label.objects.filter(user=request.user, name__iexact=l).exclude(id=id)
@@ -377,7 +378,7 @@ def label_edit(request, id):
           # TODO: should catch error if the label is too long, for example. 
           label.name = l
           # color
-          label.color = request.POST['color'] or '#ffff99'
+          label.color = request.POST.get('color') or '#ffff99'
           label.save()
           messages.add_message(request, messages.SUCCESS, 'The label was updated')
           return redirect('url_label')
