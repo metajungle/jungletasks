@@ -1,0 +1,5 @@
+-- this database evolution changes the SQL type of label colors from 
+-- VARCHAR(6) to VARCHAR(9)
+BEGIN;
+ALTER TABLE tasks_label ALTER COLUMN color SET DATA TYPE character varying(9);
+COMMIT;

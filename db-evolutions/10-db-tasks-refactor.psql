@@ -1,0 +1,8 @@
+-- this database evolution changes the SQL type of tasks from TEXT to VARCHAR(1024)
+BEGIN;
+ALTER TABLE tasks_task RENAME COLUMN done TO completed;
+ALTER TABLE tasks_task RENAME COLUMN created TO date_created;
+ALTER TABLE tasks_task RENAME COLUMN edited TO date_edited;
+ALTER TABLE tasks_task RENAME COLUMN finished TO date_completed;
+ALTER TABLE tasks_task RENAME COLUMN due TO date_due;
+COMMIT;
