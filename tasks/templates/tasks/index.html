@@ -196,7 +196,7 @@ $(function() {
             {% for label in task.labels.all %}
             {% if not label.is_hidden %}
             <li style="background-color: {{ label.color }}">
-              <span class="label-small">{{ label.name|truncatechars:12 }}</span>
+              <span class="label-small" title="{{ label.name }}">{{ label.name|truncatechars:12 }}</span>
             </li>
             {% endif %}
             {% endfor %}
