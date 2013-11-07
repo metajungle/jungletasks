@@ -85,9 +85,10 @@ $(".btn-hidden-toggle").click(function() {
     </thead>
     <tbody>
         {% for label in labels %}
+        {% url 'url_tasks_label' label.id as url_label %}
         <tr style="background-color: {{ label.color }}">
             <td>
-              {{ label.name }}
+              <a class="label-link" href="{{ url_label }}">{{ label.name }}</a>
               (<strong>{{ label.num_not_done_tasks}}</strong>)
             </td>
             <td>

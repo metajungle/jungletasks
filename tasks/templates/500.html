@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Jungle Tasks - An Error Occurred</title>
-  <link href="/static/css/main.css" rel="stylesheet" type="text/css" />
+  <title>An error occurred</title>
+  <link href="{{ STATIC_URL }}bootstrap/3.0.1/css/bootstrap.min.css"    
+        rel="stylesheet" type="text/css" />
 </head>
-
 <body>
-  
-  <div class="simple_msg">
-    <h1 style="text-align: center;">Sorry &mdash; An Error Occured</h1>
-    <p>Return to the last visited page by clicking 
+
+  <div class="jumbotron">
+    <h1>An Error Occurred</h1>
+    <p class="lead">
+      Return to the last visited page by clicking 
       <a href="#" style="font-weight: bold;" 
-            onclick="history.back(); return false;">here</a>.</p>
+            onclick="history.back(); return false;">here</a>.
+    </p>
   </div>
 
 </body>
 </html>
-

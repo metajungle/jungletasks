@@ -246,18 +246,20 @@ def tasks_edit(request, id):
       if form.is_valid(): 
         # update task 
         data = form.cleaned_data
-        task.task = data['task']
-        task.priority = data['priority']
+        task.task = data.get('task')
+        task.notes = data.get('notes')
+        task.priority = data.get('priority')
         task.save()
         # set message 
         messages.add_message(request, messages.SUCCESS, 'Task updated')
         return redirect('url_tasks')
     else:
       form = TaskForm(instance=task)
-      return render_to_response('tasks/edit.html', 
-                                { 'task': task, 
-                                  'form' : form }, 
-                      context_instance=RequestContext(request)) 
+
+    return render_to_response('tasks/edit.html', 
+                              { 'task': task, 
+                                'form' : form }, 
+                    context_instance=RequestContext(request)) 
     
   except Task.DoesNotExist:
     pass

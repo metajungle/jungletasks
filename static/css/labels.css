@@ -78,6 +78,11 @@ body {
 /*
  * Labels
  */
+table.table-labels a.label-link,
+table.table-labels a:link.label-link,
+table.table-labels a:visited.label-link {
+  color: #000; }
+
 ul.labels {
   list-style: none;
   padding: 0px; }

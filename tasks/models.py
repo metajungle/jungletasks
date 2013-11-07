@@ -79,8 +79,8 @@ class Task(models.Model):
 
   user = models.ForeignKey(User) 
 
-  # TODO: add optional 'notes' field (TextField) 
-  task = models.CharField(max_length=1024, help_text="Content of the task")
+  task = models.CharField(max_length=1024, help_text="The task")
+  notes = models.TextField(blank=True, null=True)
   completed = models.BooleanField(default=False)
   priority = models.CharField(max_length=3, choices=PRIORITIES, default='NOR')
   labels = models.ManyToManyField(Label)
@@ -102,15 +102,6 @@ class Task(models.Model):
   def is_completed(self):
     """ returns True if the task is marked as completed, False otherwise """
     return self.completed
-
-  def pri_letter(self):
-    if self.priority == 'HIG':
-      return 'H'
-    elif self.priority == 'NOR':
-      return 'N'
-    elif self.priority == 'LOW':
-      return 'L'
-    return self.priority
 
   def important(self):
     return self.priority == 'HIG'

@@ -14,16 +14,20 @@ $("#id_task").focus();
     <fieldset>
     {% for field in form %}
     
-        <div class="form-group">
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
         {{ field.label_tag }}
         {{ field }}
-        </div>
-
-        {% for error in field.errors %}
-        <p>
-        <span class="error">{{ error }}</span>
-        </p>
-        {% endfor %}
+        {% if field.errors %}
+        <ul class="list-unstyled">
+          {% for error in field.errors %}
+            <li>
+            <span class="label label-danger">Error</span>
+            <span class="text-danger">{{ error }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
 
     {% endfor %}
     </fieldset>

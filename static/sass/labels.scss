@@ -157,6 +157,20 @@ body {
   
 }
 
+table.table-labels {
+  
+  a, 
+  a:link,
+  a:visited {
+    &.label-link {
+      color: #000;
+    }
+  }
+  
+  a:hover {
+  }
+}
+
 ul.labels {
   list-style: none; 
   padding: 0px;

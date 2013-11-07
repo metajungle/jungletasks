@@ -166,19 +166,35 @@ $(function() {
 
 <p></p>
 
+{% load tasks_tags %}
+
 <div class="row">
   <div class="col-sm-9">
-        
+    
+    <ul class="labels visible-xs">
+      {# standard labels #}
+      <li class="label-standard"
+          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          {% url 'url_tasks_inbox' as url_tasks_inbox %}
+          <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
+      </li>
+      <li class="label-standard"
+          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          {% url 'url_tasks_completed' as url_tasks_completed %}
+          <a href="{{ url_tasks_completed }}" class="{% active_exact request url_tasks_completed %}">Completed</a>
+      </li>
+    </ul>
+    
     {% if tasks.object_list %}
     <table class="table table-tasks">
-      <thead>
-      <tr>
-        <th class="narrow">&nbsp;</th>
-        <th>Tasks</th>
-        <th class="narrow">&nbsp;</th>
-        <th class="narrow hidden-xs">&nbsp;</th>
-      </tr>
-      </thead>
+      {# <thead> #}
+      {# <tr> #}
+      {#   <th class="narrow">&nbsp;</th> #}
+      {#   <th>Tasks</th> #}
+      {#   <th class="narrow">&nbsp;</th> #}
+      {#   <th class="narrow hidden-xs">&nbsp;</th> #}
+      {# </tr> #}
+      {# </thead> #}
       <tbody>
       {% for task in tasks.object_list %}
       <tr id="task-row-{{ task.id }}"
@@ -241,64 +257,63 @@ $(function() {
       <p><em>Try creating or completing a task first.</em></p>
     {% endif %}
         
-    </div>
-    <div class="col-sm-3">
-      <ul class="labels hidden-xs">
-  
-        {% load tasks_tags %}
-  
-        {# standard labels #}
-        <li class="label-standard"
-            style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            {% url 'url_tasks_inbox' as url_tasks_inbox %}
-            <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
-        </li>
-        <li class="label-standard"
-            style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
-            {% url 'url_tasks_completed' as url_tasks_completed %}
-            <a href="{{ url_tasks_completed }}" class="{% active_exact request url_tasks_completed %}">Completed</a>
-        </li>
-        {# <li class="separator">&nbsp;</li> #}
-  
-        {# user-defined labels #}
-        <li class="title">Your labels</li>
-        {% for label in labels %}
-            {# for selecting labels #}
-            <li class="task-label" 
-                style="background-color: {{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
-                {% url 'url_tasks_label' label.id as url_label %}
-                <a href="{{ url_label }}" class="{% active_exact request url_label %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
-            </li>
-            
-            {# for assigning labels to tasks #}
-            <li class="label-task-assignment hidden" data-id="{{ label.id }}" data-color="{{ label.color }}">
-                <a href="#">{{ label.name }}</a>
-            </li>
-        {% empty %}
-        <li class="empty"><em>No labels here</em></li>
-        {% endfor %}
-        
-        {# save button for labeling #}
-        <li class="controls hidden">
-          <button id="btn-label-assign-done" 
-                  class="btn btn-success form-control">Done</button>
-        </li>
-        
-        {% if user.get_profile and user.get_profile.system_labels.all %}
-        <li class="separator system-label-part">&nbsp;</li>
-        <li class="title system-label-part">System labels</li>
-        {% block systemlabels %}
-        {% for label in user.get_profile.system_labels.all %}
-        <li class="systemlabel system-label-part">
-          <a href="?l=s:{{ label.label }}">{{ label.get_label_display }}</a>
-        </li>
-        {% endfor %}
-        {% endblock %}
-        {% endif %}
-  
-      </ul>        
-    </div>
   </div>
+  <div class="col-sm-3">
+    
+    <ul class="labels hidden-xs">
+
+      {# standard labels #}
+      <li class="label-standard"
+          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          {% url 'url_tasks_inbox' as url_tasks_inbox %}
+          <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
+      </li>
+      <li class="label-standard"
+          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          {% url 'url_tasks_completed' as url_tasks_completed %}
+          <a href="{{ url_tasks_completed }}" class="{% active_exact request url_tasks_completed %}">Completed</a>
+      </li>
+
+      {# user-defined labels #}
+      <li class="title">Your labels</li>
+      {% for label in labels %}
+          {# for selecting labels #}
+          <li class="task-label" 
+              style="background-color: {{ label.color }}; border-left: 10px solid {% adjust_color label.color %};">
+              {% url 'url_tasks_label' label.id as url_label %}
+              <a href="{{ url_label }}" class="{% active_exact request url_label %}">{{ label.name }}&nbsp;({{ label.num_not_done_tasks }})</a>
+          </li>
+          
+          {# for assigning labels to tasks #}
+          <li class="label-task-assignment hidden" data-id="{{ label.id }}" data-color="{{ label.color }}">
+              <a href="#">{{ label.name }}</a>
+          </li>
+      {% empty %}
+      <li class="empty"><em>No labels here</em></li>
+      {% endfor %}
+      
+      {# save button for labeling #}
+      <li class="controls hidden">
+        <button id="btn-label-assign-done" 
+                class="btn btn-success form-control">Done</button>
+      </li>
+      
+      {% if user.get_profile and user.get_profile.system_labels.all %}
+      <li class="separator system-label-part">&nbsp;</li>
+      <li class="title system-label-part">System labels</li>
+      {% block systemlabels %}
+      {% for label in user.get_profile.system_labels.all %}
+      <li class="systemlabel system-label-part">
+        <a href="?l=s:{{ label.label }}">{{ label.get_label_display }}</a>
+      </li>
+      {% endfor %}
+      {% endblock %}
+      {% endif %}
+
+    </ul>    
+    
+  </div>
+    
 </div>
 
 {% endblock %}
