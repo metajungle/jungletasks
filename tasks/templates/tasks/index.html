@@ -106,7 +106,18 @@ $(function() {
       var id = $(this).data('id');
       var row = $("#task-row-" + id);
       var done = !row.hasClass('task-done');
+      var taskStatusIcon = row.find(".task-status-icon");
       row.toggleClass('task-done');
+      if (done) {
+        taskStatusIcon.removeClass('glyphicon-arrow-up');
+        taskStatusIcon.addClass('glyphicon-ok');
+      } else {
+        taskStatusIcon.removeClass('glyphicon-ok');
+        // check if it was important, if so add important symbol back
+        if (taskStatusIcon.data('important')) {
+          taskStatusIcon.addClass('glyphicon-arrow-up');
+        }
+      }
       // update DB 
       $.post("{% url 'url_tasks_mark_done' %}", {
               'task': id, 
@@ -201,11 +212,14 @@ $(function() {
           class="task-row {% if task.is_completed %}task-done{% else %}task-not-done{% endif %}"
           data-labels="{{ task.label_ids }}">
         {# Priority column #}
-        <td>
-            {% if task.important %}<span class="glyphicon glyphicon-arrow-up"></span>{% endif %}
+        <td class="task-status">
+          {# completed task precedes important task #}
+          <span class="task-status-icon glyphicon {% if task.is_completed %}glyphicon-ok{% elif task.is_important %}glyphicon-arrow-up{% endif %}" data-important="{{ task.is_important }}"></span>
         </td>
         <td>
-          <a href="#" class="task-text" data-id="{{ task.id }}">{{ task.task }}</a>
+          <a href="#" class="task-text" data-id="{{ task.id }}">
+            {{ task.task }}
+          </a>
 
           {# show task labels #}
           <ul class="label-crumbs hidden-xs">

@@ -10,9 +10,11 @@ class LoginForm(forms.Form):
     A form for logging in users
     """
     email = forms.EmailField(label="E-mail", help_text = "Required",
-                             required=True) 
-    password = forms.CharField(label="Password", widget=forms.PasswordInput, 
-                                required=True, help_text = "Required") 
+                             required=True, 
+                             widget=forms.TextInput(attrs={'class':'form-control special-form-control'})) 
+    password = forms.CharField(label="Password", help_text = "Required", 
+                              required=True, 
+                              widget=forms.PasswordInput(attrs={'class':'form-control special-form-control'}))
 
     def clean_email(self):
         """
@@ -20,14 +22,14 @@ class LoginForm(forms.Form):
         and that the User object is active 
         """
         e = self.cleaned_data['email']
-        try:
-            user = User.objects.get(email=e)
-            if not user.is_active:
-                msg = 'This user account has not been confirmed yet'
-                raise forms.ValidationError(msg)
-        except User.DoesNotExist:
-            msg = 'This email is not associated with an account'
-            raise forms.ValidationError(msg)
+        # try:
+        #     user = User.objects.get(email=e)
+        #     if not user.is_active:
+        #         msg = 'This user account has not been confirmed yet'
+        #         raise forms.ValidationError(msg)
+        # except User.DoesNotExist:
+        #     msg = 'This email is not associated with an account'
+        #     raise forms.ValidationError(msg)
         return e
 
     def get_username(self):
@@ -43,27 +45,6 @@ class LoginForm(forms.Form):
         except User.DoesNotExist:
             pass
         return None
-        
-    # def clean_password(self):
-    #     """
-    #     Returns the password if it matches the 
-    #     """
-    #     username = self.get_username()
-    #     pw = self.cleaned_data.get("password", "")
-    #     user = authenticate(username=username, password=pw)
-    #     if user is None:
-    #         raise forms.ValidationError(_("Password did not match the account"))
-    #     return self.password
-        
-    # def is_valid(self):
-    #     super(LoginForm, self).validate()
-    #     if super(LoginForm, self).is_valid():
-    #         username = self.get_username()
-    #         pw = self.cleaned_data.get("password", "")
-    #         user = authenticate(username=username, password=pw)
-    #         if user is None:
-    #             raise forms.ValidationError(_("Password did not match the account"))
-    #     return False
 
 
 class SignupForm(forms.Form):
@@ -71,12 +52,14 @@ class SignupForm(forms.Form):
     A for for signing up users 
     """
     email = forms.EmailField(label="E-mail", help_text = "Required",
-                             required=True) 
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, 
-                                required=True, help_text = "Required")
-    password2 = forms.CharField(label="Password confirmation", 
-                                widget=forms.PasswordInput, 
-                                required=True, help_text = "Required")
+                             required=True,
+                             widget=forms.TextInput(attrs={'class':'form-control special-form-control'})) 
+    password1 = forms.CharField(label="Password", help_text = "Required", 
+                                required=True, 
+                                widget=forms.PasswordInput(attrs={'class':'form-control special-form-control'}))
+    password2 = forms.CharField(label="Password confirmation", help_text = "Required", 
+                                required=True,
+                                widget=forms.PasswordInput(attrs={'class':'form-control special-form-control'}))
 
     def clean_email(self):
         """ 
@@ -131,11 +114,12 @@ class ChangePasswordForm(forms.Form):
     """
     A form for changing password 
     """
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, 
-                                required=True, help_text = "Required")
-    password2 = forms.CharField(label="Password confirmation", 
-                                widget=forms.PasswordInput, 
-                                required=True, help_text = "Required")
+    password1 = forms.CharField(label="Password", help_text = "Required", 
+                                required=True, 
+                                widget=forms.PasswordInput(attrs={'class':'form-control special-form-control'}))
+    password2 = forms.CharField(label="Password confirmation", help_text = "Required", 
+                                required=True,
+                                widget=forms.PasswordInput(attrs={'class':'form-control special-form-control'})) 
 
     def clean_password2(self):
         """
@@ -165,8 +149,9 @@ class ResetPasswordForm(forms.Form):
     A form for resetting a password 
     """
     email = forms.EmailField(label="E-mail", help_text = "Required",
-                             required=True) 
-
+                             required=True,
+                             widget=forms.TextInput(attrs={'class':'form-control special-form-control'})) 
+                             
     def clean_email(self):
         """
         Checks that the email is valid 

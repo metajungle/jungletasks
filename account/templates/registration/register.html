@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
-{% block js-on-document-load %}
+{% block script %}
+<script type="text/javascript">
+<!--
 $("input#id_email").focus();
-{% endblock %}
+-->
+</script>
+{% endblock script %}
 
 {% block contents %}
 

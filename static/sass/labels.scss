@@ -107,8 +107,25 @@ body {
     background-color: inherit;
     @include border-radius(2px);
   }
+
+  @media screen and (min-width: 768px) {
+    .special-form-control {
+      &.form-control {
+            width: 728px;
+      } 
+    }
+  }
   
   @media screen and (max-width: 768px) {
+    
+//    input[type="text"], 
+//    input[type="password"] { 
+//      margin-bottom: 5px;
+//      display: block;
+//      padding: 4px;
+//      border: solid 1px #a0a0a0;
+//      width: 300px;
+//    }  
     
 //    .row {
 //      padding-right: 0px;
@@ -120,14 +137,14 @@ body {
     
   }
 
-  input[type="text"]:not(.form-control), 
-  input[type="password"]:not(.form-control) { 
-    margin-bottom: 5px;
-    display: block;
-    padding: 4px;
-    border: solid 1px #a0a0a0;
-    width: 300px;
-  }  
+//  input[type="text"]:not(.form-control), 
+//  input[type="password"]:not(.form-control) { 
+//    margin-bottom: 5px;
+//    display: block;
+//    padding: 4px;
+//    border: solid 1px #a0a0a0;
+//    width: 300px;
+//  }  
   
   #footer {
     margin: 0px auto;
@@ -276,6 +293,8 @@ table.table-tasks {
     
     &.task-done {
       text-decoration: line-through;
+      font-style: italic;
+      background-color: #F7CED4;
     }
     
     a, 
@@ -293,11 +312,7 @@ table.table-tasks {
     }
   
     &.priority-high {
-      td.status {
-        background-image: url('/static/icons/priority.png');
-        background-repeat: no-repeat;
-        background-position: left center;
-      }
+
     }
   
     ul.label-crumbs {

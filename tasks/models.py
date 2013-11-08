@@ -103,7 +103,7 @@ class Task(models.Model):
     """ returns True if the task is marked as completed, False otherwise """
     return self.completed
 
-  def important(self):
+  def is_important(self):
     return self.priority == 'HIG'
 
   def label_ids(self):

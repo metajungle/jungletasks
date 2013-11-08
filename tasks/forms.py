@@ -10,9 +10,9 @@ class TaskForm(forms.ModelForm):
     model = models.Task
     exclude = ['user', 'completed', 'date_due', 'date_completed', 'labels']
     widgets = {
-      'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task'}),
-      'notes': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Notes', 'rows': 10}),
-      'priority': forms.Select(attrs={'class': 'form-control'}),
+      'task': forms.TextInput(attrs={'class': 'form-control special-form-control', 'placeholder': 'Task'}),
+      'notes': forms.Textarea(attrs={'class': 'form-control special-form-control', 'placeholder': 'Notes', 'rows': 10}),
+      'priority': forms.Select(attrs={'class': 'form-control special-form-control'}),
     }
     
   def clean_task(self):

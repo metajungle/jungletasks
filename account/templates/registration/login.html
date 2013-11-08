@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
-{% block js-on-document-load %}
+{% block script %}
+<script type="text/javascript">
+<!--
 $("input#id_email").focus();
-{% endblock %}
+-->
+</script>
+{% endblock script %}
 
 {% block contents %}
 
   <h1>Login</h1>
 
   <p>Please provide the email you signed up with and your password.</p>
+
+  {% if invalid %}
+  <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      I'm sorry, your credentials were not accepted, please try again
+  </div>
+  {% endif %}
 
   <form action="" method="post" role="form">{% csrf_token %}
     <fieldset>
@@ -30,20 +41,15 @@ $("input#id_email").focus();
       {% endfor %}
     </fieldset>
     
-    {% if invalid %}
-    <span class="error">
-      The email and password did not match
-    </span>
-    {% endif %}
-
     {% if next %}
       <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
 
     <button type="submit" class="btn btn-primary">Login</button>
 
-    <p style="text-align: right; margin-right: 20px;">
-      Forgot your password? <a href="{% url 'url_password_reset' %}">Reset  your password</a>.
+    <p>&nbsp;</p>
+    <p>
+      Forgot your password? <a href="{% url 'url_password_reset' %}">Reset  your password.</a>
     </p>
 
   </form>

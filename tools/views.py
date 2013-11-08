@@ -47,11 +47,9 @@ def tasks_export(request):
     
     if not tasks:
       msg = """
-            <p>There are no tasks to export.</p>
+            There are no tasks to export.
             """
-      return render_to_response('message.html', 
-                                { 'msg' : msg, 'success' : False }, 
-                                context_instance=RequestContext(request)) 
+      messages.error(request, msg)
 
   #
   # EXPORT tasks

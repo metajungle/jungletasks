@@ -32,7 +32,7 @@ urlpatterns = patterns('tasks.views',
     
     url(r'^settings/$', 'settings', name='url_settings'), 
     url(r'^tools/$', 'tools', name='url_tools'), 
-    url(r'^faq/$', 'faq', name='url_faq'), 
+    url(r'^about/$', 'about', name='url_about'), 
 
     url(r'^log/$', 'log', name='url_log'), 
 
@@ -73,8 +73,8 @@ urlpatterns += patterns('account.views',
     url(r'^accounts/login/$', 'login', name='url_login'), 
     url(r'^accounts/signup/$', 'register', name='url_signup'), 
     url(r'^confirm/$', 'confirm_email', name='url_email_confirmation'), 
-    url(r'^accounts/pw/change/$', 'password_change', name='url_password_change'), 
-    url(r'^accounts/pw/reset/$', 'password_reset', name='url_password_reset'), 
+    url(r'^accounts/password-change/$', 'password_change', name='url_password_change'), 
+    url(r'^accounts/password-reset/$', 'password_reset', name='url_password_reset'), 
 )
 
 # import and export urls 

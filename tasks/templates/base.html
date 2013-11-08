@@ -57,7 +57,7 @@
       {% url 'url_tasks' as url_tasks %}
       {% url 'url_label' as url_label %}
       {% url 'url_tools' as url_tools %}
-      {% url 'url_faq' as url_faq %}
+      {% url 'url_about' as url_about %}
       {% url 'url_login' as url_login %}
       {% url 'url_signup' as url_signup %}
 
@@ -84,7 +84,7 @@
                 <li class="{% active_exact request url_signup %}"><a href="{{ url_signup }}">signup</a></li>
             {% endif %}
           <li class="{% active request url_tools %}"><a href="{{ url_tools }}">tools</a></li>
-          <li class="{% active request url_faq %}"><a href="{{ url_faq }}">faq</a></li>
+          <li class="{% active request url_about %}"><a href="{{ url_about }}">about</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>

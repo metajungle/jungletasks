@@ -2,6 +2,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from django.core.urlresolvers import reverse
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
 
 from django.contrib.auth.models import User
 # from django.contrib.auth import logout, authenticate
@@ -89,15 +90,11 @@ def register(request):
             utils.send_email_verification_email(request, user)
             # re-direct to information message 
             msg = """
-            <p>Thanks for registring!</p>
-            <p>We have sent you an email to confirm your email address.</p>
-            <p>Follow the instructions in the email to start using 
-            your account.</p>
-            <p>Thank you</p>
+            Thanks for registering! A confirmation email with instructions
+            has been sent. 
             """
-            return render_to_response('message.html', 
-                                      { 'msg' : msg, 'success' : True }, 
-                                      context_instance=RequestContext(request)) 
+            messages.success(request, msg)
+            return redirect('url_index')
     else:
         form = SignupForm()
 
@@ -106,13 +103,14 @@ def register(request):
                   context_instance=RequestContext(request)) 
 
 
+@require_GET
 def confirm_email(request):
     """
     Confirm an email address
     """
     success = False
-    if request.method == 'GET' and 'code' in request.GET:
-        code = request.GET['code']
+    if 'code' in request.GET:
+        code = request.GET.get('code') or ''
         try:
             ec = models.EmailConfirmation.objects.get(code=code)
             user = ec.user
@@ -124,26 +122,25 @@ def confirm_email(request):
             ec.delete()
             # send notification email 
             utils.send_signup_notification_msg()
+            msg = """
+                Your email was successfully confirmed.
+                You can now login.
+                """
+            messages.success(request, msg)
+            return redirect('url_login')
         except models.EmailConfirmation.DoesNotExist:
-            pass
-    
-    if success:
-        msg = """
-            <p>Your email was successfully confirmed.</p>
-            <p>You can now login.</p>
-            """
-    else:        
-        msg = """
-            <p>The confirmation code you used could not be recognized.</p>
-            <p>If this does not seem right, write to: 
-               <a href="mailto:tasks@metajungle.net">tasks@metajungle.net</a>
-            </p>
-              """
+            msg = """
+                The confirmation code you used could not be recognized.
+                """
+            messages.error(request, msg)
+            return redirect('url_index')
+            
+    msg = """
+        An error occurred with your email confirmation, please try again. 
+        """
+    messages.error(request, msg)
+    return redirect('url_index')
 
-    return render_to_response('message.html', 
-                              { 'msg' : msg, 
-                                'success' : success }, 
-                              context_instance=RequestContext(request))
 
 @login_required
 def password_change(request):
@@ -151,30 +148,25 @@ def password_change(request):
     A view for changing a password
     """
 
-    if request.user.email == 'demo@jungletasks.com':
-        msg = """
-            <p>The demo user cannot change password.</p>
-            """
-        return render_to_response('message.html', 
-                                  { 'msg' : msg, 'success' : False }, 
-                                  context_instance=RequestContext(request)) 
-
     if request.method == 'POST': 
-        form = ChangePasswordForm(request.POST) 
-        if form.is_valid(): 
-            # change the password
-            form.change_password(request.user)
-            # re-direct to information message 
-            msg = """
-            <p>Your password was successfully changed!</p>
-            """
-            return render_to_response('message.html', 
-                                      { 'msg' : msg, 'success' : True }, 
-                                      context_instance=RequestContext(request)) 
+      form = ChangePasswordForm(request.POST) 
+      if form.is_valid(): 
+        email = form.cleaned_data.get('email')
+        if email == 'demo@jungletasks.com':
+          msg = 'The demo user cannot change the password'
+          messages.error(request, msg)
+        else:
+          # change the password
+          form.change_password(request.user)
+          # re-direct to information message 
+          msg = """
+          Your password was successfully changed!
+          """
+          messages.success(request, msg)
     else:
         form = ChangePasswordForm()
 
-    return render_to_response('password_change.html', 
+    return render_to_response('account/password_change.html', 
                               { 'form' : form }, 
                   context_instance=RequestContext(request)) 
 
@@ -183,47 +175,22 @@ def password_reset(request):
     """
     A view for resetting a user's password
     """
-
-    demo_error = False
-    if not request.user.is_anonymous():
-        if request.user.email == 'demo@jungletasks.com':
-            demo_error = True
-
-    if request.method == 'POST':
-        form = ResetPasswordForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            if email == 'demo@jungletasks.com':
-                demo_error = True
-
-    if demo_error:
-        msg = """
-            <p>The demo user cannot reset the password.</p>
-            """
-        return render_to_response('message.html', 
-                                  { 'msg' : msg, 'success' : False }, 
-                                  context_instance=RequestContext(request)) 
-
     if request.method == 'POST': 
         form = ResetPasswordForm(request.POST) 
         if form.is_valid(): 
-            email = form.cleaned_data['email']
-            user = form.get_user()
-            # generate and set new password
-            password = utils.user_password_reset(user)
-            # send email 
-            utils.send_reset_password_email(request, user, password)
-            # re-direct to information message 
-            link = reverse('url_password_change')
-            msg = """
-            <p>Your new password has been sent to your email address.</p>
-            <p>Please change your password as soon as possible: 
-               <a href="%s">change password</a>.</p>
-            <p>Thank you</p>
-            """ % (link)
-            return render_to_response('message.html', 
-                                      { 'msg' : msg, 'success' : True }, 
-                                      context_instance=RequestContext(request)) 
+            email = form.cleaned_data.get('email')
+            if email == 'demo@jungletasks.com':
+              msg = 'The demo user cannot reset the password'
+              messages.error(request, msg)
+            else:
+              user = form.get_user()
+              # generate and set new password
+              password = utils.user_password_reset(user)
+              # send email 
+              utils.send_reset_password_email(request, user, password)
+              # message 
+              msg = 'Your new password has been sent to your email address'
+              messages.success(request, msg)
     else:
         form = ResetPasswordForm()
 
@@ -231,10 +198,10 @@ def password_reset(request):
     if request.user.is_authenticated():
         url = reverse('url_password_change')
         msg = '''You are currently logged in, you may instead want to
-                 <a href="%s">change your password</a>''' % url
+                 <a href="%s" class="alert-link">change your password</a>.''' % url
         messages.info(request, msg)
 
-    return render_to_response('password_reset.html', 
+    return render_to_response('account/password_reset.html', 
                               { 'form' : form, 'request' : request }, 
                   context_instance=RequestContext(request)) 
 

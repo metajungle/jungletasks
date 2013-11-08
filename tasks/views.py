@@ -488,11 +488,11 @@ def tools(request):
                   context_instance=RequestContext(request)) 
 
 
-def faq(request):
+def about(request):
   """
-  Displays the FAQ
+  Displays the 'About' page
   """
-  return render_to_response('faq.html', 
+  return render_to_response('tasks/about.html', 
                             { }, 
                   context_instance=RequestContext(request)) 
 
