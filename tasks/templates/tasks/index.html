@@ -173,6 +173,10 @@ $(function() {
     <button type="submit" class="btn btn-default form-control">&plus; add task</button>
   </div>
 </div>
+{# pass along the active label for automatic tagging #}
+{% if active_label %}
+<input type="hidden" name="active_label" value="{{ active_label.id }}" />
+{% endif %}
 </form>
 
 <p></p>
@@ -212,7 +216,7 @@ $(function() {
           class="task-row {% if task.is_completed %}task-done{% else %}task-not-done{% endif %}"
           data-labels="{{ task.label_ids }}">
         {# Priority column #}
-        <td class="task-status">
+        <td class="task-status narrow">
           {# completed task precedes important task #}
           <span class="task-status-icon glyphicon {% if task.is_completed %}glyphicon-ok{% elif task.is_important %}glyphicon-arrow-up{% endif %}" data-important="{{ task.is_important }}"></span>
         </td>
@@ -226,13 +230,13 @@ $(function() {
             {% for label in task.labels.all %}
             {% if not label.is_hidden %}
             <li style="background-color: {{ label.color }}">
-              <span class="label-small" title="{{ label.name }}">{{ label.name|truncatechars:12 }}</span>
+              <span class="label-small" title="{{ label.name }}"><a href="{% url 'url_tasks_label' label.id %}">{{ label.name|truncatechars:12 }}</a></span>
             </li>
             {% endif %}
             {% endfor %}
           </ul>
         </td>
-        <td>
+        <td class="narrow">
             <a href="{% url 'url_tasks_edit' task.id %}" title="Edit task" 
                class="task_edit"><span class="glyphicon glyphicon-edit"></span></a>
         </td>
@@ -241,7 +245,7 @@ $(function() {
    {#    data-task_id="'{{ task.id }}'" #}
      {#  value="{% if task.due %}{{ task.due|date:"SHORT_DATE_FORMAT" }}{% else %}&mdash;{% endif %}" /> #}
     {# </td> #}
-        <td class="hidden-xs">
+        <td class="narrow hidden-xs">
           <a href="#" title="Assign labels to task" class="task-labels-assign" data-id="{{ task.id }}"><span class="glyphicon glyphicon-tags"></span></a>
         </td>
       </tr>

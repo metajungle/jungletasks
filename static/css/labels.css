@@ -145,9 +145,9 @@ ul.labels {
 /* 
  * Tasks
  */
-table.table-tasks thead th.narrow {
+table.table-tasks tbody td.narrow {
   width: 32px; }
-table.table-tasks thead th:not(.narrow) {
+table.table-tasks tbody td:not(.narrow) {
   width: 100%; }
 table.table-tasks tr.task-row td {
   vertical-align: middle; }

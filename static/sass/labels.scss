@@ -276,11 +276,11 @@ ul.labels {
 
 table.table-tasks {
 
-  thead {
-    th.narrow {
+  tbody {
+    td.narrow {
       width: 32px;
     }
-    th:not(.narrow) {
+    td:not(.narrow) {
       width: 100%;
     }
   }

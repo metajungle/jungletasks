@@ -173,12 +173,12 @@ def tasks_by_label(request, id):
   try:
     label = Label.objects.get(id=id)
     tasks = Task.objects.filter(user=request.user, labels=label, completed=False)
-    return tasks_display(request, tasks)
+    return tasks_display(request, tasks, label)
   except Label.DoesNotExist:
     raise Http404
 
 
-def tasks_display(request, tasks):
+def tasks_display(request, tasks, label=None):
   """
   Utility method for displaying the given tasks 
   """
@@ -201,6 +201,7 @@ def tasks_display(request, tasks):
   
   return render_to_response('tasks/index.html', 
                             { 'tasks': paged_items, 
+                              'active_label': label, 
                               'labels': labels, 
                               'num_tasks_not_done': num_tasks_not_done }, 
                   context_instance=RequestContext(request)) 
@@ -211,12 +212,23 @@ def tasks_display(request, tasks):
 def tasks_add_task(request):
   """ Adds a new task """
   if 'task' in request.POST:
-    task = request.POST['task']
-    # create task
-    task = Task(user=request.user, task=task)
-    task.save()
+    task = request.POST.get('task') or ''
+    if task != '': 
+      # create task
+      task = Task(user=request.user, task=task)
+      task.save()
+      # add label
+      if 'active_label' in request.POST:
+        l_id = request.POST.get('active_label')
+        try:
+          label = Label.objects.get(id=l_id)
+          task.labels.add(label)
+          return redirect('url_tasks_label', id=l_id)
+        except Label.DoesNotExist:
+          pass
+    else:
+      messages.error(request, 'A task cannot be empty')
 
-  # return tasks_inbox(request)
   return redirect('url_tasks_inbox')
   
 
