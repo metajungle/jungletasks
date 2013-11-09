@@ -5,6 +5,7 @@ from django.contrib.messages import constants as message_constants
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# maintenance mode settings
 MAINTENANCE_MODE = False
 MAINTENANCE_IGNORE_URLS = (
     # static resources
@@ -12,6 +13,15 @@ MAINTENANCE_IGNORE_URLS = (
     # login form 
     r'^/dev/login',
 )
+
+# jungletask settings - can override in local_settings.py
+# the domain where the application is running, 
+# defaults to localhost:8000 if DEBUG is True 
+JUNGLETASKS_DOMAIN = ''
+# email address admin emails are sent from 
+JUNGLETASKS_SEND_EMAIL_FROM = ''
+# if true, sends notification to admins when a user signs up 
+JUNGLETASKS_SIGNUP_EMAIL_NOTIFICATION = False
 
 PROJECT_DIR = os.path.dirname(__file__)
 
@@ -51,7 +61,7 @@ MESSAGE_TAGS = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.metajungle.net']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

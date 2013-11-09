@@ -39,7 +39,7 @@ urlpatterns = patterns('tasks.views',
 urlpatterns += patterns('account.views',
     url(r'^accounts/login/$', 'login', name='url_login'), 
     url(r'^accounts/signup/$', 'register', name='url_signup'), 
-    url(r'^confirm/$', 'confirm_email', name='url_email_confirmation'), 
+    url(r'^accounts/confirm/$', 'confirm_email', name='url_email_confirmation'), 
     url(r'^accounts/password-change/$', 'password_change', name='url_password_change'), 
     url(r'^accounts/password-reset/$', 'password_reset', name='url_password_reset'), 
 )
