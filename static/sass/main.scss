@@ -192,7 +192,13 @@ ul.labels {
   list-style: none; 
   padding: 0px;
   
-  li {
+  li.link {
+    a {
+      padding-left: 20px;
+    }
+  }
+  
+  li:not(.link) {
     display: block;
     margin: 4px 0px 2px 0px;
     padding: 2px 26px 2px 4px;

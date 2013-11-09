@@ -82,7 +82,9 @@ table.table-labels a:visited.label-link {
 ul.labels {
   list-style: none;
   padding: 0px; }
-  ul.labels li {
+  ul.labels li.link a {
+    padding-left: 20px; }
+  ul.labels li:not(.link) {
     display: block;
     margin: 4px 0px 2px 0px;
     padding: 2px 26px 2px 4px;
@@ -92,23 +94,23 @@ ul.labels {
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
     border-radius: 4px; }
-    ul.labels li a,
-    ul.labels li a:link,
-    ul.labels li a:visited {
+    ul.labels li:not(.link) a,
+    ul.labels li:not(.link) a:link,
+    ul.labels li:not(.link) a:visited {
       color: #000;
       padding: 4px;
       margin: 4px;
       display: block;
       line-height: 100%;
       text-decoration: none; }
-      ul.labels li a.active,
-      ul.labels li a:link.active,
-      ul.labels li a:visited.active {
+      ul.labels li:not(.link) a.active,
+      ul.labels li:not(.link) a:link.active,
+      ul.labels li:not(.link) a:visited.active {
         font-weight: bold; }
-    ul.labels li.label-standard {
+    ul.labels li:not(.link).label-standard {
       color: #000;
       background-color: #99cc00; }
-    ul.labels li.title {
+    ul.labels li:not(.link).title {
       border: 0px;
       font-weight: bold;
       padding: inherit;
@@ -116,22 +118,22 @@ ul.labels {
       padding-bottom: 8px;
       margin-top: 10px;
       font-style: italic; }
-    ul.labels li.separator {
+    ul.labels li:not(.link).separator {
       border: 0px;
       border-top: 1px solid #000;
       margin-top: 10px;
       margin-bottom: -20px;
       border-radius: 0px; }
-    ul.labels li.hidden {
+    ul.labels li:not(.link).hidden {
       display: none; }
-    ul.labels li.controls {
+    ul.labels li:not(.link).controls {
       border: 0px;
       padding: 5px 0px 0px 0px; }
-    ul.labels li.label-selected {
+    ul.labels li:not(.link).label-selected {
       background-color: #000; }
-      ul.labels li.label-selected a {
+      ul.labels li:not(.link).label-selected a {
         color: #fff; }
-    ul.labels li.label-task-assignment {
+    ul.labels li:not(.link).label-task-assignment {
       border: 1px dotted #808080; }
 
 #colorpicker {

@@ -40,7 +40,6 @@ def login(request):
             next = request.POST['next']
 
         form = LoginForm(request.POST)
-        print "VALID: %s" % "YES" if form.is_valid() else "NO"
         if form.is_valid():
             # get the username
             # (if there is no username, the form is not valid)

@@ -98,7 +98,9 @@ $(function() {
         // hide controls
         $('.controls').addClass('hidden');
         // de-highlight all tasks 
-        $(".task-row").removeClass('task-selected');        
+        $(".task-row").removeClass('task-selected');
+        // refresh the page
+        window.location.reload();
     });
     
     // register action for clicking on a task to mark it complete 
@@ -311,7 +313,9 @@ $(function() {
               <a href="#">{{ label.name }}</a>
           </li>
       {% empty %}
-      <li class="empty"><em>No labels here</em></li>
+        <li class="link">
+          <a href="{% url 'url_label' %}">Create your first label</a>
+        </li>
       {% endfor %}
       
       {# save button for labeling #}
