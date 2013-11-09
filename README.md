@@ -2,6 +2,8 @@
 
 A simple Web application for keeping track of tasks. 
 
+An example instance of the application is running at [http://tasks.metajungle.net][ref-tasks-metajungle]
+
 This application is implemented using, supports and uses, the following technologies:
 
 * The [Django][ref-django] Web Framework 
@@ -11,6 +13,7 @@ This application is implemented using, supports and uses, the following technolo
 * The [jQuery][ref-jquery] JavaScript library
 * The [Handlebars][ref-handlebars] JavaScript template library 
 
+[ref-tasks-metajungle]: http://tasks.metajungle.net "Jungletasks"
 [ref-django]: https://www.djangoproject.com/ "Django Web Framework"
 [ref-sass]: http://sass-lang.com/ "SASS"
 [ref-bootstrap]: http://getbootstrap.com/ "Bootstrap"

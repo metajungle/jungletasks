@@ -1,5 +1,5 @@
 from django.template import RequestContext 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 
 from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
@@ -90,11 +90,11 @@ def register(request):
             utils.send_email_verification_email(request, user)
             # re-direct to information message 
             msg = """
-            Thanks for registering! A confirmation email with instructions
-            has been sent. 
+            Thanks for registering! A verification email with further 
+            instructions has been sent. 
             """
             messages.success(request, msg)
-            return redirect('url_index')
+            return redirect('url_login')
     else:
         form = SignupForm()
 

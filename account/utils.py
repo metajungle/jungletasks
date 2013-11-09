@@ -44,7 +44,7 @@ def send_verification_email(request, user, code):
     link = "http://%s%s?code=%s" % (host, url_verification, code)
 
     message = """
-    <p>Hi,</p>
+    <p>Hello,</p>
     <p>Thanks for signing up with Jungle Tasks!</p>
     <p>This email is sent to verify your email address. 
     Please do not reply to this message.</p>
@@ -149,7 +149,7 @@ def util_get_host_address(request):
   """
   Returns the host address used for a request
   """
-  host = request.META['SERVER_NAME']
+  host = util_get_client_ip(request)
   if 'SERVER_PORT' in request.META:
     port = request.META['SERVER_PORT']
     # if the port is the standard "80" we do not need to include it
@@ -157,6 +157,17 @@ def util_get_host_address(request):
       host += ":" + port
   return host 
   
+  
+def util_get_client_ip(request):
+  """
+  Returns the client IP address 
+  """
+  x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+  if x_forwarded_for:
+    ip = x_forwarded_for.split(',')[0]
+  else:
+    ip = request.META.get('REMOTE_ADDR')
+  return ip  
 
 def util_remove_port(host):
   """

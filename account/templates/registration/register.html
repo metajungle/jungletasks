@@ -19,9 +19,6 @@ $("input#id_email").focus();
       <div class="form-group {% if field.errors %}has-error{% endif %}">
         <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
         {{ field }}
-        {% if field.help_text %}
-        <p class="help-block"><em>{{ field.help_text }}</em></p>
-        {% endif %}
         {% if field.errors %}
         <ul class="list-unstyled">
           {% for error in field.errors %}
@@ -31,6 +28,10 @@ $("input#id_email").focus();
             </li>
           {% endfor %}
         </ul>
+        {% else %}
+          {% if field.help_text %}
+          <p class="help-block"><em>{{ field.help_text }}</em></p>
+          {% endif %}
         {% endif %}
       </div>
       {% endfor %}

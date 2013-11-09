@@ -22,14 +22,15 @@ class LoginForm(forms.Form):
         and that the User object is active 
         """
         e = self.cleaned_data['email']
-        # try:
-        #     user = User.objects.get(email=e)
-        #     if not user.is_active:
-        #         msg = 'This user account has not been confirmed yet'
-        #         raise forms.ValidationError(msg)
-        # except User.DoesNotExist:
-        #     msg = 'This email is not associated with an account'
-        #     raise forms.ValidationError(msg)
+        try:
+            user = User.objects.get(email=e)
+            if not user.is_active:
+                msg = 'This user account has not been confirmed yet'
+                raise forms.ValidationError(msg)
+        except User.DoesNotExist:
+            pass
+            # msg = 'This email is not associated with an account'
+            # raise forms.ValidationError(msg)
         return e
 
     def get_username(self):
@@ -68,7 +69,7 @@ class SignupForm(forms.Form):
         # NOTE: all emails are stored in lower case
         e = self.cleaned_data['email'].lower()
         if User.objects.filter(email=e).count() > 0:
-            raise forms.ValidationError('The given email is already in use.')
+            raise forms.ValidationError('An existing account is using that email address.')
         return e
 
     def clean_password2(self):
