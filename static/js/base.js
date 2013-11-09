@@ -1,36 +1,8 @@
-/**
- * URLs
+
+/*
+ * Code for allowing safe Ajax requests 
  */
-var url_tasks_api_task_add = "api/task/add/";
-var url_tasks_api_task_edit = "api/task/edit/";
-var url_tasks_api_task_toggle = "api/task/toggle/";
-var url_tasks_api_task_labels_save = "api/task/labels/save/";
-var url_tasks_api_task_date_save = "api/task/date/save/";
 
-var url_tasks_api_label_add = "api/label/add/";
-var url_tasks_api_label_rename = "api/label/rename/";
-var url_tasks_api_label_delete = "api/label/del/";
-var url_tasks_api_labels_save = "api/labels/save/";
-var url_tasks_api_label_save = "api/label/save/";
-
-/**
- * CSS class names
- */
-var css_task_done = "task_done";
-var css_task_not_done = "task_not_done";
-
-/**
- * Displays status information
- * 
- * @param msg
- */
-function ajax_display_status(msg) {
-    var m = 
-	'<img src="/static/icons/yes_smaller.png" class="ajax-status-image" alt="Success" />' + msg;
-    $('#ajax_status').show().html(m).delay(2000).fadeOut(1000);
-}
-
-// using jQuery
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -77,40 +49,4 @@ $.ajaxSetup({
     }
 });
 
-/**
- * Returns the host name
- *
- */
-function getHostName() {
-  var host = document.location.hostname;
-  var port = document.location.port;
-  var protocol = document.location.protocol;
-  if (port.length <= 0)
-    port = "";
-  else
-    port = ":" + port;
-  return protocol + '//' + host + port + '/'; 
-}
-
-function useHttp(address) {
-  if (address.substring(0, 5) == "https") {
-    return "http" + address.substring("https".length);
-  }
-  // default 
-  return address;
-}
-
-function trim(str) {
-  return str.replace(/^\s+|\s+$/g, '');
-}
-
-/**
- * Validates an email address
- *
- * @param value
- * @used
- */
-function isValidEmail(value) { 
-    return /.+@.+\..+/.test(value);
-}
 

@@ -24,7 +24,8 @@ def active_exact(request, pattern):
   if re.search(pattern, request.path):
       return 'active'
   return ''
-  
+
+# TODO: clean and and write in one tag
 @register.simple_tag
 def adjust_color(hex_color, offset=-30):
   if hex_color.startswith('#'):
@@ -46,3 +47,28 @@ def color_variant(hex_color, brightness_offset=1):
     return "#%02x%02x%02x" % tuple(new_rgb_int)
     # return "#" + "".join([hex(i)[2:] for i in new_rgb_int])  
   
+  
+# // From: http://stackoverflow.com/questions/4726344/how-do-i-change-text-color-determined-by-the-background-color
+# 
+# function idealTextColor(bgColor) {
+# 
+#    var nThreshold = 105;
+#    var components = getRGBComponents(bgColor);
+#    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+# 
+#    return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";   
+# }
+# 
+# function getRGBComponents(color) {       
+# 
+#     var r = color.substring(1, 3);
+#     var g = color.substring(3, 5);
+#     var b = color.substring(5, 7);
+# 
+#     return {
+#        R: parseInt(r, 16),
+#        G: parseInt(g, 16),
+#        B: parseInt(b, 16)
+#     };
+# }
+# 

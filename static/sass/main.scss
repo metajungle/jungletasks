@@ -340,3 +340,41 @@ table.table-tasks {
   }  
 }
 
+/*
+ * Activity log
+ */
+
+
+h3 {
+  &.date {
+      text-decoration: underline;
+  }
+
+  &.today {
+      font-style: italic;
+//      background-color: #000;
+//      color: #fff;
+  }
+}
+
+ul.activity-log {
+    list-style: none;
+    margin: 0px;
+    padding: 0px 0px 0px 20px;
+    
+    li {
+        padding: 0px 0px 10px 0px;
+    }
+}
+
+#stats p:first-child {
+    background-color: #ffff99;
+    padding: 10px 5px 10px 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.3em;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+

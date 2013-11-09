@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block contents %}
+
+<a href="?year={{ prev_year }}&week={{ prev_week }}" class="btn btn-default">Prev</a>
+<a href="?year={{ today_year }}&week={{ today_week }}" class="btn btn-default">Today</a>
+{% if year <= today_year and week < today_week %}
+<a href="?year={{ next_year }}&week={{ next_week }}" class="btn btn-default">Next</a>
+{% else %}
+<button class="btn btn-default" disabled="disabled">Next</button>
+{% endif %}
+
+<div id="stats" style="float: right;">
+  <p>
+    Year: {{ year }}; Week: {{ week }}
+  </p>
+  <p>Completed this week: {{ total_week }}</p>
+  <p>Completed total: {{ total }}</p>
+</div>
+
+{% load tasks_tags %}
+{% for date in dates %}
+  <h3 class="date {% today date %}">{{ date|date:"D d M Y" }}</h3>
+  {% for key,tasks in tasks.items %}
+    {% ifequal key date %}
+      {% if tasks %}
+        <ul class="activity-log">
+          {% for task in tasks %}
+            <li>{{ task.task }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>&mdash;</p>
+      {% endif %}
+    {% endifequal %}
+  {% endfor %}
+{% endfor %}
+
+{% endblock %}

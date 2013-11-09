@@ -4,91 +4,79 @@
 
 <h1>About</h1>
 
-<strong>TODO</strong>
+<p>
+  This is a simple Web application for managing tasks built by <a href="http://metajungle.net">Jakob Henriksson</a>.
+</p>
+
+<p>
+  The <a href="https://github.com/metajungle/jungletasks">source code can be found on GitHub</a>.
+</p>
 
 <h1>Frequently Asked Questions*</h1>
 
-<h3 class="question">What's the point of this site?</h3>
+<h3>What's the point of this site?</h3>
 
-<p class="answer">
+<p>
   The site provides a very simple way of keeping track of tasks.
 </p>
 
-<h3 class="question">Seriously, what's the point?</h3>
+<h3>Seriously, what's the point?</h3>
 
-<p class="answer">
-  Ah, you mean, what's the <i>point</i>? In the sense that there are probably a thousand other web applications or desktop applications that do a better job?
+<p>
+  Ah, you mean, what's the <em>point</em>? In the sense that there are probably a thousand other web applications or desktop applications that do a better job?
 </p>
 
-<p class="answer">
+<p>
   Well, in that case there is no point. You should use whatever system
   you find useful for your purposes. If the best way for you keep
-  track of what you <i>need to get done</i> is to keep a simple text
+  track of what you <em>need to get done</em> is to keep a simple text
   file on your computer with your tasks, you should probably do
   that. If you already have an application that you are happy with
-  that helps you <i>get things done</i>, you should probably stick
+  that helps you <em>get things done</em>, you should probably stick
   with that.
 </p>
 
-<p class="answer">
-  I built this site because it works well for what I need. If it works
-  for you too, great! If not, you should try something else.
-</p>
+<h3>What is a good workflow for managing tasks?</h3>
 
-<h3 class="question">What is a good workflow for managing tasks?</h3>
+<p>Whatever works for you.</p>
 
-<p class="answer">Whatever works for you.</p>
-
-<p class="answer">
+<p>
   Personally I like to organize everything
-  around <i>labels</i>. Labels are nothing new, they are just bins
+  around <em>labels</em>. Labels are just bins
   that you can put your tasks in. I typically have a general label for
-  each project, let's call one such label <i>Project</i>. I put
+  each project, let's call one such label <em>Project</em>. I put
   everything that has to do that particular project there. Then I keep
-  other labels, e.g. <i>Issues</i> (or <i>Bugs</i>), <i>Todo
-  Next</i>, <i>RC</i> (for release candidate), <i>Showstoppers</i>. I
+  other labels, e.g. <em>Issues</em> (or <em>Bugs</em>), <em>Todo
+  Next</em>, <em>RC</em> (for release candidate), <em>Showstoppers</em>. I
   then organize all my tasks around these labels. I can move tasks
   around as I see fit. But everything is organized around these
-  labels, but most importantly, their <i>names</i> is what keeps
-  things moving forward. It's very simple, but keeps things somewhat
-  organized, and keeps things moving forward. 
+  labels, but most importantly, their <em>names</em> is what keeps
+  things moving forward. 
 </p>
 
-<h3 class="question">Isn't this site too simple?</h3>
+<h3>Isn't this site too simple?</h3>
 
-<p class="answer">
+<p>
   You mean it lacks a lot of features that are available in most
   other <a href="http://en.wikipedia.org/wiki/Issue_tracking_system">issue
   trackers</a>? Yes, it is true. However, I have found many issue
-  trackers just overly complex. I don't need most of that stuff. I
-  simply want: 
-  <ol>
-    <li>To keep track of (personal) tasks</li>
-    <li>Have my tasks available on the 'cloud' (the Web)</li>
-    <li>Have tasks be first-class citizens (the system is aware of
-    what a task is)</li>
-    <li>Move things forward</li>
-  </ol>
-
-  This site accomplishes this for me. It might, or might
-  not, be what you need.
-  
+  trackers just overly complex. I don't need most of that stuff. 
 </p>
 
-<h3 class="question">What are some things I should be aware of when using the site?</h3>
+<h3>What are some things I should be aware of when using the site?</h3>
 
-<p class="answer">
+<p>
   Labels are first-class entities and not simply text strings that are
   associated with tasks. This means that if you delete a label, that
   label is gone. Yes, from all the tasks that previously had that
   label. Same thing if you rename a label, that old name is gone. 
 </p>
 
-<p class="answer">
+<p>
   Does it have to be this way? No, but that's the way it has been
   implemented. The tasks you have completed is of some interests once
-  you have completed them. That's why completed tasks are viewable in
-  the 'All' folder/label. They are also included if you export
+  you have completed them. That's why completed tasks are still viewable. 
+  They are also included if you export
   tasks. However, the labels are not stored in this way. They are just
   meant to help you organize your current tasks so that you know what
   needs to get done. They are your current window into your tasks. As
@@ -96,86 +84,67 @@
   create/delete/rename labels). You old 'view' will not be saved. How
   you viewed things before is of less interest now. Your current label
   setup should be optimized to move things forward and get things
-  done, now.
+  done, <em>now</em>.
 </p>
 
-<h3 class="question">How do I mark a task as completed?</h3>
+<h3>How do I mark a task as completed?</h3>
 
-<p class="answer">
+<p>
   You simply click on the task text. One click marks it as completed,
-  another click marks it as not completed.
+  another click returns it to being not completed.
 </p>
 
-<h3 class="question">How do I delete a task?</h3>
+<h3>How do I delete a task?</h3>
 
-<p class="answer">
-  You edit the task and delete the task text. If a task is changed to
-  an empty string (containing only white-spaces) it will be deleted.
+<p>
+  You edit the task and delete the task from there.
 </p>
 
-<h3 class="question">How do I mark a task as high priority?</h3>
+<h3>How do I mark a task as high priority?</h3>
 
-<p class="answer">
-  You click the label icon to the far right of the task (in the
-  'Label' column). This brings up you labeling tools in the place
-  where your labels usually are. At the bottom of the labels there is
-  a special label that says either <i>No priority</i> or <i>Higher
-  priority</i>. Select the appropriate value and then click 'Save and
-  close'. If you selected <i>Higher priority</i>, the task will now
-  have a pinkish background to signify the higher priority.
+<p>
+  You edit the task and select the priority level from there. 
 </p>
 
-<h3 class="question">Can I export my tasks so I can use them in other systems?</h3>
+<h3>Can I export my tasks so I can use them in other systems?</h3>
 
-<p class="answer">
-  Yes. In any view that has a task you can click 'export' in the
-  top-right corner. You will see a preview of 10 tasks that shows how
+<p>
+  Yes. In any view that has a task you can click 'export' from the main menu. 
+  You will see a preview of a few tasks that shows how
   the exported tasks will be formatted. The actual export will contain
   all tasks in the view you were in when you clicked 'export'. If you
   want to export all tasks, click the "All" label first and then
-  'export' in the top-right corner. If you are happy with the preview,
-  click the 'export' button below the preview. You will then have a
-  chance to save the exported tasks as a file onto your hard drive.
+  'export' in the top-right corner. After previewing you can then export
+  your tasks. A file will be saved to your local disk with all the tasks. 
 </p>
 
-<p class="answer">
+<p>
   The format of the export
   is <a href="http://orgmode.org">Org-Mode</a>. It's basically a text
   file so you can do whatever you want with it.
 </p>
 
-<h3 class="question">How can I reset my password?</h3>
+<h3>How can I reset my password?</h3>
 
-<p class="answer">
-  {% url 'url_password_reset' as reset %}
-  You go here: 
-  <a href="http://jungletasks.com{{ reset }}">http://jungletasks.com{{ reset }}</a>
+<p>
+  You can <a href="{% url 'url_password_reset' %}">reset your password here</a>.
 </p>
 
-<h3 class="question">Will you support OpenID?</h3>
+<h3>Will you support other features in the future?</h3>
 
-<p class="answer">
-I wanted to initially, but I doubt it. It seems to cause more problems
-than it solves. Read about
-it <a href="http://blog.wekeroad.com/thoughts/open-id-is-a-party-that-happened">here</a>
-and <a href="http://www.quora.com/What-s-wrong-with-OpenID">here</a>.
-</p>
-
-<h3 class="question">Will you support other features in the future?</h3>
-
-<p class="answer">
+<p>
 Maybe. It depends on whether I find more features useful to what I
 want to use the site for. If someone has a good idea and I find that
 useful I might do it. 
 </p>
 
-<h3 class="question">How can I contact you?</h3>
+<h3>How can I contact you?</h3>
 
-<p class="answer">
-Send me an email: <a href="mailto:tasks@metajungle.net">tasks@metajungle.net</a>
+<p>
+  I'm on <a href="http://twitter.com">Twitter</a> as <a href="http://twitter.com/metajungle">@metajungle</a>
 </p>
 
-<p style="font-size: 0.8em;">
+<p style="font-size: 0.8em; margin-top: 20px;">
   *No-one has actually asked these questions, so they are not
   frequently asked, but may still be helpful.
 </p>

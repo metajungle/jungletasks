@@ -4,23 +4,6 @@
 Jungle Tasks - Simple Task Management 
 {% endblock %}
 
-{% block style %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-{% endblock style %}
-
-{% block script %}
-    <script type="text/javascript" src="{{ STATIC_URL }}js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <script type="text/javascript">
-    <!--
-    $(function() {
-      $("a.screenshot").fancybox({
-        'hideOnContentClick': true
-      });
-    });
-    -->
-    </script>
-{% endblock script %}
-
 {% block contents %}
 
 <div class="jumbotron text-center">
@@ -47,36 +30,6 @@ Idea. Track. Go.</h1>
       </form>
     </p>
   </div>
-  {# <div class="col-sm-4"> #}
-  {#   <a class="screenshot" href="{{ STATIC_URL }}images/screenshot.png"><img src="{{ STATIC_URL }}images/screenshot-small.png" alt="Screenshot"  #}
-  {#    style="width: 240px;"/></a> #}
-  {#   <br /> #}
-  {#   <p class="text-center">Screenshot (click to enlarge)</p> #}
-  {# </div> #}
-  {# <div class="col-sm-6"> #}
-  {#   <p class="infobox"> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Track tasks #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Organize with labels #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Export tasks (no data lock-in) #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Accessible everywhere #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Simple #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Get things done #}
-  {#     <br /> #}
-  {#     <img src="{{ STATIC_URL }}icons/yes_small.png" alt="Yes" /> #}
-  {#     Move forward #}
-  {#   </p> #}
-  {# </div> #}
 </div>
 
 {% endblock %}

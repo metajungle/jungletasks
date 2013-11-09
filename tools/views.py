@@ -90,6 +90,7 @@ def tasks_export(request):
 
 
 @login_required
+@require_GET
 def activity_log(request):
   """
   Displays a log of completed tasks
@@ -100,21 +101,8 @@ def activity_log(request):
   today_week = week
   today_year = year
   
-  if request.method == 'GET':
-    if 'week' in request.GET:
-      try:
-        week = int(request.GET['week'])
-      except ValueError:
-        msg = 'Week value %s was not a number' % week
-        messages.error(request, msg)
-        week = today_week
-    if 'year' in request.GET:
-      try:
-        year = int(request.GET['year'])
-      except ValueError:
-        msg = 'Year value %s was not a number' % year
-        messages.error(request, msg)
-        year = today_year
+  week = request.GET.get('week') or today_week
+  year = request.GET.get('year') or today_year 
 
   try:
     monday_struct = time.strptime('%s %s 1' % (year, week), '%Y %W %w')
@@ -126,7 +114,6 @@ def activity_log(request):
     monday = datetime.fromtimestamp(time.mktime(monday_struct))
     msg = 'Did not understand the specified week and/or year, using <b>today</b>'
     messages.error(request, msg)
-
 
   total = Task.objects.filter(user=request.user, completed=True).count()
 
@@ -146,7 +133,7 @@ def activity_log(request):
   prev_year, prev_week, dow = (monday - timedelta(weeks=1)).isocalendar()
   next_year, next_week, dow = (monday + timedelta(weeks=1)).isocalendar()
 
-  return render_to_response('log.html', 
+  return render_to_response('tools/log.html', 
                             { 'week' : week, 
                               'year' : year, 
                               'today_week' : today_week, 
@@ -160,3 +147,4 @@ def activity_log(request):
                               'total' : total, 
                               'total_week' : total_week, },  
                   context_instance=RequestContext(request))   
+
