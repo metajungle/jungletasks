@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block stylesheet %}
-    <link href="/static/css/orgmode.css" rel="stylesheet" type="text/css" />
+    <link href="{{ STATIC_URL }}css/orgmode.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block contents %}
@@ -9,9 +9,25 @@
 
 {% if tasks %}
 
-<p>Below is a preview of your export in <a href="http://orgmode.org/">Org-Mode</a> format:</p>
+<p>
+  Below is a <strong>preview of at most 10 tasks</strong> 
+  {% if label %}
+  labeled with <a href="{% url 'url_tasks_label' label.id %}">{{ label.name }}</a>
+  {% endif %}
+  in the provided export <a href="http://orgmode.org/">Org-Mode</a> 
+  format. 
+</p>
 
-<div class="task_export_list_orgmode">
+<form action="{% url 'url_export' %}" method="POST">{% csrf_token %}
+  {% if label %}
+  <input type="hidden" name="label" value="{{ label.id }}" />
+  {% endif %}
+  <input type="submit" value="Export tasks" class="btn btn-default" />
+</form>
+
+<p>&nbsp;</p>
+
+<div class="task-list-orgmode">
 
   <p class="header">
     #+PRIORITIES: A B B
@@ -24,9 +40,9 @@
     <span>&#42;</span>
 
     {% if task.is_completed %}
-    <span class="done">DONE</span>
+    <span class="status completed">DONE</span>
     {% else %}
-    <span class="todo">TODO</span>
+    <span class="status todo">TODO</span>
     {% endif %}
 
     <span class="priority">
@@ -53,20 +69,11 @@
   {% endif %}
   {% endfor %}
   
-  {% if not all_shown %}
   <p style="font-weight: bold;">. . .</p>
-  {% endif %}
 </div>
 
-{% if label and not error_no_such_label %}
-<form action="" method="post">{% csrf_token %}
-  <input type="hidden" name="label" value="{{ label }}" />
-  <input type="submit" value="Export" />
-</form>
-{% endif %}
-
 {% else %}
-  <p>Nothing here.</p>
+  <p><em>There are currently no tasks to export.</em></p>
 {% endif %}
 
 {% endblock %}

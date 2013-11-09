@@ -1,101 +1,162 @@
 from django.template import RequestContext 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect 
+from django.contrib import messages
 
 from django.http import HttpResponse, Http404
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
 
 from tasks.models import Task, Label
+
+import time 
+from datetime import datetime, timedelta
 
 from utils import orgmode_write
 
 @login_required
-def tasks_export(request):
+def tools(request):
   """
-  View for exporting tasks (into a file that can be downloaded)
+  Index page for various tools 
   """
+  return render_to_response('tools/index.html', 
+                            { }, 
+                  context_instance=RequestContext(request)) 
 
-  label = None
-  error_no_such_label = False
-  tasks = None
-  
-  # limit of number of tasks to fetch for preview
-  no = 10
-  count = 0
-
-  #
-  # PREVIEW tasks
-  #
-  if request.method == 'GET' and 'label' in request.GET:
-    label = request.GET['label']
-    try:
-      l = Label.objects.get(user=request.user, name__iexact=label)
-      # limit number of tasks for the preview 
-      count = Task.objects.filter(user=request.user, labels=l).count()
-      tasks = Task.objects.filter(user=request.user, labels=l)[:no]
-    except Label.DoesNotExist:
-      if label.lower() == "inbox":
-        # limit number of tasks for the preview 
-        count = Task.objects.filter(user=request.user, completed=False).count()
-        tasks = Task.objects.filter(user=request.user, completed=False)[:no]
-      elif label.lower() == "all":
-        # limit number of tasks for the preview 
-        count = Task.objects.filter(user=request.user).count()
-        tasks = Task.objects.filter(user=request.user)[:no]
-      else:
-        error_no_such_label = True
-    
-    if not tasks:
-      msg = """
-            There are no tasks to export.
-            """
-      messages.error(request, msg)
-
-  #
-  # EXPORT tasks
-  #
-  elif request.method == 'POST' and 'label' in request.POST:
-    label = request.POST['label']
-    # get tasks 
-    try:
-      l = Label.objects.get(user=request.user, name__iexact=label)
-      tasks = Task.objects.filter(user=request.user, labels=l)
-    except Label.DoesNotExist:
-      if label.lower() == "inbox":
-        tasks = Task.objects.filter(user=request.user, completed=False)
-      elif label.lower() == "all":
-        tasks = Task.objects.filter(user=request.user)
-    # export tasks 
-    if tasks:
-      # create the HttpResponse object with the appropriate header
-      response = HttpResponse(mimetype='text/plain')
-      response['Content-Disposition'] = 'attachment; filename=tasks.org'
-      # write tasks 
-      contents = orgmode_write(tasks)
-      response.write(contents)
-      # return attachment
-      return response
-    else:
-      raise Http404
-
-  # True if all tasks that will be exported are shown in the preview, 
-  # False otherwise 
-  if count > no:
-    all_shown = False
-  else:
-    all_shown = True
-
-  return render_to_response('export.html', 
-                            { 'tasks' : tasks[:no], 
-                              'all_shown' : all_shown, 
-                              'label' : label, 
-                              'error_no_such_label' : error_no_such_label }, 
+@login_required
+@require_GET
+def tasks_export_preview_all(request):
+  """
+  Preview the tasks to be exported (ALL)
+  """
+  max = 10
+  if 'max' in request.GET:
+    max = request.GET.get('max')
+  tasks = Task.objects.filter(user=request.user)[:max]
+  return render_to_response('tools/export.html', 
+                            { 'tasks' : tasks }, 
                   context_instance=RequestContext(request)) 
 
 
 @login_required
-def tasks_import(request):
+@require_GET
+def tasks_export_preview_label(request, id):
+  """
+  Preview the tasks to be exported (by label)
+  """
+  max = 10
+  if 'max' in request.GET:
+    max = request.GET.get('max')
+  try:
+    label = Label.objects.get(id=id)
+    tasks = Task.objects.filter(user=request.user, labels=label)[:max]
+    return render_to_response('tools/export.html', 
+                              { 'tasks' : tasks, 
+                                'label' : label }, 
+                    context_instance=RequestContext(request)) 
+  except Label.DoesNotExist:
+    messages.error(request, 'No such label exists')
+    return redirect('url_export_preview_all')
 
-  return render_to_response('import.html', 
-                            { }, 
-                  context_instance=RequestContext(request)) 
+@login_required
+@require_POST
+def tasks_export(request):
+  """
+  Exporting tasks (ALL or by LABEL)
+  """
+  
+  # refer to label-specific tasks 
+  if 'label' in request.POST:
+    try:
+      label = Label.objects.get(id=request.POST.get('label'))
+      tasks = Task.objects.filter(user=request.user, labels=label)
+    except Label.DoesNotExist:
+      messages.error(request, 'No such label exists')
+      return redirect('url_export_preview_all')
+  else:
+    tasks = Task.objects.filter(user=request.user)  
+  
+  if len(tasks) > 0:
+    # create the HttpResponse object with the appropriate header
+    response = HttpResponse(mimetype='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=tasks.org'
+    # write tasks 
+    contents = orgmode_write(tasks)
+    response.write(contents)
+    # return attachment
+    return response
+  
+  raise Http404
+
+
+@login_required
+def activity_log(request):
+  """
+  Displays a log of completed tasks
+  """
+  now = datetime.now()
+  year,week,dow = now.isocalendar()
+
+  today_week = week
+  today_year = year
+  
+  if request.method == 'GET':
+    if 'week' in request.GET:
+      try:
+        week = int(request.GET['week'])
+      except ValueError:
+        msg = 'Week value %s was not a number' % week
+        messages.error(request, msg)
+        week = today_week
+    if 'year' in request.GET:
+      try:
+        year = int(request.GET['year'])
+      except ValueError:
+        msg = 'Year value %s was not a number' % year
+        messages.error(request, msg)
+        year = today_year
+
+  try:
+    monday_struct = time.strptime('%s %s 1' % (year, week), '%Y %W %w')
+    monday = datetime.fromtimestamp(time.mktime(monday_struct))
+  except ValueError:
+    week = today_week
+    year = today_year
+    monday_struct = time.strptime('%s %s 1' % (year, week), '%Y %W %w')
+    monday = datetime.fromtimestamp(time.mktime(monday_struct))
+    msg = 'Did not understand the specified week and/or year, using <b>today</b>'
+    messages.error(request, msg)
+
+
+  total = Task.objects.filter(user=request.user, completed=True).count()
+
+  total_week = 0
+  tasks = {}
+  dates = []
+  for i in range(7):
+    day = monday + timedelta(days=i)
+    # add to the list of dates
+    dates.append(day)
+    # create a map from dates to tasks 
+    tasks_ = Task.objects.filter(user=request.user, completed=True, date_completed__year=day.year, date_completed__month=day.month, date_completed__day=day.day)
+    tasks[day] = tasks_
+    # count
+    total_week += len(tasks_)
+
+  prev_year, prev_week, dow = (monday - timedelta(weeks=1)).isocalendar()
+  next_year, next_week, dow = (monday + timedelta(weeks=1)).isocalendar()
+
+  return render_to_response('log.html', 
+                            { 'week' : week, 
+                              'year' : year, 
+                              'today_week' : today_week, 
+                              'prev_week' : prev_week, 
+                              'next_week' : next_week, 
+                              'today_year' : today_year, 
+                              'prev_year' : prev_year, 
+                              'next_year' : next_year, 
+                              'dates' : dates, 
+                              'tasks' : tasks, 
+                              'total' : total, 
+                              'total_week' : total_week, },  
+                  context_instance=RequestContext(request))   

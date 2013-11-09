@@ -27,7 +27,7 @@ def orgmode_write(tasks):
         s.append('\n')
 
         # finished date
-        if task.is_completed:
+        if task.is_completed():
             s.append('  CLOSED: [%s]' % 
                      task.date_completed.strftime("%Y-%m-%d %a %H:%M"))
             s.append('\n')

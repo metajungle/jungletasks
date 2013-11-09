@@ -22,17 +22,9 @@
     <!--
     
     $(function() {
-        
-        /* for metadata plugin */
-        $.metadata.setType("html5");
-        
-        {% block js-on-document-load %}
-        {% endblock %}
-        
-        {% block keyboard-shortcuts %}
-        {% endblock %} {# 'keyboard-shortcuts' #}
-    
-    });
+      {% block keyboard-shortcuts %}
+      {% endblock %} {# 'keyboard-shortcuts' #}
+      });
     -->
     </script>
 </head>
@@ -98,7 +90,13 @@
       <div class="alert alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>
-          <span class="text-{{ message.tags }}">{{ message.tags|capfirst }}!</span>&nbsp;
+          <span class="text-{{ message.tags }}">
+            {% if message.tags == 'danger' %}
+            Error!
+            {% else %}
+            {{ message.tags|capfirst }}!
+            {% endif %}
+          </span>&nbsp;
         </strong>
         {% autoescape off %}
         {{ message }}

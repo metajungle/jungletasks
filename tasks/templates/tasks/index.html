@@ -105,9 +105,9 @@ $(function() {
     $(".task-text").click(function(e) {
       var id = $(this).data('id');
       var row = $("#task-row-" + id);
-      var done = !row.hasClass('task-done');
+      var done = !row.hasClass('task-completed');
       var taskStatusIcon = row.find(".task-status-icon");
-      row.toggleClass('task-done');
+      row.toggleClass('task-completed');
       if (done) {
         taskStatusIcon.removeClass('glyphicon-arrow-up');
         taskStatusIcon.addClass('glyphicon-ok');
@@ -156,9 +156,13 @@ $(function() {
 
 
 {% block action-controls %}
-{% if tasks.object_list %}
-<li><a href="{% url 'url_export' %}?label={{ active_label|lower }}" id="btn_export">export</a></li>
-{% endif %}
+<li>
+  {% if active_label %}
+  <a href="{% url 'url_export_preview_label' active_label.id %}">export</a>
+  {% else %}
+  <a href="{% url 'url_export_preview_all' %}">export</a>
+  {% endif %}
+</li>
 {% endblock action-controls %}
 
 {% block contents %}
@@ -213,7 +217,7 @@ $(function() {
       <tbody>
       {% for task in tasks.object_list %}
       <tr id="task-row-{{ task.id }}"
-          class="task-row {% if task.is_completed %}task-done{% else %}task-not-done{% endif %}"
+          class="task-row {% if task.is_completed %}task-completed{% endif %}"
           data-labels="{{ task.label_ids }}">
         {# Priority column #}
         <td class="task-status narrow">

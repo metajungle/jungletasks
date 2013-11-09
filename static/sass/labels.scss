@@ -291,10 +291,10 @@ table.table-tasks {
       vertical-align: middle
     }
     
-    &.task-done {
+    &.task-completed {
       text-decoration: line-through;
       font-style: italic;
-      background-color: #F7CED4;
+      background-color: #F7E7E9;
     }
     
     a, 

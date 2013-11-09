@@ -5,11 +5,17 @@
 
 <p>The following tools are available:</p>
 
+<h3>Export data</h3>
+
+<p>
+  <a href="{% url 'url_export_preview_all' %}">Export all your tasks</a>
+</p>
+
+
 <h3>Activity Log</h3>
 
 <p>
-  View your completed tasks week by week: <a href="{% url 'url_log' %}">Activity Log</a>
-</p>
+  View your <a href="{% url 'url_log' %}">completed tasks week by week</a> </p>
 
 <h3>Bookmarklet</h3>
 
@@ -22,8 +28,7 @@
 <h3>Change password</h3>
 
 <p>
-  You can change your password here: 
-  <a href="{% url 'url_password_change' %}">Change password</a>
+  You can <a href="{% url 'url_password_change' %}">change your password here</a>
 </p>
 
 {% endblock %}

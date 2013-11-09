@@ -1,0 +1,48 @@
+
+.task-list-orgmode {
+  
+    display: inline-block;
+    margin: 0px 0px 0px 0px;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #000;
+    border-left: 6px solid #000;
+    
+    p {
+      color: blue;
+      margin: 4px 0px 0px 0px;
+      
+      &.header {
+        color: #D51722;
+      }
+    }
+    
+    span {
+      margin-right: 2px;
+      
+      &.date {
+        color: #A10094;
+        text-decoration: underline; 
+      }
+      
+      &.priority {
+        color: #D39F9F;
+      }
+      
+      &.closed {
+        color: #D39F9F;
+      }
+    }
+    
+    span.status {
+      font-weight: bold;
+      
+      &.completed {
+        color: green;
+      }
+      
+      &.todo {
+        color: red;
+      }
+    }
+}

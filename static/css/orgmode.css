@@ -1,49 +1,27 @@
-
-.task_export_list_orgmode {
-    display: inline-block;
-    margin: 0px 0px 0px 0px;
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #000;
-    border-left: 6px solid #000;
-}
-
-.task_export_list_orgmode p {
+.task-list-orgmode {
+  display: inline-block;
+  margin: 0px 0px 0px 0px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #000;
+  border-left: 6px solid #000; }
+  .task-list-orgmode p {
     color: blue;
-    margin: 4px 0px 0px 0px;
-}
-
-.task_export_list_orgmode p.header {
-    color: #D51722;
-}
-
-.task_export_list_orgmode span {
-    margin-right: 2px;
-}
-
-.task_export_list_orgmode span.done {
-    font-weight: bold;
-    color: green;
-}
-
-.task_export_list_orgmode span.todo {
-    font-weight: bold;
-    color: red;
-}
-
-.task_export_list_orgmode span.priority {
-    color: #D39F9F;
-}
-
-.task_export_list_orgmode span.closed {
-    color: #D39F9F;
-}
-
-.task_export_list_orgmode span.date {
-    color: #A10094;
-    text-decoration: underline;
-}
-
-form {
-    margin: 20px 0px 0px 0px;
-}
+    margin: 4px 0px 0px 0px; }
+    .task-list-orgmode p.header {
+      color: #D51722; }
+  .task-list-orgmode span {
+    margin-right: 2px; }
+    .task-list-orgmode span.date {
+      color: #A10094;
+      text-decoration: underline; }
+    .task-list-orgmode span.priority {
+      color: #D39F9F; }
+    .task-list-orgmode span.closed {
+      color: #D39F9F; }
+  .task-list-orgmode span.status {
+    font-weight: bold; }
+    .task-list-orgmode span.status.completed {
+      color: green; }
+    .task-list-orgmode span.status.todo {
+      color: red; }

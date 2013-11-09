@@ -12,8 +12,7 @@ from django.views.decorators.http import require_http_methods, require_GET, requ
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.utils import simplejson
-from datetime import datetime, timedelta
-import time 
+from datetime import datetime
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -28,7 +27,6 @@ def index(request):
   """
   Home page
   """
-
   if request.user.is_authenticated():
     if not 'hp' in request.GET:
       return redirect('url_tasks_inbox')
@@ -36,103 +34,103 @@ def index(request):
   return render_to_response('index.html', {}, 
                   context_instance=RequestContext(request)) 
 
-@login_required
-def home(request, label=None): 
-  """
-  A users home view
-  """
-
-  # Label
-  user_label = None
-
-  if request.method == 'GET':
-    if 'l' in request.GET:
-      label = request.GET['l']
-
-  #
-  # TASKS
-  #
-    
-  if label == None:
-    label = "inbox"
-
-  # 'standard' labels
-  if label.lower() == "inbox" or label.lower() == "all":
-    if label.lower() == "inbox":
-      tasks = Task.objects.filter(user=request.user, completed=False)
-    else:
-      tasks = Task.objects.filter(user=request.user)      
-    pass
-  # 'system' labels 
-  elif label.lower().startswith('s:'):
-    system = label.upper()[2:]
-    if system == 'UNLABELED':
-      tasks = Task.objects.filter(user=request.user, labels=None, completed=False)
-    elif system == 'PRIORITY':
-      tasks = Task.objects.filter(user=request.user, priority='HIG', completed=False)
-    else:
-      # fall back to 'inbox'
-      tasks = Task.objects.filter(user=request.user, completed=False)
-      # ... but leave a message 
-      msg = """
-            Did not understand the given system label "%s", showing
-            <b>Inbox</b> instead
-            """ % system 
-      messages.error(request, msg)
-  else:
-    # user-defined labels 
-    try:
-      l = Label.objects.get(user=request.user, name=label)
-      user_label = l 
-      tasks = Task.objects.filter(user=request.user, labels=l, completed=False) 
-    except Label.DoesNotExist:
-      # use 'inbox' tasks, but give an error 
-      tasks = Task.objects.filter(user=request.user, completed=False)
-      # write message 
-      msg = 'The label "%s" is not recognized, showing the Inbox instead.' % label
-      messages.error(request, msg)
-
-  # sort 
-  if label and label.lower() != "all":
-    pass
-    #tasks = sorted(tasks, key=lambda task: task.priority)
-
-
-  num_not_done = Task.objects.filter(user=request.user, completed=False).count()
-    
-  #
-  # LABELS
-  #
-  labels = Label.objects.filter(user=request.user, hidden=False)
-
-  paginator = Paginator(tasks, 10) 
-
-  # make sure page request is an int. If not, deliver first page.
-  try:
-    page = int(request.GET.get('page', '1'))
-  except ValueError:
-    page = 1
-
-  # If page request (9999) is out of range, deliver last page of results.
-  try:
-    paged_items = paginator.page(page)
-  except (EmptyPage, InvalidPage):
-    paged_items = paginator.page(paginator.num_pages)
-  
-  # pass on GET values
-  get_values = ""
-  for key in request.GET:
-    get_values += "%s=%s&" % (key, request.GET[key])
-
-  return render_to_response('home.html', 
-                            { 'paged_items' : paged_items, 
-                              'num_not_done' : num_not_done, 
-                              'user_label' : user_label, 
-                              'labels' : labels, 
-                              'active_label' : label, 
-                              'get_values' : get_values, 
-                              'get' : request.GET },
-                  context_instance=RequestContext(request)) 
+# @login_required
+# def home(request, label=None): 
+#   """
+#   A users home view
+#   """
+# 
+#   # Label
+#   user_label = None
+# 
+#   if request.method == 'GET':
+#     if 'l' in request.GET:
+#       label = request.GET['l']
+# 
+#   #
+#   # TASKS
+#   #
+#     
+#   if label == None:
+#     label = "inbox"
+# 
+#   # 'standard' labels
+#   if label.lower() == "inbox" or label.lower() == "all":
+#     if label.lower() == "inbox":
+#       tasks = Task.objects.filter(user=request.user, completed=False)
+#     else:
+#       tasks = Task.objects.filter(user=request.user)      
+#     pass
+#   # 'system' labels 
+#   elif label.lower().startswith('s:'):
+#     system = label.upper()[2:]
+#     if system == 'UNLABELED':
+#       tasks = Task.objects.filter(user=request.user, labels=None, completed=False)
+#     elif system == 'PRIORITY':
+#       tasks = Task.objects.filter(user=request.user, priority='HIG', completed=False)
+#     else:
+#       # fall back to 'inbox'
+#       tasks = Task.objects.filter(user=request.user, completed=False)
+#       # ... but leave a message 
+#       msg = """
+#             Did not understand the given system label "%s", showing
+#             <b>Inbox</b> instead
+#             """ % system 
+#       messages.error(request, msg)
+#   else:
+#     # user-defined labels 
+#     try:
+#       l = Label.objects.get(user=request.user, name=label)
+#       user_label = l 
+#       tasks = Task.objects.filter(user=request.user, labels=l, completed=False) 
+#     except Label.DoesNotExist:
+#       # use 'inbox' tasks, but give an error 
+#       tasks = Task.objects.filter(user=request.user, completed=False)
+#       # write message 
+#       msg = 'The label "%s" is not recognized, showing the Inbox instead.' % label
+#       messages.error(request, msg)
+# 
+#   # sort 
+#   if label and label.lower() != "all":
+#     pass
+#     #tasks = sorted(tasks, key=lambda task: task.priority)
+# 
+# 
+#   num_not_done = Task.objects.filter(user=request.user, completed=False).count()
+#     
+#   #
+#   # LABELS
+#   #
+#   labels = Label.objects.filter(user=request.user, hidden=False)
+# 
+#   paginator = Paginator(tasks, 10) 
+# 
+#   # make sure page request is an int. If not, deliver first page.
+#   try:
+#     page = int(request.GET.get('page', '1'))
+#   except ValueError:
+#     page = 1
+# 
+#   # If page request (9999) is out of range, deliver last page of results.
+#   try:
+#     paged_items = paginator.page(page)
+#   except (EmptyPage, InvalidPage):
+#     paged_items = paginator.page(paginator.num_pages)
+#   
+#   # pass on GET values
+#   get_values = ""
+#   for key in request.GET:
+#     get_values += "%s=%s&" % (key, request.GET[key])
+# 
+#   return render_to_response('home.html', 
+#                             { 'paged_items' : paged_items, 
+#                               'num_not_done' : num_not_done, 
+#                               'user_label' : user_label, 
+#                               'labels' : labels, 
+#                               'active_label' : label, 
+#                               'get_values' : get_values, 
+#                               'get' : request.GET },
+#                   context_instance=RequestContext(request)) 
 
 
 @login_required
@@ -141,7 +139,7 @@ def tasks(request):
   """
   Re-directs to the tasks in the 'inbox'
   """
-  return HttpResponseRedirect(reverse('url_tasks_inbox'))
+  return redirect('url_tasks_inbox')  
 
 
 @login_required
@@ -483,23 +481,6 @@ def label_set_hidden_json(request):
                       content_type = 'application/json; charset=utf8')
 
 
-
-
-
-@login_required
-def settings(request):
-  return render_to_response('settings.html', 
-                            { }, 
-                  context_instance=RequestContext(request)) 
-
-@login_required
-def tools(request):
-
-  return render_to_response('tools.html', 
-                            { }, 
-                  context_instance=RequestContext(request)) 
-
-
 def about(request):
   """
   Displays the 'About' page
@@ -508,78 +489,6 @@ def about(request):
                             { }, 
                   context_instance=RequestContext(request)) 
 
-
-@login_required
-def log(request):
-  """
-  Displays a log of completed tasks
-  """
-  now = datetime.now()
-  year,week,dow = now.isocalendar()
-
-  today_week = week
-  today_year = year
-  
-  if request.method == 'GET':
-    if 'week' in request.GET:
-      try:
-        week = int(request.GET['week'])
-      except ValueError:
-        msg = 'Week value %s was not a number' % week
-        messages.error(request, msg)
-        week = today_week
-    if 'year' in request.GET:
-      try:
-        year = int(request.GET['year'])
-      except ValueError:
-        msg = 'Year value %s was not a number' % year
-        messages.error(request, msg)
-        year = today_year
-
-  try:
-    monday_struct = time.strptime('%s %s 1' % (year, week), '%Y %W %w')
-    monday = datetime.fromtimestamp(time.mktime(monday_struct))
-  except ValueError:
-    week = today_week
-    year = today_year
-    monday_struct = time.strptime('%s %s 1' % (year, week), '%Y %W %w')
-    monday = datetime.fromtimestamp(time.mktime(monday_struct))
-    msg = 'Did not understand the specified week and/or year, using <b>today</b>'
-    messages.error(request, msg)
-
-
-  total = Task.objects.filter(user=request.user, completed=True).count()
-
-  total_week = 0
-  tasks = {}
-  dates = []
-  for i in range(7):
-    day = monday + timedelta(days=i)
-    # add to the list of dates
-    dates.append(day)
-    # create a map from dates to tasks 
-    tasks_ = Task.objects.filter(user=request.user, completed=True, finished__year=day.year, finished__month=day.month, finished__day=day.day)
-    tasks[day] = tasks_
-    # count
-    total_week += len(tasks_)
-
-  prev_year, prev_week, dow = (monday - timedelta(weeks=1)).isocalendar()
-  next_year, next_week, dow = (monday + timedelta(weeks=1)).isocalendar()
-
-  return render_to_response('log.html', 
-                            { 'week' : week, 
-                              'year' : year, 
-                              'today_week' : today_week, 
-                              'prev_week' : prev_week, 
-                              'next_week' : next_week, 
-                              'today_year' : today_year, 
-                              'prev_year' : prev_year, 
-                              'next_year' : next_year, 
-                              'dates' : dates, 
-                              'tasks' : tasks, 
-                              'total' : total, 
-                              'total_week' : total_week, },  
-                  context_instance=RequestContext(request)) 
 
 @login_required
 def form_task_add(request, template='add.html'):

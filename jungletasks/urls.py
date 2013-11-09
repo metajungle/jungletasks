@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('tasks.views',
 
     url(r'^$', 'index', name='url_index'), 
+    url(r'^about/$', 'about', name='url_about'), 
 
     url(r'^tasks/$', 'tasks', name='url_tasks'), 
     url(r'^tasks/inbox/$', 'tasks_inbox', name='url_tasks_inbox'), 
@@ -27,45 +28,11 @@ urlpatterns = patterns('tasks.views',
     url(r'^label/assign/$', 'label_task_assign_json', name='url_task_assign_json'), 
     url(r'^label/hidden/$', 'label_set_hidden_json', name='url_label_set_hidden_json'), 
 
-
-
-    
-    url(r'^settings/$', 'settings', name='url_settings'), 
-    url(r'^tools/$', 'tools', name='url_tools'), 
-    url(r'^about/$', 'about', name='url_about'), 
-
-    url(r'^log/$', 'log', name='url_log'), 
-
-    url(r'^form/task/add/$', 'form_task_add', name='url_form_task_add'), 
-    url(r'^form/task/edit/$', 'form_task_edit', name='url_form_task_edit'), 
-    (r'^b/task/add/$', 'bookmarklet_task_add'), 
-
-    url(r'^api/task/add/$', 'api_task_add', name='url_task_add'), 
-    url(r'^api/task/edit/$', 'api_task_edit', name='url_task_edit'), 
-    url(r'^api/task/toggle/$', 'api_task_toggle', name='url_task_toggle'), 
-    url(r'^api/task/labels/save/$', 'api_task_labels_save', 
-        name='url_task_labels_save'), 
-    url(r'^api/task/date/save/$', 'api_task_date_save', 
-        name='url_task_date_save'), 
-
-    url(r'^api/label/add/$', 'api_label_add', name='url_api_label_add'), 
-    url(r'^api/label/rename/$', 'api_label_rename', name='url_label_rename'), 
-    url(r'^api/label/del/$', 'api_label_delete', name='url_label_delete'), 
-    url(r'^api/label/save/$', 'api_label_save', name='url_label_save'), 
-    url(r'^api/labels/save/$', 'api_labels_save', name='url_labels_save'), 
-
-    # admin and testing 
-    (r'^robots.txt$', 'robots'), 
-    # (r'^sitemap.xml$', 'googlesitemap'), 
-                       
-    (r'^test-ajax/$', 'ajax_response_test'), 
-    (r'^test/$', 'test'), 
-
     # uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    (r'^admin/', include(admin.site.urls)),
+    # (r'^admin/', include(admin.site.urls)),
 )
 
 # account 
@@ -79,8 +46,12 @@ urlpatterns += patterns('account.views',
 
 # import and export urls 
 urlpatterns += patterns('tools.views',
-    url(r'^tools/import/$', 'tasks_import', name='url_import'), 
+    url(r'^tools/$', 'tools', name='url_tools'), 
+    url(r'^tools/export/preview/all/$', 'tasks_export_preview_all', name='url_export_preview_all'), 
+    url(r'^tools/export/preview/(?P<id>\d+)/$', 'tasks_export_preview_label', name='url_export_preview_label'), 
     url(r'^tools/export/$', 'tasks_export', name='url_export'), 
+    
+    url(r'^tools/log/$', 'activity_log', name='url_log'), 
 )
 
 # authentication 
