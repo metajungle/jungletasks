@@ -116,7 +116,7 @@ $(function() {
       } else {
         taskStatusIcon.removeClass('glyphicon-ok');
         // check if it was important, if so add important symbol back
-        if (taskStatusIcon.data('important')) {
+        if (taskStatusIcon.data('important') == 'True') {
           taskStatusIcon.addClass('glyphicon-arrow-up');
         }
       }
