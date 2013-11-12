@@ -1,4 +1,4 @@
-# Jungletasks 
+# JungleTasks 
 
 A simple Web application for keeping track of tasks. 
 

@@ -55,7 +55,7 @@ def send_verification_email(request, user, code):
 
   message = """
   <p>Hello,</p>
-  <p>Thanks for signing up with Jungle Tasks!</p>
+  <p>Thanks for signing up with JungleTasks!</p>
   <p>This email is sent to verify your email address. 
   Please do not reply to this message.</p>
   <p>To verify your email address, please click on the link below:</p>
@@ -88,7 +88,7 @@ def send_reset_password_email(request, user, password):
 
   message = """
   <p>Hi,</p>
-  <p>Your <a href="%s">Jungle Tasks</a> 
+  <p>Your <a href="%s">JungleTasks</a> 
      password has been reset.</p>
   <p>Your new password is: %s</p>
   <p>Please change your password as soon as possible: 
@@ -173,7 +173,7 @@ def send_signup_notification_msg():
   subject = "User signed up"
   message = """
   <p>Hi,</p>
-  <p>A user signed up to Jungle Tasks.</p>
+  <p>A user signed up to JungleTasks.</p>
   <p>Cheers,<br/>Admin</p>
   """ 
   try:

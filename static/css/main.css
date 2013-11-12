@@ -29,10 +29,10 @@ body {
         color: #CCCBCB; }
     body .navbar-default.navbar-default li.active a {
       color: #fff;
-      background-color: #23A700; }
+      background-color: #23a700; }
       body .navbar-default.navbar-default li.active a:hover {
         color: #fff;
-        background-color: #23A700; }
+        background-color: #23a700; }
     body .navbar-default.navbar-default .navbar-toggle {
       border: 0px; }
       body .navbar-default.navbar-default .navbar-toggle .icon-bar {
@@ -46,7 +46,7 @@ body {
   body #contents {
     margin: 20px; }
   body .jumbotron {
-    padding: 20px;
+    padding: 0px;
     color: #000;
     background-color: inherit;
     -webkit-border-radius: 2px;
@@ -210,3 +210,23 @@ ul.activity-log {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px; }
+
+/*
+ * Carousel
+ */
+.carousel {
+  margin: 0 auto; }
+  .carousel .carousel-indicators li {
+    border: 1px solid #000; }
+    .carousel .carousel-indicators li.active {
+      background-color: #000; }
+  .carousel .carousel-control {
+    color: #000; }
+    .carousel .carousel-control.right {
+      background-image: none; }
+    .carousel .carousel-control.left {
+      background-image: none; }
+
+.carousel-inner .carousel-caption {
+  color: #000;
+  text-shadow: none; }

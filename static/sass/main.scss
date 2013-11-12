@@ -70,10 +70,10 @@ body {
         &.active {
           a {
             color: #fff;
-            background-color: #23A700;  
+            background-color: $theme-color-light;  
             &:hover {
               color: #fff;
-              background-color: #23A700;
+              background-color: $theme-color-light;
             }
           }
         }
@@ -102,7 +102,7 @@ body {
   }
   
   .jumbotron {
-    padding: 20px;
+    padding: 0px;
     color: #000;
     background-color: inherit;
     @include border-radius(2px);
@@ -382,5 +382,42 @@ ul.activity-log {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
+}
+
+/*
+ * Carousel
+ */
+
+.carousel {
+//  width: 800px;
+  margin: 0 auto;
+  
+  .carousel-indicators {
+    li {
+      border: 1px solid #000;
+      &.active {
+        background-color: #000;
+      }
+    }
+  }
+  
+  .carousel-control {
+    color: #000;
+    &.right {
+      background-image: none;
+    }
+    &.left {
+      background-image: none;
+    }
+  }
+  
+}
+.carousel-inner {
+  img {
+  }
+  .carousel-caption {
+    color: #000;
+    text-shadow: none;
+  }
 }
 

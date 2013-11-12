@@ -195,12 +195,12 @@ $(function() {
     <ul class="labels visible-xs">
       {# standard labels #}
       <li class="label-standard"
-          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          style="background-color: #99CC00; border-left: 10px solid {% adjust_color '99CC00' %};">
           {% url 'url_tasks_inbox' as url_tasks_inbox %}
           <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
       </li>
       <li class="label-standard"
-          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          style="background-color: #99CC00; border-left: 10px solid {% adjust_color '99CC00' %};">
           {% url 'url_tasks_completed' as url_tasks_completed %}
           <a href="{{ url_tasks_completed }}" class="{% active_exact request url_tasks_completed %}">Completed</a>
       </li>
@@ -288,7 +288,7 @@ $(function() {
 
       {# standard labels #}
       <li class="label-standard"
-          style="background-color: #99cc00; border-left: 10px solid {% adjust_color '99cc00' %};">
+          style="background-color: #99CC00; border-left: 10px solid {% adjust_color '99CC00' %};">
           {% url 'url_tasks_inbox' as url_tasks_inbox %}
           <a href="{{ url_tasks_inbox }}" class="{% active_exact request url_tasks_inbox %}">Inbox&nbsp;({{ num_tasks_not_done }})</a>
       </li>
